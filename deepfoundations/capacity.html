@@ -1,0 +1,710 @@
+
+
+<!doctype html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Capacity of Single Piles &#8212; edafos 0.1.0beta documentation</title>
+    <link rel="stylesheet" href="../_static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../_static/bizstyle.js"></script>
+    <link rel="shortcut icon" href="../_static/favicon.png"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Pile Capacity Calculations" href="../examples/pile_capacity.html" />
+    <link rel="prev" title="Types of Piles" href="types_o_piles.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../examples/pile_capacity.html" title="Pile Capacity Calculations"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="types_o_piles.html" title="Types of Piles"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">edafos: A Python Module for Soil Mechanics</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/logo.png" alt="Logo"/>
+            </a></p><h3><a href="../index.html">Site Contents</a></h3>
+<p class="caption"><span class="caption-text">INTRODUCTION:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../intro/units.html">Units</a></li>
+</ul>
+<p class="caption"><span class="caption-text">SOIL PROFILE:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../soil/delineation.html">Layer Delineation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../soil/stresses.html">Soil Stresses</a></li>
+</ul>
+<p class="caption"><span class="caption-text">DEEP FOUNDATIONS:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="types_o_piles.html">Types of Piles</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Capacity of Single Piles</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#api-method">API Method</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#cohesive-soils">Cohesive Soils</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cohesionless-soils">Cohesionless Soils</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#olson-90-method">Olson 90 Method</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id4">Cohesionless Soils</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">EXAMPLES:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../examples/pile_capacity.html">Pile Capacity Calculations</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API REFERENCE:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../api/api_reference.html">Module Documentation</a></li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="types_o_piles.html"
+                        title="previous chapter">Types of Piles</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="../examples/pile_capacity.html"
+                        title="next chapter">Pile Capacity Calculations</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/deepfoundations/capacity.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="capacity-of-single-piles">
+<span id="capacity-methods"></span><h1>Capacity of Single Piles<a class="headerlink" href="#capacity-of-single-piles" title="Permalink to this headline">¶</a></h1>
+<p><code class="docutils literal notranslate"><span class="pre">edafos</span></code> implements the pile capacity methods presented below.</p>
+<div class="section" id="api-method">
+<span id="id1"></span><h2>API Method<a class="headerlink" href="#api-method" title="Permalink to this headline">¶</a></h2>
+<p>American Petroleum Institute (API).</p>
+<div class="admonition-required-properties admonition">
+<p class="first admonition-title">Required Properties</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Pile:</th><td class="field-body"><ul class="first simple">
+<li><span class="math notranslate nohighlight">\(\alpha\)</span> or <span class="math notranslate nohighlight">\(\delta\)</span>: side length or diameter for surface
+area, <span class="math notranslate nohighlight">\(A_s\)</span> (shaft resistance)</li>
+<li><span class="math notranslate nohighlight">\(\alpha\)</span> or <span class="math notranslate nohighlight">\(\delta\)</span> (<span class="math notranslate nohighlight">\(t\)</span>): side
+length or diameter (with thickness for open ended) for toe area,
+<span class="math notranslate nohighlight">\(A_p, A_{pp}\)</span> (toe resistance)</li>
+<li>pile type: open-ended or closed-ended for <span class="math notranslate nohighlight">\(K\)</span> selection
+(cohesionless soils)</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Soil:</th><td class="field-body"><ul class="first last simple">
+<li>type: cohesive/cohesionless classification</li>
+<li><span class="math notranslate nohighlight">\(\gamma\)</span>: total unit weight for effective stress calculations</li>
+<li><span class="math notranslate nohighlight">\(s_u\)</span>: undrained shear strength (cohesive soils)</li>
+<li><span class="math notranslate nohighlight">\(N_{cor}\)</span>: SPT-N corrected for <span class="math notranslate nohighlight">\(\delta\)</span>, <span class="math notranslate nohighlight">\(f_{s.lim}\)</span>,
+<span class="math notranslate nohighlight">\(N_q\)</span>, <span class="math notranslate nohighlight">\(q_{s.lim}\)</span> (cohesionless soils)</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="last"><strong>Note</strong>: <code class="docutils literal notranslate"><span class="pre">edafos</span></code> runs a pre-check to verify that all required properties
+have been defined prior to running the capacity calculations. Refer to the
+… method for more information. TODO: add method</p>
+</div>
+<div class="section" id="cohesive-soils">
+<h3>Cohesive Soils<a class="headerlink" href="#cohesive-soils" title="Permalink to this headline">¶</a></h3>
+<p>The revised API method was included in RP-2A (1993) and has been widely used
+in the offshore industry.</p>
+<div class="section" id="shaft-resistance">
+<h4>Shaft Resistance<a class="headerlink" href="#shaft-resistance" title="Permalink to this headline">¶</a></h4>
+<p>The general equation for shaft resistance is given by:</p>
+<div class="math notranslate nohighlight" id="equation-r-s-api">
+<span class="eqno">(1)<a class="headerlink" href="#equation-r-s-api" title="Permalink to this equation">¶</a></span>\[R_s = \sum{f_s A_s}\]</div>
+<p>where:</p>
+<ul class="simple">
+<li><span class="math notranslate nohighlight">\(f_s\)</span>: unit shaft resistance (adhesion)</li>
+<li><span class="math notranslate nohighlight">\(A_s\)</span>: side surface area of pile</li>
+</ul>
+<p>and,</p>
+<div class="math notranslate nohighlight" id="equation-f-s-api-clay">
+<span class="eqno">(2)<a class="headerlink" href="#equation-f-s-api-clay" title="Permalink to this equation">¶</a></span>\[f_s = \alpha s_u\]</div>
+<p>where:</p>
+<ul class="simple">
+<li><span class="math notranslate nohighlight">\(\alpha\)</span>: coefficient as per revised API (1987)</li>
+<li><span class="math notranslate nohighlight">\(s_u\)</span>: undrained shear strength of soil</li>
+</ul>
+<p>The <span class="math notranslate nohighlight">\(\alpha\)</span> factor is calculated based on the conditional in equation
+<a class="reference internal" href="#equation-a-api-clay">(3)</a>.</p>
+<div class="math notranslate nohighlight" id="equation-a-api-clay">
+<span class="eqno">(3)<a class="headerlink" href="#equation-a-api-clay" title="Permalink to this equation">¶</a></span>\[\begin{split}\alpha = \begin{cases}
+0.5\psi^{-0.5} &amp; \textrm{if} \quad \psi \leq 1.0 \\
+0.5\psi^{-0.25} &amp; \textrm{if} \quad \psi &gt; 1.0
+\end{cases} \quad \leq 1.0\end{split}\]</div>
+<p>where:</p>
+<ul class="simple">
+<li><span class="math notranslate nohighlight">\(\psi\)</span>: <span class="math notranslate nohighlight">\(s_u/\bar{\sigma'}\)</span> at a depth, <span class="math notranslate nohighlight">\(z\)</span></li>
+<li><span class="math notranslate nohighlight">\(\bar{\sigma'}\)</span>: average effective stress (at midpoint)</li>
+<li><span class="math notranslate nohighlight">\(s_u\)</span>: undrained shear strength of soil</li>
+</ul>
+</div>
+<div class="section" id="toe-resistance">
+<h4>Toe Resistance<a class="headerlink" href="#toe-resistance" title="Permalink to this headline">¶</a></h4>
+<p>The toe resistance is equal to:</p>
+<div class="math notranslate nohighlight" id="equation-r-p-api">
+<span class="eqno">(4)<a class="headerlink" href="#equation-r-p-api" title="Permalink to this equation">¶</a></span>\[R_p = q_p A_p\]</div>
+<p>where:</p>
+<ul class="simple">
+<li><span class="math notranslate nohighlight">\(q_p\)</span>: unit toe resistance</li>
+<li><span class="math notranslate nohighlight">\(A_p\)</span>: pile toe cross-sectional area</li>
+</ul>
+<p><strong>Important:</strong> Toe resistance must always be checked against
+<span class="math notranslate nohighlight">\(R_p = q_p A_{pp}\)</span> where <span class="math notranslate nohighlight">\(A_{pp}\)</span> is the cross sectional area of
+soil plug in open end pipe or H-piles at pile toe.</p>
+<p>The unit toe resistance, <span class="math notranslate nohighlight">\(q_p\)</span>, is given by:</p>
+<div class="math notranslate nohighlight" id="equation-q-p-api-clay">
+<span class="eqno">(5)<a class="headerlink" href="#equation-q-p-api-clay" title="Permalink to this equation">¶</a></span>\[q_p = 9 s_u\]</div>
+<p>where:</p>
+<ul class="simple">
+<li><span class="math notranslate nohighlight">\(s_u\)</span>: Undrained shear strength at the tip of the pile, usually taken as
+the <strong>average over a distance of two diameters</strong> below the tip of the pile.</li>
+</ul>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+</div>
+</div>
+<div class="section" id="cohesionless-soils">
+<h3>Cohesionless Soils<a class="headerlink" href="#cohesionless-soils" title="Permalink to this headline">¶</a></h3>
+<p>Following API RP2A (1987) recommendations.</p>
+<div class="section" id="id2">
+<h4>Shaft Resistance<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h4>
+<p>Shaft resistance is given by the general form in equation <a class="reference internal" href="#equation-r-s-api">(1)</a>. Unit
+shaft resistance for piles in cohesionless soils is calculated by:</p>
+<div class="math notranslate nohighlight" id="equation-f-s-api-sand">
+<span class="eqno">(6)<a class="headerlink" href="#equation-f-s-api-sand" title="Permalink to this equation">¶</a></span>\[f_s = K \sigma' \tan{\delta}\]</div>
+<p>where:</p>
+<ul class="simple">
+<li><span class="math notranslate nohighlight">\(K\)</span>: coefficient of lateral earth (ratio of horizontal to vertical
+normal effective stress)</li>
+<li><span class="math notranslate nohighlight">\(\bar{\sigma'}\)</span>: average effective stress (at midpoint)</li>
+<li><span class="math notranslate nohighlight">\(\delta\)</span>: friction angle between the soil and the pile wall</li>
+</ul>
+<p><a class="reference internal" href="#api-k-table"><span class="std std-numref">Table 3</span></a> offers recommended values for the coefficient of lateral
+earth, <span class="math notranslate nohighlight">\(K\)</span>.</p>
+<span id="api-k-table"></span><table border="1" class="docutils" id="id5">
+<caption><span class="caption-number">Table 3 </span><span class="caption-text">Values for coefficient of lateral earth, <span class="math notranslate nohighlight">\(K\)</span></span><a class="headerlink" href="#id5" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col width="91%" />
+<col width="9%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Condition</th>
+<th class="head">K</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>unplugged, open-ended pipe piles (tens &amp; comp)</td>
+<td>0.8</td>
+</tr>
+<tr class="row-odd"><td>full-displacement piles</td>
+<td>1.0</td>
+</tr>
+</tbody>
+</table>
+<p><a class="reference internal" href="#api-d-table"><span class="std std-numref">Table 4</span></a> offers guidelines for <span class="math notranslate nohighlight">\(\delta\)</span>, the friction angle
+between the soil and the pile wall as well as limiting, <span class="math notranslate nohighlight">\(f_s\)</span>.</p>
+<span id="api-d-table"></span><table border="1" class="docutils" id="id6">
+<caption><span class="caption-number">Table 4 </span><span class="caption-text">Guidelines for Side Friction in Siliceous Soil</span><a class="headerlink" href="#id6" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col width="51%" />
+<col width="21%" />
+<col width="13%" />
+<col width="15%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head" rowspan="2">Soil</th>
+<th class="head" rowspan="2"><span class="math notranslate nohighlight">\(\delta\)</span>
+, degrees</th>
+<th class="head" colspan="2">Limiting, <span class="math notranslate nohighlight">\(f_s\)</span></th>
+</tr>
+<tr class="row-even"><th class="head" colspan="2">kips/ft2 | kPa</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-odd"><td>Very loose to medium, sand to silt</td>
+<td>15</td>
+<td>1.0</td>
+<td>47.8</td>
+</tr>
+<tr class="row-even"><td>Loose to dense, sand to silt</td>
+<td>20</td>
+<td>1.4</td>
+<td>67.0</td>
+</tr>
+<tr class="row-odd"><td>Medium to dense, sand to sand-silt</td>
+<td>25</td>
+<td>1.7</td>
+<td>81.4</td>
+</tr>
+<tr class="row-even"><td>Dense to very dense, sand to sand-silt</td>
+<td>30</td>
+<td>2.0</td>
+<td>95.8</td>
+</tr>
+<tr class="row-odd"><td>Dense to very dense, gravel to sand</td>
+<td>35</td>
+<td>2.4</td>
+<td>114.9</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="id3">
+<h4>Toe Resistance<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h4>
+<p>Toe resistance is given by the general form in equation <a class="reference internal" href="#equation-r-p-api">(4)</a>. Unit
+toe resistance for piles in cohesionless soils is calculated by:</p>
+<div class="math notranslate nohighlight" id="equation-q-p-api-sand">
+<span class="eqno">(7)<a class="headerlink" href="#equation-q-p-api-sand" title="Permalink to this equation">¶</a></span>\[q_p = \sigma' N_q\]</div>
+<p>where:</p>
+<ul class="simple">
+<li><span class="math notranslate nohighlight">\(\sigma'\)</span>: effective stress at pile tip (not average)</li>
+<li><span class="math notranslate nohighlight">\(N_q\)</span>: bearing capacity factor</li>
+</ul>
+<p><a class="reference internal" href="#api-q-table"><span class="std std-numref">Table 5</span></a> offers guidelines for <span class="math notranslate nohighlight">\(N_q\)</span>, bearing capacity factor
+as well as limiting, <span class="math notranslate nohighlight">\(q_p\)</span>.</p>
+<span id="api-q-table"></span><table border="1" class="docutils" id="id7">
+<caption><span class="caption-number">Table 5 </span><span class="caption-text">Guidelines for Toe Resistance in Siliceous Soil</span><a class="headerlink" href="#id7" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col width="51%" />
+<col width="17%" />
+<col width="24%" />
+<col width="8%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head" rowspan="2">Soil</th>
+<th class="head" rowspan="2"><span class="math notranslate nohighlight">\(N_q\)</span></th>
+<th class="head" colspan="2">Limiting, <span class="math notranslate nohighlight">\(q_p\)</span></th>
+</tr>
+<tr class="row-even"><th class="head" colspan="2">kips/ft<sup>2</sup> | MPa</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-odd"><td>Very loose to medium, sand to silt</td>
+<td>8</td>
+<td>40</td>
+<td>1.9</td>
+</tr>
+<tr class="row-even"><td>Loose to dense, sand to silt</td>
+<td>12</td>
+<td>60</td>
+<td>2.9</td>
+</tr>
+<tr class="row-odd"><td>Medium to dense, sand to sand-silt</td>
+<td>20</td>
+<td>100</td>
+<td>4.8</td>
+</tr>
+<tr class="row-even"><td>Dense to very dense, sand to sand-silt</td>
+<td>40</td>
+<td>200</td>
+<td>9.6</td>
+</tr>
+<tr class="row-odd"><td>Dense to very dense, gravel to sand</td>
+<td>50</td>
+<td>250</td>
+<td>12.0</td>
+</tr>
+</tbody>
+</table>
+<p>In order to interpret <a class="reference internal" href="#api-d-table"><span class="std std-numref">Table 4</span></a> and <a class="reference internal" href="#api-q-table"><span class="std std-numref">Table 5</span></a>
+algorithmically, the correlation in <a class="reference internal" href="#api-spt-corr-table"><span class="std std-numref">Table 6</span></a> is employed
+in <code class="docutils literal notranslate"><span class="pre">edafos</span></code>.</p>
+<span id="api-spt-corr-table"></span><table border="1" class="docutils" id="id8">
+<caption><span class="caption-number">Table 6 </span><span class="caption-text">SPT-N corrected Correlations</span><a class="headerlink" href="#id8" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col width="25%" />
+<col width="40%" />
+<col width="35%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Density</th>
+<th class="head"><span class="math notranslate nohighlight">\(N_{cor}\)</span> (bpf)</th>
+<th class="head"><span class="math notranslate nohighlight">\(\phi\)</span> (deg)</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>Very loose</td>
+<td>0 - 4</td>
+<td>&lt; 28</td>
+</tr>
+<tr class="row-odd"><td>Loose</td>
+<td>5 - 10</td>
+<td>28 - 30</td>
+</tr>
+<tr class="row-even"><td>Medium dense</td>
+<td>11 - 30</td>
+<td>30 - 36</td>
+</tr>
+<tr class="row-odd"><td>Dense</td>
+<td>31 - 50</td>
+<td>36 - 41</td>
+</tr>
+<tr class="row-even"><td>Very Dense</td>
+<td>over 50</td>
+<td>&gt; 41</td>
+</tr>
+</tbody>
+</table>
+<p>In which case <a class="reference internal" href="#api-d-table"><span class="std std-numref">Table 4</span></a>, <a class="reference internal" href="#api-q-table"><span class="std std-numref">Table 5</span></a> and
+<a class="reference internal" href="#api-spt-corr-table"><span class="std std-numref">Table 6</span></a> can be consolidated as in
+<a class="reference internal" href="#api-d-q-spt-table"><span class="std std-numref">Table 7</span></a>.</p>
+<span id="api-d-q-spt-table"></span><table border="1" class="docutils" id="id9">
+<caption><span class="caption-number">Table 7 </span><span class="caption-text">Guidelines for Shaft and Toe Resistance in Siliceous Soil with
+SPT-N values</span><a class="headerlink" href="#id9" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col width="27%" />
+<col width="16%" />
+<col width="15%" />
+<col width="17%" />
+<col width="9%" />
+<col width="17%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Soil</th>
+<th class="head"><span class="math notranslate nohighlight">\(N_{cor}\)</span> (bpf)</th>
+<th class="head"><span class="math notranslate nohighlight">\(\delta\)</span> (deg)</th>
+<th class="head"><span class="math notranslate nohighlight">\(f_{s.lim}\)</span> (ksf)</th>
+<th class="head"><span class="math notranslate nohighlight">\(N_q\)</span></th>
+<th class="head"><span class="math notranslate nohighlight">\(q_{p.lim}\)</span> (ksf)</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>Very loose to medium, sand to silt</td>
+<td>0 - 4</td>
+<td>15</td>
+<td>1.0</td>
+<td>8</td>
+<td>40</td>
+</tr>
+<tr class="row-odd"><td>Loose to dense, sand to silt</td>
+<td>5 - 10</td>
+<td>20</td>
+<td>1.4</td>
+<td>12</td>
+<td>60</td>
+</tr>
+<tr class="row-even"><td>Medium to dense, sand to sand-silt</td>
+<td>11 - 30</td>
+<td>25</td>
+<td>1.7</td>
+<td>20</td>
+<td>100</td>
+</tr>
+<tr class="row-odd"><td>Dense to very dense, sand to sand-silt</td>
+<td>31 - 50</td>
+<td>30</td>
+<td>2.0</td>
+<td>40</td>
+<td>200</td>
+</tr>
+<tr class="row-even"><td>Dense to very dense, gravel to sand</td>
+<td>over 50</td>
+<td>35</td>
+<td>2.4</td>
+<td>50</td>
+<td>250</td>
+</tr>
+</tbody>
+</table>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="olson-90-method">
+<span id="olson90-method"></span><h2>Olson 90 Method<a class="headerlink" href="#olson-90-method" title="Permalink to this headline">¶</a></h2>
+<p>The Olson 90 method is for cohesionless soils only. It was created from a
+database of 31 load tests on steel pipe piles.</p>
+<div class="section" id="id4">
+<h3>Cohesionless Soils<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h3>
+<p>Olson 90 is similar to the Revised API method with two main differences. First,
+the coefficient of lateral earth, <span class="math notranslate nohighlight">\(K\)</span>, is calculated rather than taken
+from <a class="reference internal" href="#api-k-table"><span class="std std-numref">Table 3</span></a>. In Olson 90, <span class="math notranslate nohighlight">\(K\)</span> is:</p>
+<div class="math notranslate nohighlight" id="equation-olson90-k">
+<span class="eqno">(8)<a class="headerlink" href="#equation-olson90-k" title="Permalink to this equation">¶</a></span>\[\begin{split}K = \begin{cases}
+0.16 + 0.015 \, N_{cor} &amp; \textrm{non-displacement piles}\\
+0.70 + 0.015 \, N_{cor} &amp; \textrm{full displacement piles}
+\end{cases}\end{split}\]</div>
+<p>where:</p>
+<ul class="simple">
+<li><span class="math notranslate nohighlight">\(N_{cor}\)</span>: SPT-N values corrected for overburden pressure</li>
+</ul>
+<p>Next, Olson 90 provides revised guidelines for shaft and tow resistances which
+are offered in <a class="reference internal" href="#olson90-table"><span class="std std-numref">Table 8</span></a>.</p>
+<span id="olson90-table"></span><table border="1" class="docutils" id="id10">
+<caption><span class="caption-number">Table 8 </span><span class="caption-text">Olson 90 guidelines for Shaft and Toe Resistance</span><a class="headerlink" href="#id10" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col width="12%" />
+<col width="19%" />
+<col width="18%" />
+<col width="20%" />
+<col width="11%" />
+<col width="20%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Soil</th>
+<th class="head"><span class="math notranslate nohighlight">\(N_{cor}\)</span> (bpf)</th>
+<th class="head"><span class="math notranslate nohighlight">\(\delta\)</span> (deg)</th>
+<th class="head"><span class="math notranslate nohighlight">\(f_{s.lim}\)</span> (ksf)</th>
+<th class="head"><span class="math notranslate nohighlight">\(N_q\)</span></th>
+<th class="head"><span class="math notranslate nohighlight">\(q_{p.lim}\)</span> (ksf)</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td rowspan="4">Gravel</td>
+<td>0 - 4</td>
+<td>[20]</td>
+<td>[1.4]</td>
+<td>[12]</td>
+<td>[60]</td>
+</tr>
+<tr class="row-odd"><td>5 - 10</td>
+<td>[25]</td>
+<td>[1.7]</td>
+<td>[20]</td>
+<td>[100]</td>
+</tr>
+<tr class="row-even"><td>11 - 30</td>
+<td>[30]</td>
+<td>[2.0]</td>
+<td>[40]</td>
+<td>[200]</td>
+</tr>
+<tr class="row-odd"><td>over 30</td>
+<td>[35]</td>
+<td>[2.4]</td>
+<td>[60]</td>
+<td>[250]</td>
+</tr>
+<tr class="row-even"><td rowspan="4">Sand / Gravel</td>
+<td>0 - 4</td>
+<td>[20]</td>
+<td>[1.4]</td>
+<td>[12]</td>
+<td>[60]</td>
+</tr>
+<tr class="row-odd"><td>5 - 10</td>
+<td>[25]</td>
+<td>[1.7]</td>
+<td>[20]</td>
+<td>[100]</td>
+</tr>
+<tr class="row-even"><td>11 - 30</td>
+<td>[30]</td>
+<td>[2.0]</td>
+<td>[40]</td>
+<td>[200]</td>
+</tr>
+<tr class="row-odd"><td>over 30</td>
+<td>[35]</td>
+<td>[2.4]</td>
+<td>[60]</td>
+<td>[250]</td>
+</tr>
+<tr class="row-even"><td rowspan="6">Sand</td>
+<td>0 - 4</td>
+<td>[20]</td>
+<td>[1.0]</td>
+<td>[50]</td>
+<td>[40]</td>
+</tr>
+<tr class="row-odd"><td>5 - 10</td>
+<td>30</td>
+<td>1.1</td>
+<td>120</td>
+<td>120</td>
+</tr>
+<tr class="row-even"><td>11 - 30</td>
+<td>35</td>
+<td>1.9</td>
+<td>120</td>
+<td>190</td>
+</tr>
+<tr class="row-odd"><td>31 - 50</td>
+<td>40</td>
+<td>2.6</td>
+<td>120</td>
+<td>190</td>
+</tr>
+<tr class="row-even"><td>51 - 100</td>
+<td>40</td>
+<td>3.7</td>
+<td>130</td>
+<td>200</td>
+</tr>
+<tr class="row-odd"><td>over 100</td>
+<td>40</td>
+<td>3.8</td>
+<td>220</td>
+<td>530</td>
+</tr>
+<tr class="row-even"><td rowspan="7">Sand / Silt</td>
+<td>0 - 4</td>
+<td>10</td>
+<td>[1.0]</td>
+<td>[10]</td>
+<td>[10]</td>
+</tr>
+<tr class="row-odd"><td>5 - 10</td>
+<td>10</td>
+<td>[1.0]</td>
+<td>[20]</td>
+<td>[40]</td>
+</tr>
+<tr class="row-even"><td>11 - 30</td>
+<td>15</td>
+<td>[1.4]</td>
+<td>50</td>
+<td>110</td>
+</tr>
+<tr class="row-odd"><td>31 - 50</td>
+<td>20</td>
+<td>2.0</td>
+<td>100</td>
+<td>160</td>
+</tr>
+<tr class="row-even"><td>51 - 100</td>
+<td>[30]</td>
+<td>[2.0]</td>
+<td>[100]</td>
+<td>[200]</td>
+</tr>
+<tr class="row-odd"><td>101 - 200</td>
+<td>[34]</td>
+<td>[20]</td>
+<td>[100]</td>
+<td>[200]</td>
+</tr>
+<tr class="row-even"><td>over 200</td>
+<td>40</td>
+<td>20</td>
+<td>[100]</td>
+<td>[200]</td>
+</tr>
+<tr class="row-odd"><td rowspan="5">Silt</td>
+<td>0 - 4</td>
+<td>[10]</td>
+<td>[1.0]</td>
+<td>[10]</td>
+<td>[40]</td>
+</tr>
+<tr class="row-even"><td>5 - 10</td>
+<td>15</td>
+<td>[1.0]</td>
+<td>[10]</td>
+<td>[40]</td>
+</tr>
+<tr class="row-odd"><td>11 - 30</td>
+<td>20</td>
+<td>[1.4]</td>
+<td>[10]</td>
+<td>[40]</td>
+</tr>
+<tr class="row-even"><td>31 - 50</td>
+<td>20</td>
+<td>[1.4]</td>
+<td>[12]</td>
+<td>[60]</td>
+</tr>
+<tr class="row-odd"><td>over 50</td>
+<td>[25]</td>
+<td>[1.4]</td>
+<td>[12]</td>
+<td>[60]</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Note:</strong></p>
+<ul class="simple">
+<li>Must not interpolate. In using values in <a class="reference internal" href="#olson90-table"><span class="std std-numref">Table 8</span></a>, use the
+line corresponding to N = 4 for any layer with N less than or equal to 4,
+the line corresponding to 10 for N = 5 - 10, and so on.</li>
+<li>Number in brackets were extrapolated, no supporting data.</li>
+</ul>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../examples/pile_capacity.html" title="Pile Capacity Calculations"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="types_o_piles.html" title="Types of Piles"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">edafos: A Python Module for Soil Mechanics</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018, Nick Machairas @ NYU Geo.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.5.
+    </div>
+  </body>
+</html>

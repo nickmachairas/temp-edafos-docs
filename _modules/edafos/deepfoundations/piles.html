@@ -1,0 +1,842 @@
+
+
+<!doctype html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>edafos.deepfoundations.piles &#8212; edafos 0.1.0beta documentation</title>
+    <link rel="stylesheet" href="../../../_static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../../../_static/bizstyle.js"></script>
+    <link rel="shortcut icon" href="../../../_static/favicon.png"/>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">edafos: A Python Module for Soil Mechanics</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../../index.html">
+              <img class="logo" src="../../../_static/logo.png" alt="Logo"/>
+            </a></p><h3><a href="../../../index.html">Site Contents</a></h3>
+<p class="caption"><span class="caption-text">INTRODUCTION:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../intro/units.html">Units</a></li>
+</ul>
+<p class="caption"><span class="caption-text">SOIL PROFILE:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../soil/delineation.html">Layer Delineation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../soil/stresses.html">Soil Stresses</a></li>
+</ul>
+<p class="caption"><span class="caption-text">DEEP FOUNDATIONS:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../deepfoundations/types_o_piles.html">Types of Piles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../deepfoundations/capacity.html">Capacity of Single Piles</a></li>
+</ul>
+<p class="caption"><span class="caption-text">EXAMPLES:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../examples/pile_capacity.html">Pile Capacity Calculations</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API REFERENCE:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/api_reference.html">Module Documentation</a></li>
+</ul>
+
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for edafos.deepfoundations.piles</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot; Provide the ``Pile`` class.</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="c1"># -- Imports -----------------------------------------------------------------</span>
+<span class="kn">from</span> <span class="nn">edafos.project</span> <span class="k">import</span> <span class="n">Project</span>
+<span class="kn">from</span> <span class="nn">edafos.data</span> <span class="k">import</span> <span class="n">english_hpiles</span><span class="p">,</span> <span class="n">si_hpiles</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+
+<span class="c1"># -- SoilProfile Class -------------------------------------------------------</span>
+
+<div class="viewcode-block" id="Pile"><a class="viewcode-back" href="../../../api/api_reference.html#edafos.deepfoundations.piles.Pile">[docs]</a><span class="k">class</span> <span class="nc">Pile</span><span class="p">(</span><span class="n">Project</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Class to represent a new driven or drilled pile.</span>
+
+<span class="sd">    .. warning::</span>
+
+<span class="sd">       Pay attention to the input units for each unit system that you</span>
+<span class="sd">       choose to use. Refer to the parameter definition below or the</span>
+<span class="sd">       :ref:`input_units` page.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># -- Constructor ---------------------------------------------------------</span>
+
+<div class="viewcode-block" id="Pile.__init__"><a class="viewcode-back" href="../../../api/api_reference.html#edafos.deepfoundations.piles.Pile.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">unit_system</span><span class="p">,</span> <span class="n">pile_type</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Args:</span>
+<span class="sd">            unit_system (str): The unit system for the project. Can only be</span>
+<span class="sd">                &#39;English&#39;, or &#39;SI&#39;. Properties inherited from the ``Project``</span>
+<span class="sd">                class.</span>
+
+<span class="sd">            pile_type (str): Type of driven pile. Available options are:</span>
+
+<span class="sd">                - ``concrete``: A rectangular (normally square) concrete pile.</span>
+<span class="sd">                  Requires different keyword arguments depending on ``shape``.</span>
+<span class="sd">                  Always requires ``length``.</span>
+<span class="sd">                - ``pipe_open``: An open-ended circular steel pipe pile.</span>
+<span class="sd">                  Requires keyword arguments ``diameter``, ``thickness``,</span>
+<span class="sd">                  ``length``.</span>
+<span class="sd">                - ``pipe_closed``: A closed-ended circular steel pipe pile.</span>
+<span class="sd">                  Requires keyword argument ``diameter``, ``length``.</span>
+<span class="sd">                - ``h_pile``: An H shape steel beam used as a pile.</span>
+<span class="sd">                  Requires keyword argument ``shape``, ``length``.</span>
+<span class="sd">                - ``timber``: A circular timber pile.</span>
+<span class="sd">                  Requires keyword argument ``diameter``, ``length``.</span>
+<span class="sd">                - ``cast-in-place``: A concrete cast-in-place pile.</span>
+<span class="sd">                  Requires keyword argument ``diameter``, ``length``.</span>
+
+<span class="sd">        Keyword Args:</span>
+<span class="sd">            shape (str): Pile shape given pile type. For concrete piles the</span>
+<span class="sd">                options are ``square-solid``, ``square-hollow``,</span>
+<span class="sd">                ``circle-closed``, ``circle-open``, ``hexagon`` and ``octagon``.</span>
+<span class="sd">                For H-piles see documentation for stored sections.</span>
+<span class="sd">                TODO: Add reference to table with sections.</span>
+
+<span class="sd">            side (float): :math:`\\alpha`: Side length of square, hexagonal and</span>
+<span class="sd">                octagonal piles, at the top.</span>
+
+<span class="sd">                - For **SI**: Enter side length in **centimeters**.</span>
+<span class="sd">                - For **English**: Enter side length in **inches**.</span>
+
+<span class="sd">            diameter (float): :math:`d`: Outer diameter at the top for circular</span>
+<span class="sd">                piles and inner diameter of concrete square hollow piles.</span>
+
+<span class="sd">                - For **SI**: Enter diameter in **centimeters**.</span>
+<span class="sd">                - For **English**: Enter diameter in **inches**.</span>
+
+<span class="sd">            thickness (float): :math:`t`: Wall thickness of steel pipe piles</span>
+<span class="sd">                and concrete circular open-ended piles.</span>
+
+<span class="sd">                - For **SI**: Enter thickness in **centimeters**.</span>
+<span class="sd">                - For **English**: Enter thickness in **inches**.</span>
+
+<span class="sd">            length (float): :math:`L_t`: Total length of pile.</span>
+
+<span class="sd">                - For **SI**: Enter length in **meters**.</span>
+<span class="sd">                - For **English**: Enter length in **feet**.</span>
+
+<span class="sd">            pen_depth (float): :math:`D_p`: Penetration depth, the part of the</span>
+<span class="sd">                pile that is embedded in the ground. **Important:** if a</span>
+<span class="sd">                penetration depth is not entered, it will be assumed equal to</span>
+<span class="sd">                the total length of the pile.</span>
+
+<span class="sd">                - For **SI**: Enter depth in **meters**.</span>
+<span class="sd">                - For **English**: Enter depth in **feet**.</span>
+
+<span class="sd">            nf_zone (float): :math:`D_{nf}`: No-friction zone; this is the</span>
+<span class="sd">                length of a segment measured from ground level where frictional</span>
+<span class="sd">                resistance does not contribute to pile capacity.</span>
+
+<span class="sd">                - For **SI**: Enter depth in **meters**.</span>
+<span class="sd">                - For **English**: Enter depth in **feet**.</span>
+
+<span class="sd">            taper_dims (list of lists): [:math:`d_i,l_i`]: For tapered piles,</span>
+<span class="sd">                enter the width of the pile, :math:`d_i`, at a length,</span>
+<span class="sd">                :math:`l_i`, measured from the top of the pile. The program</span>
+<span class="sd">                allows for multiple tapered sections. Enter as a list, for</span>
+<span class="sd">                example: [[12,4], [10,4],]</span>
+
+<span class="sd">                - For **SI**: Enter width in **centimeters** and length</span>
+<span class="sd">                  in **meters**.</span>
+<span class="sd">                - For **English**: Enter width in **inches** and length</span>
+<span class="sd">                  in **feet**.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">unit_system</span><span class="o">=</span><span class="n">unit_system</span><span class="p">)</span>
+
+        <span class="c1"># -- Check for valid pile type ---------------------------------------</span>
+        <span class="n">allowed_piles</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;concrete&#39;</span><span class="p">,</span> <span class="s1">&#39;pipe-open&#39;</span><span class="p">,</span> <span class="s1">&#39;pipe-closed&#39;</span><span class="p">,</span> <span class="s1">&#39;h-pile&#39;</span><span class="p">,</span>
+                         <span class="s1">&#39;timber&#39;</span><span class="p">,</span> <span class="s1">&#39;cast-in-place&#39;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">pile_type</span> <span class="ow">in</span> <span class="n">allowed_piles</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">pile_type</span> <span class="o">=</span> <span class="n">pile_type</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;&#39;</span><span class="si">{}</span><span class="s2">&#39; not recognized. Pile type can only be </span><span class="si">{}</span><span class="s2">.&quot;</span>
+                             <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">pile_type</span><span class="p">,</span> <span class="n">allowed_piles</span><span class="p">))</span>
+
+        <span class="c1"># -- Check for valid kwargs ------------------------------------------</span>
+        <span class="n">allowed_keys</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;shape&#39;</span><span class="p">,</span> <span class="s1">&#39;side&#39;</span><span class="p">,</span> <span class="s1">&#39;diameter&#39;</span><span class="p">,</span> <span class="s1">&#39;thickness&#39;</span><span class="p">,</span> <span class="s1">&#39;length&#39;</span><span class="p">,</span>
+                        <span class="s1">&#39;pen_depth&#39;</span><span class="p">,</span> <span class="s1">&#39;nf_zone&#39;</span><span class="p">,</span> <span class="s1">&#39;taper_dims&#39;</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">allowed_keys</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="s2">&quot;&#39;</span><span class="si">{}</span><span class="s2">&#39; is not a valid attribute.</span><span class="se">\n</span><span class="s2">The &quot;</span>
+                                     <span class="s2">&quot;allowed attributes are: </span><span class="si">{}</span><span class="s2">&quot;</span>
+                                     <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">allowed_keys</span><span class="p">))</span>
+
+        <span class="c1"># -- Assign values ---------------------------------------------------</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">shape</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;shape&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">side</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;side&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">diameter</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;diameter&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">thickness</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;thickness&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">length</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;length&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pen_depth</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;pen_depth&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">length</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nf_zone</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;nf_zone&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">taper_dims</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;taper_dims&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+
+        <span class="c1"># -- Reject negative or zero values ----------------------------------</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">side</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">diameter</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">thickness</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">length</span><span class="p">,</span>
+                  <span class="bp">self</span><span class="o">.</span><span class="n">pen_depth</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">nf_zone</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="n">i</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">pass</span>
+            <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Cannot parse non-numerical pile properties. &quot;</span>
+                                 <span class="s2">&quot;Did you enter a string?&quot;</span><span class="p">)</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Cannot parse negative or zero pile &quot;</span>
+                                     <span class="s2">&quot;properties.&quot;</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">TypeError</span><span class="p">:</span>
+                <span class="k">pass</span>
+
+        <span class="c1"># TODO: Fix these checks so they return the missing required attr only</span>
+        <span class="c1"># TODO: Also throw a warning if additional, unnecessary attr are given</span>
+        <span class="c1"># -- Checks for concrete piles ---------------------------------------</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">pile_type</span> <span class="o">==</span> <span class="s1">&#39;concrete&#39;</span><span class="p">:</span>
+            <span class="n">allowed_shape</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;square-solid&#39;</span><span class="p">,</span> <span class="s1">&#39;square-hollow&#39;</span><span class="p">,</span> <span class="s1">&#39;circle-closed&#39;</span><span class="p">,</span>
+                             <span class="s1">&#39;circle-open&#39;</span><span class="p">,</span> <span class="s1">&#39;hexagon&#39;</span><span class="p">,</span> <span class="s1">&#39;octagon&#39;</span><span class="p">]</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">shape</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">allowed_shape</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;&#39;</span><span class="si">{}</span><span class="s2">&#39; is not a valid value for concrete pile &quot;</span>
+                                 <span class="s2">&quot;shape.</span><span class="se">\n</span><span class="s2">The allowed values are: </span><span class="si">{}</span><span class="s2">&quot;</span>
+                                 <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">allowed_shape</span><span class="p">))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">pass</span>
+            <span class="n">shape_reqs</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s1">&#39;square-solid&#39;</span><span class="p">:</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">side</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">length</span><span class="p">],</span>
+                <span class="s1">&#39;square-hollow&#39;</span><span class="p">:</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">side</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">diameter</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">length</span><span class="p">],</span>
+                <span class="s1">&#39;circle-closed&#39;</span><span class="p">:</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">diameter</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">length</span><span class="p">],</span>
+                <span class="s1">&#39;circle-open&#39;</span><span class="p">:</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">diameter</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">thickness</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">length</span><span class="p">],</span>
+                <span class="s1">&#39;hexagon&#39;</span><span class="p">:</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">side</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">length</span><span class="p">],</span>
+                <span class="s1">&#39;octagon&#39;</span><span class="p">:</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">side</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">length</span><span class="p">],</span>
+            <span class="p">}</span>
+            <span class="n">shape_kwgs</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s1">&#39;square-solid&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;side&#39;</span><span class="p">,</span> <span class="s1">&#39;length&#39;</span><span class="p">],</span>
+                <span class="s1">&#39;square-hollow&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;side&#39;</span><span class="p">,</span> <span class="s1">&#39;diameter&#39;</span><span class="p">,</span> <span class="s1">&#39;length&#39;</span><span class="p">],</span>
+                <span class="s1">&#39;circle-closed&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;diameter&#39;</span><span class="p">,</span> <span class="s1">&#39;length&#39;</span><span class="p">],</span>
+                <span class="s1">&#39;circle-open&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;diameter&#39;</span><span class="p">,</span> <span class="s1">&#39;thickness&#39;</span><span class="p">,</span> <span class="s1">&#39;length&#39;</span><span class="p">],</span>
+                <span class="s1">&#39;hexagon&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;side&#39;</span><span class="p">,</span> <span class="s1">&#39;length&#39;</span><span class="p">],</span>
+                <span class="s1">&#39;octagon&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;side&#39;</span><span class="p">,</span> <span class="s1">&#39;length&#39;</span><span class="p">],</span>
+            <span class="p">}</span>
+            <span class="k">for</span> <span class="n">shape</span> <span class="ow">in</span> <span class="n">allowed_shape</span><span class="p">:</span>
+                <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="n">shape</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="kc">None</span> <span class="ow">in</span> <span class="n">shape_reqs</span><span class="p">[</span><span class="n">shape</span><span class="p">]):</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Missing required properties for pile &quot;</span>
+                                     <span class="s2">&quot;shape: &#39;</span><span class="si">{}</span><span class="s2">&#39;.</span><span class="se">\n</span><span class="s2">Enter values for: </span><span class="si">{}</span><span class="s2">.&quot;</span>
+                                     <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">shape_kwgs</span><span class="p">[</span><span class="n">shape</span><span class="p">]))</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">pass</span>
+            <span class="c1"># Fix assignments and units</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">side</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">side</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_set_units</span><span class="p">(</span><span class="s1">&#39;pile_diameter&#39;</span><span class="p">)</span>
+                         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">side</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="kc">None</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">diameter</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">diameter</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_set_units</span><span class="p">(</span><span class="s1">&#39;pile_diameter&#39;</span><span class="p">)</span>
+                             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">diameter</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="kc">None</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">thickness</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">thickness</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_set_units</span><span class="p">(</span><span class="s1">&#39;pile_diameter&#39;</span><span class="p">)</span>
+                              <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">thickness</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="kc">None</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">length</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">length</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_set_units</span><span class="p">(</span><span class="s1">&#39;pile_length&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">pen_depth</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pen_depth</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_set_units</span><span class="p">(</span><span class="s1">&#39;pile_length&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">nf_zone</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nf_zone</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_set_units</span><span class="p">(</span><span class="s1">&#39;pile_length&#39;</span><span class="p">)</span>
+                            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">nf_zone</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="kc">None</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">shape</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;square-solid&#39;</span><span class="p">,</span> <span class="s1">&#39;hexagon&#39;</span><span class="p">,</span> <span class="s1">&#39;octagon&#39;</span><span class="p">]:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">diameter</span> <span class="o">=</span> <span class="kc">None</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">thickness</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="s1">&#39;square-hollow&#39;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">thickness</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="s1">&#39;circle-closed&#39;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">side</span> <span class="o">=</span> <span class="kc">None</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">thickness</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">side</span> <span class="o">=</span> <span class="kc">None</span>
+
+            <span class="c1"># Check for taper dims diameters</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">taper_dims</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">pass</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">taper_dims</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">ii</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">taper_dims</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">taper_dims</span><span class="p">[</span><span class="mi">1</span><span class="p">:]):</span>
+                        <span class="k">if</span> <span class="n">ii</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">i</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+                            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Subsequent taper diameters &quot;</span>
+                                             <span class="s2">&quot;cannot be larger than preceding &quot;</span>
+                                             <span class="s2">&quot;taper diameters. Please correct.&quot;</span><span class="p">)</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="k">pass</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">pass</span>
+                <span class="n">diam_list</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">shape</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;circle-closed&#39;</span><span class="p">,</span> <span class="s1">&#39;circle-open&#39;</span><span class="p">]:</span>
+                    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">taper_dims</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="n">i</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">diameter</span><span class="o">.</span><span class="n">magnitude</span><span class="p">:</span>
+                            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Cannot have taper diameter larger&quot;</span>
+                                             <span class="s2">&quot; than top pile diameter.&quot;</span><span class="p">)</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="n">diam_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+                            <span class="n">i</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_set_units</span><span class="p">(</span><span class="s1">&#39;pile_diameter&#39;</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">diam_list</span><span class="p">))</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">diam_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span>
+                                                       <span class="bp">self</span><span class="o">.</span><span class="n">diameter</span><span class="o">.</span><span class="n">magnitude</span><span class="p">):</span>
+                        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;This is not a tapered pile. All &quot;</span>
+                                         <span class="s2">&quot;tapered diameters are the same and &quot;</span>
+                                         <span class="s2">&quot;equal to the top diameter.&quot;</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">taper_dims</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="n">i</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">side</span><span class="o">.</span><span class="n">magnitude</span><span class="p">:</span>
+                            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Cannot have taper diameter larger&quot;</span>
+                                             <span class="s2">&quot; than top pile diameter.&quot;</span><span class="p">)</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="n">diam_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+                            <span class="n">i</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_set_units</span><span class="p">(</span><span class="s1">&#39;pile_diameter&#39;</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">diam_list</span><span class="p">))</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">diam_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span>
+                                                       <span class="bp">self</span><span class="o">.</span><span class="n">side</span><span class="o">.</span><span class="n">magnitude</span><span class="p">):</span>
+                        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;This is not a tapered pile. All &quot;</span>
+                                         <span class="s2">&quot;tapered diameters are the same and &quot;</span>
+                                         <span class="s2">&quot;equal to the top diameter.&quot;</span><span class="p">)</span>
+
+        <span class="c1"># -- Checks for pipe open piles --------------------------------------</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">pile_type</span> <span class="o">==</span> <span class="s1">&#39;pipe-open&#39;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">diameter</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">thickness</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">or</span> \
+                    <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">length</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Missing required properties for pile type: &quot;</span>
+                                 <span class="s2">&quot;&#39;</span><span class="si">{}</span><span class="s2">&#39;.</span><span class="se">\n</span><span class="s2">Enter values for: [&#39;diameter&#39;, &quot;</span>
+                                 <span class="s2">&quot;&#39;thickness&#39;, &#39;length].&quot;</span>
+                                 <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pile_type</span><span class="p">))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">pass</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">taper_dims</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Open-ended steel pipe piles cannot be &quot;</span>
+                                 <span class="s2">&quot;tapered.&quot;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">pass</span>
+            <span class="c1"># Fix assignments and units</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">shape</span> <span class="o">=</span> <span class="s1">&#39;circular&#39;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">side</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">diameter</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">diameter</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_set_units</span><span class="p">(</span><span class="s1">&#39;pile_diameter&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">thickness</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">thickness</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_set_units</span><span class="p">(</span><span class="s1">&#39;pile_diameter&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">length</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">length</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_set_units</span><span class="p">(</span><span class="s1">&#39;pile_length&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">pen_depth</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pen_depth</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_set_units</span><span class="p">(</span><span class="s1">&#39;pile_length&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">nf_zone</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nf_zone</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_set_units</span><span class="p">(</span><span class="s1">&#39;pile_length&#39;</span><span class="p">)</span>
+                            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">nf_zone</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="kc">None</span><span class="p">)</span>
+
+        <span class="c1"># -- Checks for pipe closed piles ------------------------------------</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">pile_type</span> <span class="o">==</span> <span class="s1">&#39;pipe-closed&#39;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">diameter</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">length</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span> \
+                    <span class="ow">or</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">thickness</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Missing required properties for pile type: &quot;</span>
+                                 <span class="s2">&quot;&#39;</span><span class="si">{}</span><span class="s2">&#39;.</span><span class="se">\n</span><span class="s2">Enter values for: [&#39;diameter&#39;, &quot;</span>
+                                 <span class="s2">&quot;&#39;thickness&#39;, &#39;length&#39;].&quot;</span>
+                                 <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pile_type</span><span class="p">))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">pass</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">taper_dims</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Closed-ended steel pipe piles cannot be &quot;</span>
+                                 <span class="s2">&quot;tapered.&quot;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">pass</span>
+            <span class="c1"># Fix assignments and units</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">shape</span> <span class="o">=</span> <span class="s1">&#39;circular&#39;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">side</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">diameter</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">diameter</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_set_units</span><span class="p">(</span><span class="s1">&#39;pile_diameter&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">thickness</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">thickness</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_set_units</span><span class="p">(</span><span class="s1">&#39;pile_diameter&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">length</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">length</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_set_units</span><span class="p">(</span><span class="s1">&#39;pile_length&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">pen_depth</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pen_depth</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_set_units</span><span class="p">(</span><span class="s1">&#39;pile_length&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">nf_zone</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nf_zone</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_set_units</span><span class="p">(</span><span class="s1">&#39;pile_length&#39;</span><span class="p">)</span>
+                            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">nf_zone</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="kc">None</span><span class="p">)</span>
+
+        <span class="c1"># -- Checks for H-Piles ----------------------------------------------</span>
+        <span class="c1"># TODO: Add logic for custom H-pile shapes</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">pile_type</span> <span class="o">==</span> <span class="s1">&#39;h-pile&#39;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">length</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Enter value for &#39;length&#39;.&quot;</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">unit_system</span> <span class="o">==</span> <span class="s1">&#39;English&#39;</span><span class="p">:</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">shape</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">english_hpiles</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                        <span class="s2">&quot;&#39;</span><span class="si">{}</span><span class="s2">&#39; is not a valid shape for English H-Piles.&quot;</span>
+                        <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">The allowed values are: </span><span class="si">{}</span><span class="s2">&quot;</span>
+                        <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">english_hpiles</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">pass</span>
+            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">unit_system</span> <span class="o">==</span> <span class="s1">&#39;SI&#39;</span><span class="p">:</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">shape</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">si_hpiles</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                        <span class="s2">&quot;&#39;</span><span class="si">{}</span><span class="s2">&#39; is not a valid shape for S.I. H-Piles.&quot;</span>
+                        <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">The allowed values are: </span><span class="si">{}</span><span class="s2">&quot;</span>
+                        <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">si_hpiles</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">pass</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">taper_dims</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;H-Piles cannot be tapered.&quot;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">pass</span>
+            <span class="c1"># Fix assignments and units</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">side</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">diameter</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">thickness</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">length</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">length</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_set_units</span><span class="p">(</span><span class="s1">&#39;pile_length&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">pen_depth</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pen_depth</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_set_units</span><span class="p">(</span><span class="s1">&#39;pile_length&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">nf_zone</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nf_zone</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_set_units</span><span class="p">(</span><span class="s1">&#39;pile_length&#39;</span><span class="p">)</span>
+                            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">nf_zone</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="kc">None</span><span class="p">)</span>
+
+        <span class="c1"># -- Checks for timber and cast-in-place piles -----------------------</span>
+        <span class="c1"># TODO: Most likely cast-in-place will have their own checks</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">pile_type</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;timber&#39;</span><span class="p">,</span> <span class="s1">&#39;cast-in-place&#39;</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">diameter</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">length</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Missing required properties for pile type: &quot;</span>
+                                 <span class="s2">&quot;&#39;</span><span class="si">{}</span><span class="s2">&#39;.</span><span class="se">\n</span><span class="s2">Enter values for: [&#39;diameter&#39;, &quot;</span>
+                                 <span class="s2">&quot;&#39;length].&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pile_type</span><span class="p">))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">pass</span>
+            <span class="c1"># Fix assignments and units</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">shape</span> <span class="o">=</span> <span class="s1">&#39;circular&#39;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">side</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">diameter</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">diameter</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_set_units</span><span class="p">(</span><span class="s1">&#39;pile_diameter&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">thickness</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">length</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">length</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_set_units</span><span class="p">(</span><span class="s1">&#39;pile_length&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">pen_depth</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pen_depth</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_set_units</span><span class="p">(</span><span class="s1">&#39;pile_length&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">nf_zone</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nf_zone</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_set_units</span><span class="p">(</span><span class="s1">&#39;pile_length&#39;</span><span class="p">)</span>
+                            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">nf_zone</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="kc">None</span><span class="p">)</span>
+
+            <span class="c1"># Check for taper dims diameters</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">taper_dims</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">pass</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">taper_dims</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">ii</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">taper_dims</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">taper_dims</span><span class="p">[</span><span class="mi">1</span><span class="p">:]):</span>
+                        <span class="k">if</span> <span class="n">ii</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">i</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+                            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Subsequent taper diameters &quot;</span>
+                                             <span class="s2">&quot;cannot be larger than preceding &quot;</span>
+                                             <span class="s2">&quot;taper diameters. Please correct.&quot;</span><span class="p">)</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="k">pass</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">pass</span>
+                <span class="n">diam_list</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">taper_dims</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">i</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">diameter</span><span class="o">.</span><span class="n">magnitude</span><span class="p">:</span>
+                        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Cannot have taper diameter larger&quot;</span>
+                                         <span class="s2">&quot; than top pile diameter.&quot;</span><span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">diam_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+                        <span class="n">i</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_set_units</span><span class="p">(</span><span class="s1">&#39;pile_diameter&#39;</span><span class="p">)</span>
+                <span class="k">if</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">diam_list</span><span class="p">))</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">diam_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span>
+                                                   <span class="bp">self</span><span class="o">.</span><span class="n">diameter</span><span class="o">.</span><span class="n">magnitude</span><span class="p">):</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;This is not a tapered pile. All &quot;</span>
+                                     <span class="s2">&quot;tapered diameters are the same and &quot;</span>
+                                     <span class="s2">&quot;equal to the top diameter.&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">pass</span>
+
+        <span class="c1"># -- Taper dims checks -----------------------------------------------</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">taper_dims</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">pass</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">taper_dims</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="nb">list</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Taper dims must be a list of lists.&quot;</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">taper_dims</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Taper dims list cannot be empty.&quot;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">pass</span>
+
+            <span class="n">taper_length</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">taper_dims</span><span class="p">:</span>
+                <span class="k">if</span> <span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="nb">list</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">):</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Taper dims must be a list of lists, &quot;</span>
+                                     <span class="s2">&quot;i.e. [[d,l],].&quot;</span><span class="p">)</span>
+                <span class="k">elif</span> <span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">i</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">magnitude</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">])</span> \
+                        <span class="ow">or</span> <span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">i</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">]):</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Cannot parse non-numerical taper &quot;</span>
+                                     <span class="s2">&quot;dimensions. Did you enter a string?&quot;</span><span class="p">)</span>
+                <span class="k">elif</span> <span class="p">(</span><span class="n">i</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">magnitude</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">i</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">):</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Cannot parse negative or zero taper &quot;</span>
+                                     <span class="s2">&quot;dimensions. Please correct.&quot;</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">taper_length</span> <span class="o">=</span> <span class="n">taper_length</span> <span class="o">+</span> <span class="n">i</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+                    <span class="n">i</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_set_units</span><span class="p">(</span><span class="s1">&#39;pile_length&#39;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">taper_length</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">length</span><span class="o">.</span><span class="n">magnitude</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Sum of lengths of tapered portions does &quot;</span>
+                                 <span class="s2">&quot;not equal total pile length&quot;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">pass</span></div>
+
+    <span class="c1"># -- Static method for rectangle area ------------------------------------</span>
+
+<div class="viewcode-block" id="Pile.area_of_shape"><a class="viewcode-back" href="../../../api/api_reference.html#edafos.deepfoundations.piles.Pile.area_of_shape">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">area_of_shape</span><span class="p">(</span><span class="n">ad</span><span class="p">,</span> <span class="n">shape</span><span class="p">,</span> <span class="n">t</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ad2</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">h</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Static method that calculates the area of a given shape.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            ad (float): Length of side or diameter.</span>
+<span class="sd">            shape (str): Options are ``square``, ``hexagon``, ``octagon``,</span>
+<span class="sd">                ``circle``, ``ring``, ``trapezoid``, ``cone``.</span>
+<span class="sd">            t (float): Thickness of pile wall.</span>
+<span class="sd">            ad2 (float): Additional length of side or diameter to obtain</span>
+<span class="sd">                side area.</span>
+<span class="sd">            h (float): Segment height to obtain side area.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            float: Area of shape (unitless)</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">allowed</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;square&#39;</span><span class="p">,</span> <span class="s1">&#39;hexagon&#39;</span><span class="p">,</span> <span class="s1">&#39;octagon&#39;</span><span class="p">,</span> <span class="s1">&#39;circle&#39;</span><span class="p">,</span> <span class="s1">&#39;ring&#39;</span><span class="p">,</span>
+                   <span class="s1">&#39;trapezoid&#39;</span><span class="p">,</span> <span class="s1">&#39;cone&#39;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">shape</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">allowed</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Shape can be </span><span class="si">{}</span><span class="s2"> only.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">allowed</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">pass</span>
+
+        <span class="k">if</span> <span class="n">shape</span> <span class="o">==</span> <span class="s1">&#39;square&#39;</span><span class="p">:</span>
+            <span class="n">area</span> <span class="o">=</span> <span class="n">ad</span> <span class="o">**</span> <span class="mi">2</span>
+        <span class="k">elif</span> <span class="n">shape</span> <span class="o">==</span> <span class="s1">&#39;hexagon&#39;</span><span class="p">:</span>
+            <span class="n">area</span> <span class="o">=</span> <span class="p">(</span><span class="mi">3</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">ad</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">shape</span> <span class="o">==</span> <span class="s1">&#39;octagon&#39;</span><span class="p">:</span>
+            <span class="n">area</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span> <span class="o">*</span> <span class="p">(</span><span class="n">ad</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">shape</span> <span class="o">==</span> <span class="s1">&#39;circle&#39;</span><span class="p">:</span>
+            <span class="n">area</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="p">(</span><span class="n">ad</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span> <span class="o">/</span> <span class="mi">4</span>
+        <span class="k">elif</span> <span class="n">shape</span> <span class="o">==</span> <span class="s1">&#39;ring&#39;</span><span class="p">:</span>
+            <span class="n">area</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="p">((</span><span class="n">ad</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span> <span class="o">-</span> <span class="p">(</span><span class="n">ad</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">t</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span> <span class="o">/</span> <span class="mi">4</span>
+        <span class="k">elif</span> <span class="n">shape</span> <span class="o">==</span> <span class="s1">&#39;trapezoid&#39;</span><span class="p">:</span>
+            <span class="n">area</span> <span class="o">=</span> <span class="p">((</span><span class="n">ad</span> <span class="o">+</span> <span class="n">ad2</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">h</span>
+        <span class="k">else</span><span class="p">:</span>  <span class="c1"># Cone -- http://mathworld.wolfram.com/ConicalFrustum.html</span>
+            <span class="n">s</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((((</span><span class="n">ad</span> <span class="o">-</span> <span class="n">ad2</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">h</span> <span class="o">**</span> <span class="mi">2</span><span class="p">))</span>
+            <span class="n">area</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="p">((</span><span class="n">ad</span> <span class="o">+</span> <span class="n">ad2</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">s</span>
+
+        <span class="k">return</span> <span class="n">area</span></div>
+
+    <span class="c1"># -- Private method for pile a/d at z ------------------------------------</span>
+
+<div class="viewcode-block" id="Pile._pile_a_d"><a class="viewcode-back" href="../../../api/api_reference.html#edafos.deepfoundations.piles.Pile._pile_a_d">[docs]</a>    <span class="k">def</span> <span class="nf">_pile_a_d</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">z</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; A private method that returns the side, :math:`a`, or diameter,</span>
+<span class="sd">        :math:`d`, of a pile at a depth :math:`z`.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            z (float): Vertical depth to the point of interest, measured from</span>
+<span class="sd">                the top of the soil profile.</span>
+
+<span class="sd">                - For **SI**: Enter depth, *z*, in **meters**.</span>
+<span class="sd">                - For **English**: Enter depth, *z*, in **feet**.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Quantity: Side :math:`a`, or diameter, :math:`d`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">z</span> <span class="o">=</span> <span class="n">z</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_set_units</span><span class="p">(</span><span class="s1">&#39;length&#39;</span><span class="p">)</span>
+        <span class="c1"># The length x from the top of the pile is defined as</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">length</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">pen_depth</span> <span class="o">+</span> <span class="n">z</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">pile_type</span> <span class="o">==</span> <span class="s1">&#39;concrete&#39;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">shape</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;square-solid&#39;</span><span class="p">,</span> <span class="s1">&#39;square-hollow&#39;</span><span class="p">,</span> <span class="s1">&#39;hexagon&#39;</span><span class="p">,</span>
+                              <span class="s1">&#39;octagon&#39;</span><span class="p">]:</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">taper_dims</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">di</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">side</span><span class="o">.</span><span class="n">magnitude</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">side</span><span class="o">.</span><span class="n">magnitude</span><span class="p">]</span>
+                    <span class="n">li</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">length</span><span class="o">.</span><span class="n">magnitude</span><span class="p">]</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">di</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">side</span><span class="o">.</span><span class="n">magnitude</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="n">i</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">magnitude</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span>
+                                                  <span class="bp">self</span><span class="o">.</span><span class="n">taper_dims</span><span class="p">]</span>
+                    <span class="n">li</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="n">i</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">magnitude</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">taper_dims</span><span class="p">]</span>
+                    <span class="n">li</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cumsum</span><span class="p">(</span><span class="n">li</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">taper_dims</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">di</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">diameter</span><span class="o">.</span><span class="n">magnitude</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">diameter</span><span class="o">.</span><span class="n">magnitude</span><span class="p">]</span>
+                    <span class="n">li</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">length</span><span class="o">.</span><span class="n">magnitude</span><span class="p">]</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">di</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">diameter</span><span class="o">.</span><span class="n">magnitude</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="n">i</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">magnitude</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span>
+                                                      <span class="bp">self</span><span class="o">.</span><span class="n">taper_dims</span><span class="p">]</span>
+                    <span class="n">li</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="n">i</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">magnitude</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">taper_dims</span><span class="p">]</span>
+                    <span class="n">li</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cumsum</span><span class="p">(</span><span class="n">li</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">pile_type</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;pipe-open&#39;</span><span class="p">,</span> <span class="s1">&#39;pipe-closed&#39;</span><span class="p">]:</span>
+            <span class="n">di</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">diameter</span><span class="o">.</span><span class="n">magnitude</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">diameter</span><span class="o">.</span><span class="n">magnitude</span><span class="p">]</span>
+            <span class="n">li</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">length</span><span class="o">.</span><span class="n">magnitude</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>  <span class="c1"># Timber and cast-in-place piles</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">taper_dims</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">di</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">diameter</span><span class="o">.</span><span class="n">magnitude</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">diameter</span><span class="o">.</span><span class="n">magnitude</span><span class="p">]</span>
+                <span class="n">li</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">length</span><span class="o">.</span><span class="n">magnitude</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">di</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">diameter</span><span class="o">.</span><span class="n">magnitude</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="n">i</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">magnitude</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span>
+                                                  <span class="bp">self</span><span class="o">.</span><span class="n">taper_dims</span><span class="p">]</span>
+                <span class="n">li</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="n">i</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">magnitude</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">taper_dims</span><span class="p">]</span>
+                <span class="n">li</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cumsum</span><span class="p">(</span><span class="n">li</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">interp</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">magnitude</span><span class="p">,</span> <span class="n">li</span><span class="p">,</span> <span class="n">di</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_set_units</span><span class="p">(</span><span class="s1">&#39;pile_diameter&#39;</span><span class="p">)</span></div>
+
+    <span class="c1"># -- Method for cross sectional area at z --------------------------------</span>
+
+<div class="viewcode-block" id="Pile.xsection_area"><a class="viewcode-back" href="../../../api/api_reference.html#edafos.deepfoundations.piles.Pile.xsection_area">[docs]</a>    <span class="k">def</span> <span class="nf">xsection_area</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">soil_plug</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">box_area</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Method that returns the pile cross sectional area at a depth,</span>
+<span class="sd">        :math:`z`, from ground surface.</span>
+
+<span class="sd">        .. warning::</span>
+
+<span class="sd">           This method was made for bearing capacity calculations.</span>
+<span class="sd">           As such, it returns the relevant cross sectional area. For example,</span>
+<span class="sd">           for steel pipe closed-ended piles, it will return the circle and not</span>
+<span class="sd">           the ring area.</span>
+
+<span class="sd">        TODO: For concrete square hollow piles it currently returns solid area</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            z (float): Vertical depth to the point of interest, measured from</span>
+<span class="sd">                the top of the soil profile.</span>
+
+<span class="sd">                - For **SI**: Enter depth, *z*, in **meters**.</span>
+<span class="sd">                - For **English**: Enter depth, *z*, in **feet**.</span>
+
+<span class="sd">            soil_plug (bool): If ``TRUE``, the method returns the full area of</span>
+<span class="sd">                open-ended piles.</span>
+
+<span class="sd">            box_area (bool): For H-piles, if set to ``TRUE``, the method</span>
+<span class="sd">                returns the box area.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Quantity: The cross sectional area of the pile w/ units.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">z</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Depth z cannot be negative here.&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">pass</span>
+
+        <span class="c1"># The length x from the top of the pile is defined as</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">length</span><span class="o">.</span><span class="n">magnitude</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">pen_depth</span><span class="o">.</span><span class="n">magnitude</span> <span class="o">+</span> <span class="n">z</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">x</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">x</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">length</span><span class="o">.</span><span class="n">magnitude</span><span class="p">):</span>
+            <span class="n">area</span> <span class="o">=</span> <span class="mi">0</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_set_units</span><span class="p">(</span><span class="s1">&#39;pile_xarea&#39;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">pile_type</span> <span class="o">==</span> <span class="s1">&#39;concrete&#39;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">shape</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;square-solid&#39;</span><span class="p">,</span> <span class="s1">&#39;square-hollow&#39;</span><span class="p">]:</span>
+                <span class="n">area</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">area_of_shape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_pile_a_d</span><span class="p">(</span><span class="n">z</span><span class="p">),</span> <span class="s1">&#39;square&#39;</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="s1">&#39;hexagon&#39;</span><span class="p">:</span>
+                <span class="n">area</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">area_of_shape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_pile_a_d</span><span class="p">(</span><span class="n">z</span><span class="p">),</span> <span class="s1">&#39;hexagon&#39;</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="s1">&#39;octagon&#39;</span><span class="p">:</span>
+                <span class="n">area</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">area_of_shape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_pile_a_d</span><span class="p">(</span><span class="n">z</span><span class="p">),</span> <span class="s1">&#39;octagon&#39;</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="s1">&#39;circle-closed&#39;</span><span class="p">:</span>
+                <span class="n">area</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">area_of_shape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_pile_a_d</span><span class="p">(</span><span class="n">z</span><span class="p">),</span> <span class="s1">&#39;circle&#39;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>  <span class="c1"># circle-open</span>
+                <span class="k">if</span> <span class="n">soil_plug</span><span class="p">:</span>
+                    <span class="n">area</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">area_of_shape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_pile_a_d</span><span class="p">(</span><span class="n">z</span><span class="p">),</span> <span class="s1">&#39;circle&#39;</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">area</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">area_of_shape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_pile_a_d</span><span class="p">(</span><span class="n">z</span><span class="p">),</span> <span class="s1">&#39;ring&#39;</span><span class="p">,</span>
+                                              <span class="bp">self</span><span class="o">.</span><span class="n">thickness</span><span class="p">)</span>
+
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">pile_type</span> <span class="o">==</span> <span class="s1">&#39;pipe-open&#39;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">soil_plug</span><span class="p">:</span>
+                <span class="n">area</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">area_of_shape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_pile_a_d</span><span class="p">(</span><span class="n">z</span><span class="p">),</span> <span class="s1">&#39;circle&#39;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">area</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">area_of_shape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_pile_a_d</span><span class="p">(</span><span class="n">z</span><span class="p">),</span> <span class="s1">&#39;ring&#39;</span><span class="p">,</span>
+                                          <span class="bp">self</span><span class="o">.</span><span class="n">thickness</span><span class="p">)</span>
+
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">pile_type</span> <span class="o">==</span> <span class="s1">&#39;pipe-closed&#39;</span><span class="p">:</span>
+            <span class="n">area</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">area_of_shape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_pile_a_d</span><span class="p">(</span><span class="n">z</span><span class="p">),</span> <span class="s1">&#39;circle&#39;</span><span class="p">)</span>
+
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">pile_type</span> <span class="o">==</span> <span class="s1">&#39;h-pile&#39;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">box_area</span><span class="p">:</span>
+                <span class="n">area</span> <span class="o">=</span> <span class="n">english_hpiles</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">shape</span><span class="p">][</span><span class="s1">&#39;box_area&#39;</span><span class="p">]</span> \
+                       <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_set_units</span><span class="p">(</span><span class="s1">&#39;pile_xarea&#39;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">area</span> <span class="o">=</span> <span class="n">english_hpiles</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">shape</span><span class="p">][</span><span class="s1">&#39;area&#39;</span><span class="p">]</span> \
+                       <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_set_units</span><span class="p">(</span><span class="s1">&#39;pile_xarea&#39;</span><span class="p">)</span>
+
+        <span class="k">else</span><span class="p">:</span>  <span class="c1"># Timber and cast-in-place piles</span>
+            <span class="n">area</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">area_of_shape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_pile_a_d</span><span class="p">(</span><span class="n">z</span><span class="p">),</span> <span class="s1">&#39;circle&#39;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">area</span></div>
+
+    <span class="c1"># -- Method for side area between z1, z2 ---------------------------------</span>
+
+<div class="viewcode-block" id="Pile.side_area"><a class="viewcode-back" href="../../../api/api_reference.html#edafos.deepfoundations.piles.Pile.side_area">[docs]</a>    <span class="k">def</span> <span class="nf">side_area</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">z1</span><span class="p">,</span> <span class="n">z2</span><span class="p">,</span> <span class="n">box_area</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Method that returns the side area for a section of the pile defined</span>
+<span class="sd">        by z1 and z2.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            z1 (float): Vertical depth to the highest point of interest,</span>
+<span class="sd">                measured from the top of the soil profile.</span>
+
+<span class="sd">                - For **SI**: Enter depth, *z1*, in **meters**.</span>
+<span class="sd">                - For **English**: Enter depth, *z1*, in **feet**.</span>
+
+<span class="sd">            z2 (float): Vertical depth to the lowest point of interest,</span>
+<span class="sd">                measured from the top of the soil profile.</span>
+
+<span class="sd">                - For **SI**: Enter depth, *z1*, in **meters**.</span>
+<span class="sd">                - For **English**: Enter depth, *z1*, in **feet**.</span>
+
+<span class="sd">            box_area (bool): For H-piles, if set to ``TRUE``, the method</span>
+<span class="sd">                returns the box area.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Quantity: The side area of the pile w/ units between z1 and z2.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">z1</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">z2</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Depth z cannot be negative here.&quot;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">z2</span> <span class="o">&lt;=</span> <span class="n">z1</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;z2 must be larger than z1&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">pass</span>
+
+        <span class="c1"># The length x from the top of the pile is defined as</span>
+        <span class="n">x1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">length</span><span class="o">.</span><span class="n">magnitude</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">pen_depth</span><span class="o">.</span><span class="n">magnitude</span> <span class="o">+</span> <span class="n">z1</span>
+        <span class="n">x2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">length</span><span class="o">.</span><span class="n">magnitude</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">pen_depth</span><span class="o">.</span><span class="n">magnitude</span> <span class="o">+</span> <span class="n">z2</span>
+
+        <span class="n">h</span> <span class="o">=</span> <span class="p">(</span><span class="n">z2</span> <span class="o">-</span> <span class="n">z1</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_set_units</span><span class="p">(</span><span class="s1">&#39;pile_length&#39;</span><span class="p">)</span>
+
+        <span class="c1"># TODO: Give these limits another thought, maybe not return zero.</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">x1</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">x1</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">length</span><span class="o">.</span><span class="n">magnitude</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">x2</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="ow">or</span> \
+                <span class="p">(</span><span class="n">x2</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">length</span><span class="o">.</span><span class="n">magnitude</span><span class="p">):</span>
+            <span class="n">area</span> <span class="o">=</span> <span class="mi">0</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_set_units</span><span class="p">(</span><span class="s1">&#39;pile_xarea&#39;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">pile_type</span> <span class="o">==</span> <span class="s1">&#39;concrete&#39;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">shape</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;square-solid&#39;</span><span class="p">,</span> <span class="s1">&#39;square-hollow&#39;</span><span class="p">]:</span>
+                <span class="n">area</span> <span class="o">=</span> <span class="mi">4</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">area_of_shape</span><span class="p">(</span><span class="n">ad</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_pile_a_d</span><span class="p">(</span><span class="n">z1</span><span class="p">),</span>
+                                              <span class="n">shape</span><span class="o">=</span><span class="s1">&#39;trapezoid&#39;</span><span class="p">,</span>
+                                              <span class="n">ad2</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_pile_a_d</span><span class="p">(</span><span class="n">z2</span><span class="p">),</span> <span class="n">h</span><span class="o">=</span><span class="n">h</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="s1">&#39;hexagon&#39;</span><span class="p">:</span>
+                <span class="n">area</span> <span class="o">=</span> <span class="mi">6</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">area_of_shape</span><span class="p">(</span><span class="n">ad</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_pile_a_d</span><span class="p">(</span><span class="n">z1</span><span class="p">),</span>
+                                              <span class="n">shape</span><span class="o">=</span><span class="s1">&#39;trapezoid&#39;</span><span class="p">,</span>
+                                              <span class="n">ad2</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_pile_a_d</span><span class="p">(</span><span class="n">z2</span><span class="p">),</span> <span class="n">h</span><span class="o">=</span><span class="n">h</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="s1">&#39;octagon&#39;</span><span class="p">:</span>
+                <span class="n">area</span> <span class="o">=</span> <span class="mi">6</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">area_of_shape</span><span class="p">(</span><span class="n">ad</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_pile_a_d</span><span class="p">(</span><span class="n">z1</span><span class="p">),</span>
+                                              <span class="n">shape</span><span class="o">=</span><span class="s1">&#39;trapezoid&#39;</span><span class="p">,</span>
+                                              <span class="n">ad2</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_pile_a_d</span><span class="p">(</span><span class="n">z2</span><span class="p">),</span> <span class="n">h</span><span class="o">=</span><span class="n">h</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>  <span class="c1"># circle-closed and circle-open</span>
+                <span class="n">area</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">area_of_shape</span><span class="p">(</span><span class="n">ad</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_pile_a_d</span><span class="p">(</span><span class="n">z1</span><span class="p">),</span>
+                                          <span class="n">shape</span><span class="o">=</span><span class="s1">&#39;cone&#39;</span><span class="p">,</span>
+                                          <span class="n">ad2</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_pile_a_d</span><span class="p">(</span><span class="n">z2</span><span class="p">),</span> <span class="n">h</span><span class="o">=</span><span class="n">h</span><span class="p">)</span>
+
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">pile_type</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;pipe-open&#39;</span><span class="p">,</span> <span class="s1">&#39;pipe-closed&#39;</span><span class="p">]:</span>
+            <span class="n">area</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">area_of_shape</span><span class="p">(</span><span class="n">ad</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_pile_a_d</span><span class="p">(</span><span class="n">z1</span><span class="p">),</span> <span class="n">shape</span><span class="o">=</span><span class="s1">&#39;cone&#39;</span><span class="p">,</span>
+                                      <span class="n">ad2</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_pile_a_d</span><span class="p">(</span><span class="n">z2</span><span class="p">),</span> <span class="n">h</span><span class="o">=</span><span class="n">h</span><span class="p">)</span>
+        <span class="c1"># TODO: adjust to accept si piles as well</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">pile_type</span> <span class="o">==</span> <span class="s1">&#39;h-pile&#39;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">box_area</span><span class="p">:</span>
+                <span class="n">area</span> <span class="o">=</span> <span class="p">(</span><span class="n">english_hpiles</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">shape</span><span class="p">][</span><span class="s1">&#39;box_perimeter&#39;</span><span class="p">]</span>
+                        <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_set_units</span><span class="p">(</span><span class="s1">&#39;pile_diameter&#39;</span><span class="p">))</span> <span class="o">*</span> <span class="n">h</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">area</span> <span class="o">=</span> <span class="p">(</span><span class="n">english_hpiles</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">shape</span><span class="p">][</span><span class="s1">&#39;perimeter&#39;</span><span class="p">]</span>
+                        <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_set_units</span><span class="p">(</span><span class="s1">&#39;pile_diameter&#39;</span><span class="p">))</span> <span class="o">*</span> <span class="n">h</span>
+
+        <span class="k">else</span><span class="p">:</span>  <span class="c1"># Timber and cast-in-place piles</span>
+            <span class="n">area</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">area_of_shape</span><span class="p">(</span><span class="n">ad</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_pile_a_d</span><span class="p">(</span><span class="n">z1</span><span class="p">),</span> <span class="n">shape</span><span class="o">=</span><span class="s1">&#39;cone&#39;</span><span class="p">,</span>
+                                      <span class="n">ad2</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_pile_a_d</span><span class="p">(</span><span class="n">z2</span><span class="p">),</span> <span class="n">h</span><span class="o">=</span><span class="n">h</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">area</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_set_units</span><span class="p">(</span><span class="s1">&#39;pile_side_area&#39;</span><span class="p">))</span></div>
+
+    <span class="c1"># -- Method that returns list of relevant z&#39;s ----------------------------</span>
+
+<div class="viewcode-block" id="Pile.z_of_pile"><a class="viewcode-back" href="../../../api/api_reference.html#edafos.deepfoundations.piles.Pile.z_of_pile">[docs]</a>    <span class="k">def</span> <span class="nf">z_of_pile</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Method that returns a list of depths, :math:`z`, for the pile that</span>
+<span class="sd">        correspond to the top of the pile (if below ground), the tip of the</span>
+<span class="sd">        pile and inflection points if tapered.</span>
+
+<span class="sd">        The assumption here is that :math:`z = x - L_t + D_p`, where :math:`x`</span>
+<span class="sd">        is a point along the length of the pile. Therefore, for :math:`x = 0`</span>
+<span class="sd">        we get the depth :math:`z_{pile.top}` at the top of the pile (if</span>
+<span class="sd">        :math:`D_p &gt; L_t`) and for :math:`x = L_t`, we get the depth</span>
+<span class="sd">        :math:`z_{pile.toe}` at the toe (aka tip) of the pile. If the pile is</span>
+<span class="sd">        tapered, :math:`x` along inflection points will produce the</span>
+<span class="sd">        corresponding :math:`z`.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            A list of depths, :math:`z` (unitless).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">z_list</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="c1"># Get z_pile-top if Dp &gt; Lt</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">pen_depth</span><span class="o">.</span><span class="n">magnitude</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">length</span><span class="o">.</span><span class="n">magnitude</span><span class="p">:</span>
+            <span class="n">z</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pen_depth</span><span class="o">.</span><span class="n">magnitude</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">length</span><span class="o">.</span><span class="n">magnitude</span>
+            <span class="n">z_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">z</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">pass</span>
+        <span class="c1"># Get the remaining z&#39;s</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">taper_dims</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">z</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pen_depth</span><span class="o">.</span><span class="n">magnitude</span>
+            <span class="n">z_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">z</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">taper_l</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">taper_dims</span><span class="p">:</span>
+                <span class="n">taper_l</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">magnitude</span><span class="p">)</span>
+            <span class="n">taper_l</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cumsum</span><span class="p">(</span><span class="n">taper_l</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">ii</span> <span class="ow">in</span> <span class="n">taper_l</span><span class="p">:</span>
+                <span class="n">z</span> <span class="o">=</span> <span class="n">ii</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">length</span><span class="o">.</span><span class="n">magnitude</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">pen_depth</span><span class="o">.</span><span class="n">magnitude</span>
+                <span class="k">if</span> <span class="n">z</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">z_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">z</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">pass</span>
+
+        <span class="k">return</span> <span class="n">z_list</span></div>
+
+    <span class="c1"># -- Method for string representation ------------------------------------</span>
+
+    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;Pile Details:</span><span class="se">\n</span><span class="s2">------------</span><span class="se">\n</span><span class="s2">&quot;</span> \
+               <span class="s2">&quot;Type: </span><span class="si">{0.pile_type}</span><span class="se">\n</span><span class="s2">&quot;</span> \
+               <span class="s2">&quot;Shape: </span><span class="si">{0.shape}</span><span class="se">\n</span><span class="s2">&quot;</span> \
+               <span class="s2">&quot;Side: </span><span class="si">{0.side}</span><span class="se">\n</span><span class="s2">&quot;</span> \
+               <span class="s2">&quot;Diameter: </span><span class="si">{0.diameter}</span><span class="se">\n</span><span class="s2">&quot;</span> \
+               <span class="s2">&quot;Thickness: </span><span class="si">{0.thickness}</span><span class="se">\n</span><span class="s2">&quot;</span> \
+               <span class="s2">&quot;Total Length: </span><span class="si">{0.length}</span><span class="se">\n</span><span class="s2">&quot;</span> \
+               <span class="s2">&quot;Penetration Depth: </span><span class="si">{0.pen_depth}</span><span class="se">\n</span><span class="s2">&quot;</span> \
+               <span class="s2">&quot;No-Friction Zone: </span><span class="si">{0.nf_zone}</span><span class="se">\n</span><span class="s2">&quot;</span> \
+               <span class="s2">&quot;Taper Dims [[d,l],]: </span><span class="si">{0.taper_dims}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">edafos: A Python Module for Soil Mechanics</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018, Nick Machairas @ NYU Geo.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.5.
+    </div>
+  </body>
+</html>
