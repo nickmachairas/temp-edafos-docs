@@ -1,0 +1,1274 @@
+
+
+<!doctype html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Correlations &#8212; edafos 0.1.0-beta documentation</title>
+    <link rel="stylesheet" href="../_static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../_static/bizstyle.js"></script>
+    <link rel="shortcut icon" href="../_static/favicon.png"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Soil Stresses" href="stresses.html" />
+    <link rel="prev" title="Layer Delineation" href="delineation.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="stresses.html" title="Soil Stresses"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="delineation.html" title="Layer Delineation"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">edafos: A Python Module for Soil Mechanics</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/logo.png" alt="Logo"/>
+            </a></p><h3><a href="../index.html">Site Contents</a></h3>
+<p class="caption"><span class="caption-text">INTRODUCTION:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../intro/units.html">Units</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../intro/nomenclature.html">Nomenclature</a></li>
+</ul>
+<p class="caption"><span class="caption-text">SOIL PROFILE:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="delineation.html">Layer Delineation</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Correlations</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#olson">Olson</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#hunt">Hunt</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="stresses.html">Soil Stresses</a></li>
+</ul>
+<p class="caption"><span class="caption-text">DEEP FOUNDATIONS:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../deepfoundations/types_o_piles.html">Types of Piles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../deepfoundations/capacity.html">Capacity of Single Piles</a></li>
+</ul>
+<p class="caption"><span class="caption-text">EXAMPLES:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../examples/pile_capacity.html">Pile Capacity Calculations</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API REFERENCE:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../api/api_reference.html">Module Documentation</a></li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="delineation.html"
+                        title="previous chapter">Layer Delineation</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="stresses.html"
+                        title="next chapter">Soil Stresses</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/soil/correlations.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="correlations">
+<span id="id1"></span><h1>Correlations<a class="headerlink" href="#correlations" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="olson">
+<span id="olson-correlations"></span><h2>Olson<a class="headerlink" href="#olson" title="Permalink to this headline">¶</a></h2>
+<p>Most of the values of total unit weight (TUW, a.k.a. moist unit weight),
+<span class="math notranslate nohighlight">\(\gamma_t\)</span>, in Prof. Roy Olson’s database were assumed. If water content,
+<span class="math notranslate nohighlight">\(w\)</span>, was known, it was used to calculate <span class="math notranslate nohighlight">\(\gamma_t\)</span>, with an
+assumed specific gravity, <span class="math notranslate nohighlight">\(G_s\)</span>, of 2.72. The equation for <span class="math notranslate nohighlight">\(\gamma_t\)</span>
+in this case was:</p>
+<div class="math notranslate nohighlight">
+\[\gamma_t = \bigg( \dfrac{1 + w}{1 + w G_s} \bigg) \; G_s \gamma_w\]</div>
+<p>Prof. Olson
+used cases in which water contents were measured to calculate total unit weights
+for all soils and then performed correlations of those values of total unit
+weight with whatever other properties were available, meaning undrained shear
+strength, <span class="math notranslate nohighlight">\(s_u\)</span>, for cohesive soils, and SPT-N values for all soils, and
+used these other properties to estimate total unit weight for cases in which
+water contents were not defined. These correlations were often bad but at least
+they gave a consistent basis for estimating <span class="math notranslate nohighlight">\(\gamma_t\)</span>. The correlations
+are shown below for cohesive and cohesionless soils.</p>
+<p class="rubric">Cohesive Soils</p>
+<p>Values for undrained shear strength may come from the following:</p>
+<ul class="simple">
+<li>Field vane shearing strength (<span class="math notranslate nohighlight">\(s_{u.FV}\)</span>)</li>
+<li>Shearing strength from Torvane, penetrometer, etc (<span class="math notranslate nohighlight">\(s_{u.MS}\)</span>)</li>
+<li>Shearing strength from triaxial tests (<span class="math notranslate nohighlight">\(s_{u.QT}\)</span>)</li>
+<li>Unconfined shearing strength (<span class="math notranslate nohighlight">\(s_{u.QU}\)</span>)</li>
+</ul>
+<p>Priority for choosing a value for <span class="math notranslate nohighlight">\(s_u\)</span> if multiple are available is:</p>
+<div class="math notranslate nohighlight">
+\[s_{u.QT} &gt; s_{u.QU} &gt; s_{u.MS} &gt; s_{u.FV}\]</div>
+<p>But use as:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}s_u =
+\begin{cases}
+s_{u.QT} \\
+1.2 \times s_{u.QU} \\
+1.2 \times s_{u.MS} \\
+0.7 \times s_{u.FV}
+\end{cases}\end{split}\]</div>
+<p>For clay (<code class="docutils literal notranslate"><span class="pre">CLAY</span></code>):</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\gamma_t =
+\begin{cases}
+113.9 + 9.276 \ln{s_u} \textrm{ in pcf} &amp; \textrm{if } s_u &gt; 0 \textrm{ in ksf} \\
+107.5 + 5.116 \ln{N} \textrm{ in pcf} &amp; \textrm{if } s_u \textrm{ undef. and } N &gt; 0 \\
+\textrm{N/A} &amp; \textrm{if both } s_u \textrm{ and } N \textrm{ are undefined}
+\end{cases}\end{split}\]</div>
+<p>For silt/clay (<code class="docutils literal notranslate"><span class="pre">SICL</span></code>), clay/silt (<code class="docutils literal notranslate"><span class="pre">CLSI</span></code>) and sand/clay (<code class="docutils literal notranslate"><span class="pre">SACL</span></code>):</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\gamma_t =
+\begin{cases}
+113 + 22 s_u \textrm{ in pcf} &amp; \textrm{if } 0.5 &lt; s_u &lt; 1.5 \textrm{ in ksf} \\
+113 + 9.276 \ln{N} \textrm{ in pcf} &amp; \textrm{if } s_u &gt; 0 \\
+\textrm{N/A} &amp; \textrm{if both } s_u \textrm{ and } N \textrm{ are undefined}
+\end{cases}\end{split}\]</div>
+<p class="rubric">Cohesionless Soils</p>
+<p>For sand (<code class="docutils literal notranslate"><span class="pre">SAND</span></code>):</p>
+<div class="math notranslate nohighlight">
+\[\gamma_t = 126 \textrm{ pcf}\]</div>
+<p>For silt/sand (<code class="docutils literal notranslate"><span class="pre">SISA</span></code>), sand/silt (<code class="docutils literal notranslate"><span class="pre">SASI</span></code>) and silt (<code class="docutils literal notranslate"><span class="pre">SILT</span></code>):</p>
+<div class="math notranslate nohighlight">
+\[\gamma_t = 125 + 0.15 N \textrm{ pcf} &lt; 135 \textrm{ pcf}\]</div>
+<p>For cobble/gravel (<code class="docutils literal notranslate"><span class="pre">CBGV</span></code>), gravel (<code class="docutils literal notranslate"><span class="pre">GRAV</span></code>), sand/gravel (<code class="docutils literal notranslate"><span class="pre">SAGV</span></code>),
+gravel/sand (<code class="docutils literal notranslate"><span class="pre">GVSA</span></code>) and cobbles (<code class="docutils literal notranslate"><span class="pre">COBB</span></code>):</p>
+<div class="math notranslate nohighlight">
+\[\gamma_t = 132 \textrm{ pcf}\]</div>
+<p class="rubric">Olson Soil Classification to USCS</p>
+<span id="olson-uscs-table"></span><table border="1" class="colwidths-given docutils" id="id18">
+<caption><span class="caption-number">Table 2 </span><span class="caption-text">Olson Soil Classification to Unified Soil Classification System (USCS)</span><a class="headerlink" href="#id18" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col width="10%" />
+<col width="15%" />
+<col width="15%" />
+<col width="10%" />
+<col width="11%" />
+<col width="39%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head" colspan="4">Olson</th>
+<th class="head" colspan="2">USCS</th>
+</tr>
+<tr class="row-even"><th class="head">Symbol</th>
+<th class="head">Description</th>
+<th class="head">Category</th>
+<th class="head">Count <a class="footnote-reference" href="#id11" id="id2">[1]</a></th>
+<th class="head">Symbol</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">CLAY</span></code></td>
+<td>Clay</td>
+<td>Cohesive</td>
+<td>2305</td>
+<td><code class="docutils literal notranslate"><span class="pre">CL</span></code></td>
+<td>Inorganic clays of low to medium
+plasticity, gravelly clays, sandy clays,
+silty clays, lean clays</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">CLSA</span></code></td>
+<td>Clay/Sand</td>
+<td>Cohesive</td>
+<td>3</td>
+<td><code class="docutils literal notranslate"><span class="pre">SC</span></code></td>
+<td>Clayey sands, sand-clay mixtures</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">CLSI</span></code></td>
+<td>Clay/Silt</td>
+<td>Cohesive</td>
+<td>20</td>
+<td><code class="docutils literal notranslate"><span class="pre">ML</span></code></td>
+<td>Inorganic silts, and very fine sands, rock
+flour, silty or clayey fine sands or clayey
+silts with slight plasticity</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">GRAV</span></code></td>
+<td>Gravel</td>
+<td>Coarse</td>
+<td>49</td>
+<td><code class="docutils literal notranslate"><span class="pre">GW</span></code> or <code class="docutils literal notranslate"><span class="pre">GP</span></code></td>
+<td>Well/Poorly-graded gravels, gravel-sand
+mixtures, little or no fines</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">GVSA</span></code></td>
+<td>Gravel/Sand</td>
+<td>Coarse</td>
+<td>45</td>
+<td><code class="docutils literal notranslate"><span class="pre">GW</span></code> or <code class="docutils literal notranslate"><span class="pre">GP</span></code></td>
+<td>Well/Poorly-graded gravels, gravel-sand
+mixtures, little or no fines</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">MISA</span></code></td>
+<td>Micaceous
+Sand</td>
+<td>Cohesionless</td>
+<td>15</td>
+<td><code class="docutils literal notranslate"><span class="pre">MH</span></code></td>
+<td>Inorganic silts, micaceous or diatomaceous
+fine sandy or silty soils, elastic silts</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">MISS</span></code></td>
+<td>Micaceous
+Sand/Silt</td>
+<td>Cohesionless</td>
+<td>6</td>
+<td><code class="docutils literal notranslate"><span class="pre">MH</span></code></td>
+<td>Inorganic silts, micaceous or diatomaceous
+fine sandy or silty soils, elastic silts</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">PEAT</span></code></td>
+<td>Peat</td>
+<td>Cohesive</td>
+<td>1</td>
+<td><code class="docutils literal notranslate"><span class="pre">PT</span></code></td>
+<td>Peat and other highly organic soils</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">SACL</span></code></td>
+<td>Sand/Clay</td>
+<td>Cohesive</td>
+<td>14</td>
+<td><code class="docutils literal notranslate"><span class="pre">SC</span></code></td>
+<td>Clayey sands, sand-clay mixtures</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">SAGV</span></code></td>
+<td>Sand/Gravel</td>
+<td>Coarse</td>
+<td>67</td>
+<td><code class="docutils literal notranslate"><span class="pre">GW</span></code> or <code class="docutils literal notranslate"><span class="pre">GP</span></code></td>
+<td>Well/Poorly-graded gravels, gravel-sand
+mixtures, little or no fines</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">SAND</span></code></td>
+<td>Sand</td>
+<td>Cohesionless</td>
+<td>1780</td>
+<td><code class="docutils literal notranslate"><span class="pre">SW</span></code> or <code class="docutils literal notranslate"><span class="pre">SP</span></code></td>
+<td>Well/Poorly-graded sands, gravelly sands,
+little or no fines</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">SASI</span></code></td>
+<td>Sand/Silt</td>
+<td>Cohesionless</td>
+<td>319</td>
+<td><code class="docutils literal notranslate"><span class="pre">SM</span></code></td>
+<td>Silty sands, sand-silt mixtures</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">SHEL</span></code></td>
+<td>&#160;</td>
+<td>Coarse</td>
+<td>2</td>
+<td><code class="docutils literal notranslate"><span class="pre">GW</span></code> or <code class="docutils literal notranslate"><span class="pre">GP</span></code></td>
+<td>Well/Poorly-graded gravels, gravel-sand
+mixtures, little or no fines</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">SICL</span></code></td>
+<td>Silt/Clay</td>
+<td>Cohesive</td>
+<td>39</td>
+<td><code class="docutils literal notranslate"><span class="pre">ML</span></code></td>
+<td>Inorganic silts, and very fine sands, rock
+flour, silty or clayey fine sands or clayey
+silts with slight plasticity</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">SILT</span></code></td>
+<td>Silt</td>
+<td>Cohesionless</td>
+<td>198</td>
+<td><code class="docutils literal notranslate"><span class="pre">MH</span></code></td>
+<td>Inorganic silts, micaceous or diatomaceous
+fine sandy or silty soils, elastic silts</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">SISA</span></code></td>
+<td>Silt/Sand</td>
+<td>Cohesionless</td>
+<td>397</td>
+<td><code class="docutils literal notranslate"><span class="pre">SM</span></code></td>
+<td>Silty sands, sand-silt mixtures</td>
+</tr>
+</tbody>
+</table>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+</div>
+<div class="section" id="hunt">
+<span id="hunt-correlations"></span><h2>Hunt<a class="headerlink" href="#hunt" title="Permalink to this headline">¶</a></h2>
+<p>Roy Hunt on his 1984 book, the “Geotechnical Engineering Investigation Manual”,
+offers typical values for common properties including relative density,
+<span class="math notranslate nohighlight">\(D_r\)</span>, dry density, <span class="math notranslate nohighlight">\(\gamma_{dry}\)</span>, void ratio, <span class="math notranslate nohighlight">\(e\)</span>, and
+strength, <span class="math notranslate nohighlight">\(\phi\)</span>, as related to gradation and SPT-N. For cohesionless
+soils these typical values are presented in <a class="reference internal" href="#hunt-cohesionless-table"><span class="std std-numref">Table 3</span></a>.</p>
+<p>For cohesive soils, common properties, including relationships between
+consistency, unconfined compressive strength, <span class="math notranslate nohighlight">\(q_u\)</span>, saturated weight,
+<span class="math notranslate nohighlight">\(\gamma_{sat}\)</span>, and SPT-N are given on <a class="reference internal" href="#hunt-cohesive-table"><span class="std std-numref">Table 4</span></a>.
+Furthermore, typical properties of cohesive materials classified by geologic
+origin, including density, <span class="math notranslate nohighlight">\(\gamma_{dry}\)</span>, natural moisture contents,
+<span class="math notranslate nohighlight">\(w\)</span>, plasticity indices, <span class="math notranslate nohighlight">\(PI\)</span> and strength parameters,
+<span class="math notranslate nohighlight">\(s_u, c, \phi\)</span>, are given on <a class="reference internal" href="#hunt-cohesive-ext-table"><span class="std std-numref">Table 5</span></a>.</p>
+<span id="hunt-cohesionless-table"></span><table border="1" class="colwidths-given docutils" id="id19">
+<caption><span class="caption-number">Table 3 </span><span class="caption-text">Common Properties of Cohesionless Soils (after Hunt 1984)</span><a class="headerlink" href="#id19" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col width="22%" />
+<col width="17%" />
+<col width="9%" />
+<col width="7%" />
+<col width="16%" />
+<col width="14%" />
+<col width="16%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Material</th>
+<th class="head">Compactness</th>
+<th class="head"><span class="math notranslate nohighlight">\(D_r\)</span>, %</th>
+<th class="head">N <a class="footnote-reference" href="#id12" id="id3">[2]</a></th>
+<th class="head"><span class="math notranslate nohighlight">\(\gamma_{dry}\)</span> <a class="footnote-reference" href="#id13" id="id4">[3]</a>,
+lbf/ft<sup>3</sup></th>
+<th class="head">Void Ratio,
+<span class="math notranslate nohighlight">\(e\)</span></th>
+<th class="head">Strength <a class="footnote-reference" href="#id14" id="id5">[4]</a>,
+<span class="math notranslate nohighlight">\(\phi\)</span></th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td rowspan="3"><strong>GW:</strong> well-graded
+gravels, gravel-
+sand mixtures</td>
+<td>Dense</td>
+<td>75</td>
+<td>90</td>
+<td>138</td>
+<td>0.22</td>
+<td>40</td>
+</tr>
+<tr class="row-odd"><td>Medium dense</td>
+<td>50</td>
+<td>55</td>
+<td>130</td>
+<td>0.28</td>
+<td>36</td>
+</tr>
+<tr class="row-even"><td>Loose</td>
+<td>25</td>
+<td>&lt; 28</td>
+<td>123</td>
+<td>0.36</td>
+<td>32</td>
+</tr>
+<tr class="row-odd"><td rowspan="3"><strong>GP:</strong> poorly graded
+gravels, gravel-
+sand mixtures</td>
+<td>Dense</td>
+<td>75</td>
+<td>70</td>
+<td>127</td>
+<td>0.33</td>
+<td>38</td>
+</tr>
+<tr class="row-even"><td>Medium dense</td>
+<td>50</td>
+<td>50</td>
+<td>120</td>
+<td>0.39</td>
+<td>35</td>
+</tr>
+<tr class="row-odd"><td>Loose</td>
+<td>25</td>
+<td>&lt; 20</td>
+<td>114</td>
+<td>0.47</td>
+<td>32</td>
+</tr>
+<tr class="row-even"><td rowspan="3"><strong>SW:</strong> well-graded
+sands, gravelly
+sands</td>
+<td>Dense</td>
+<td>75</td>
+<td>65</td>
+<td>118</td>
+<td>0.43</td>
+<td>37</td>
+</tr>
+<tr class="row-odd"><td>Medium dense</td>
+<td>50</td>
+<td>35</td>
+<td>112</td>
+<td>0.49</td>
+<td>34</td>
+</tr>
+<tr class="row-even"><td>Loose</td>
+<td>25</td>
+<td>&lt; 15</td>
+<td>106</td>
+<td>0.57</td>
+<td>30</td>
+</tr>
+<tr class="row-odd"><td rowspan="3"><strong>SP:</strong> poorly graded
+sands, gravelly
+sands</td>
+<td>Dense</td>
+<td>75</td>
+<td>50</td>
+<td>110</td>
+<td>0.52</td>
+<td>36</td>
+</tr>
+<tr class="row-even"><td>Medium dense</td>
+<td>50</td>
+<td>30</td>
+<td>104</td>
+<td>0.60</td>
+<td>33</td>
+</tr>
+<tr class="row-odd"><td>Loose</td>
+<td>25</td>
+<td>&lt; 10</td>
+<td>99</td>
+<td>0.65</td>
+<td>29</td>
+</tr>
+<tr class="row-even"><td rowspan="3"><strong>SM:</strong> silty sands</td>
+<td>Dense</td>
+<td>75</td>
+<td>45</td>
+<td>103</td>
+<td>0.62</td>
+<td>35</td>
+</tr>
+<tr class="row-odd"><td>Medium dense</td>
+<td>50</td>
+<td>25</td>
+<td>97</td>
+<td>0.74</td>
+<td>32</td>
+</tr>
+<tr class="row-even"><td>Loose</td>
+<td>25</td>
+<td>&lt; 8</td>
+<td>93</td>
+<td>0.80</td>
+<td>29</td>
+</tr>
+<tr class="row-odd"><td rowspan="3"><strong>ML:</strong> inorganic silts,
+very fine sands</td>
+<td>Dense</td>
+<td>75</td>
+<td>35</td>
+<td>93</td>
+<td>0.80</td>
+<td>33</td>
+</tr>
+<tr class="row-even"><td>Medium dense</td>
+<td>50</td>
+<td>20</td>
+<td>88</td>
+<td>0.90</td>
+<td>31</td>
+</tr>
+<tr class="row-odd"><td>Loose</td>
+<td>25</td>
+<td>&lt; 4</td>
+<td>84</td>
+<td>1.00</td>
+<td>27</td>
+</tr>
+</tbody>
+</table>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<span id="hunt-cohesive-table"></span><table border="1" class="colwidths-given docutils" id="id20">
+<caption><span class="caption-number">Table 4 </span><span class="caption-text">Common Properties of Cohesive Soils (after Hunt 1984)</span><a class="headerlink" href="#id20" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col width="18%" />
+<col width="10%" />
+<col width="30%" />
+<col width="17%" />
+<col width="25%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Consistency</th>
+<th class="head">N</th>
+<th class="head">Hand test</th>
+<th class="head"><span class="math notranslate nohighlight">\(\gamma_{sat}\)</span> <a class="footnote-reference" href="#id15" id="id6">[5]</a>,
+lbf/ft<sup>3</sup></th>
+<th class="head">Strength <a class="footnote-reference" href="#id16" id="id7">[6]</a>,
+<span class="math notranslate nohighlight">\(q_u\)</span>,
+kip/ft<sup>2</sup></th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>Hard</td>
+<td>&gt; 30</td>
+<td>Difficult to indent</td>
+<td>&gt; 140</td>
+<td>&gt; 8.2</td>
+</tr>
+<tr class="row-odd"><td>Very stiff</td>
+<td>15 - 30</td>
+<td>Indented by thumbnail</td>
+<td>130 - 140</td>
+<td>4.1 - 8.2</td>
+</tr>
+<tr class="row-even"><td>Stiff</td>
+<td>8 - 15</td>
+<td>Indented by thumb</td>
+<td>120 - 130</td>
+<td>2.0 - 4.1</td>
+</tr>
+<tr class="row-odd"><td>Medium (firm)</td>
+<td>4 - 8</td>
+<td>Molded by strong pressure</td>
+<td>110 - 120</td>
+<td>1.0 - 2.0</td>
+</tr>
+<tr class="row-even"><td>Soft</td>
+<td>2 - 4</td>
+<td>Molded by slight pressure</td>
+<td>100 - 110</td>
+<td>0.5 - 1.0</td>
+</tr>
+<tr class="row-odd"><td>Very soft</td>
+<td>&lt; 2</td>
+<td>Extrudes between fingers</td>
+<td>90 - 100</td>
+<td>0.0 - 0.5</td>
+</tr>
+</tbody>
+</table>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<span id="hunt-cohesive-ext-table"></span><table border="1" class="docutils" id="id21">
+<caption><span class="caption-number">Table 5 </span><span class="caption-text">Typical Properties of Formations of Cohesive Materials (after Hunt 1984)</span><a class="headerlink" href="#id21" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col width="12%" />
+<col width="3%" />
+<col width="12%" />
+<col width="13%" />
+<col width="7%" />
+<col width="4%" />
+<col width="4%" />
+<col width="9%" />
+<col width="10%" />
+<col width="11%" />
+<col width="15%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Material</th>
+<th class="head">Type</th>
+<th class="head">Location</th>
+<th class="head"><span class="math notranslate nohighlight">\(\gamma_{dry}\)</span>,
+lbf/ft<sup>3</sup></th>
+<th class="head"><span class="math notranslate nohighlight">\(w\)</span>, %</th>
+<th class="head">LI, %</th>
+<th class="head">PI, %</th>
+<th class="head"><span class="math notranslate nohighlight">\(s_u\)</span>,
+kip/ft<sup>2</sup></th>
+<th class="head"><span class="math notranslate nohighlight">\(\bar{c}\)</span>,
+kip/ft<sup>2</sup></th>
+<th class="head"><span class="math notranslate nohighlight">\(\bar{\phi}\)</span></th>
+<th class="head">Remarks</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td colspan="11"><strong>CLAY SHALES (WEATHERED)</strong></td>
+</tr>
+<tr class="row-odd"><td>Carlisle (Cret.)</td>
+<td>CH</td>
+<td>Nebraska</td>
+<td>92</td>
+<td>18</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>1.024</td>
+<td>45</td>
+<td rowspan="3"><span class="math notranslate nohighlight">\(\phi\)</span>
+extremely
+variable</td>
+</tr>
+<tr class="row-even"><td>Bearpaw (Cret.)</td>
+<td>CH</td>
+<td>Montana</td>
+<td>90</td>
+<td>32</td>
+<td>130</td>
+<td>90</td>
+<td>&#160;</td>
+<td>0.717</td>
+<td>15</td>
+</tr>
+<tr class="row-odd"><td>Pierre (Cret.)</td>
+<td>CH</td>
+<td>South Dakota</td>
+<td>92</td>
+<td>28</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>1.843</td>
+<td>12</td>
+</tr>
+<tr class="row-even"><td>Cucaracha (Cret.)</td>
+<td>CH</td>
+<td>Panama Canal</td>
+<td>&#160;</td>
+<td>12</td>
+<td>80</td>
+<td>45</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td><span class="math notranslate nohighlight">\(\phi_r = 10^\circ\)</span></td>
+</tr>
+<tr class="row-odd"><td>Pepper (Cret.)</td>
+<td>CH</td>
+<td>Waco, Texas</td>
+<td>&#160;</td>
+<td>17</td>
+<td>80</td>
+<td>58</td>
+<td>&#160;</td>
+<td>0.819</td>
+<td>17</td>
+<td><span class="math notranslate nohighlight">\(\phi_r = 7^\circ\)</span></td>
+</tr>
+<tr class="row-even"><td>Bear Paw (Cret.)</td>
+<td>CH</td>
+<td>Saskatchewan</td>
+<td>&#160;</td>
+<td>32</td>
+<td>115</td>
+<td>92</td>
+<td>&#160;</td>
+<td>0.819</td>
+<td>20</td>
+<td><span class="math notranslate nohighlight">\(\phi_r = 8^\circ\)</span></td>
+</tr>
+<tr class="row-odd"><td>Modelo (Tert.)</td>
+<td>CH</td>
+<td>Los Angeles</td>
+<td>90</td>
+<td>29</td>
+<td>66</td>
+<td>31</td>
+<td>&#160;</td>
+<td>3.277</td>
+<td>22</td>
+<td>Intact specimen</td>
+</tr>
+<tr class="row-even"><td>Modelo (Tert.)</td>
+<td>CH</td>
+<td>Los Angeles</td>
+<td>90</td>
+<td>29</td>
+<td>66</td>
+<td>31</td>
+<td>&#160;</td>
+<td>0.655</td>
+<td>27</td>
+<td>Shear zone</td>
+</tr>
+<tr class="row-odd"><td>Martinez (Tert.)</td>
+<td>CH</td>
+<td>Los Angeles</td>
+<td>104</td>
+<td>22</td>
+<td>62</td>
+<td>38</td>
+<td>&#160;</td>
+<td>0.512</td>
+<td>26</td>
+<td>Shear zone</td>
+</tr>
+<tr class="row-even"><td>(Eocene)</td>
+<td>CH</td>
+<td>Menlo Park, Calif.</td>
+<td>103</td>
+<td>30</td>
+<td>60</td>
+<td>50</td>
+<td>&#160;</td>
+<td colspan="3">Free swell 100%; P = 20.5 kip/ft<sup>2</sup></td>
+</tr>
+<tr class="row-odd"><td colspan="11"><strong>RESIDUAL SOILS</strong></td>
+</tr>
+<tr class="row-even"><td>Gneiss</td>
+<td>CL</td>
+<td>Brazil; buried</td>
+<td>81</td>
+<td>38</td>
+<td>40</td>
+<td>16</td>
+<td>&#160;</td>
+<td>0.000</td>
+<td>40</td>
+<td><span class="math notranslate nohighlight">\(e_0 = 1.23\)</span></td>
+</tr>
+<tr class="row-odd"><td>Gneiss</td>
+<td>ML</td>
+<td>Brazil; slopes</td>
+<td>84</td>
+<td>22</td>
+<td>40</td>
+<td>8</td>
+<td>&#160;</td>
+<td>0.799</td>
+<td>19</td>
+<td rowspan="2"><span class="math notranslate nohighlight">\(c, \phi\)</span>: unsoaked</td>
+</tr>
+<tr class="row-even"><td>Gneiss</td>
+<td>ML</td>
+<td>Brazil; slopes</td>
+<td>84</td>
+<td>&#160;</td>
+<td>40</td>
+<td>8</td>
+<td>&#160;</td>
+<td>0.573</td>
+<td>21</td>
+</tr>
+<tr class="row-odd"><td colspan="11"><strong>COLLUVIUM</strong></td>
+</tr>
+<tr class="row-even"><td>From shales</td>
+<td>CL</td>
+<td>West Virginia</td>
+<td>&#160;</td>
+<td>28</td>
+<td>48</td>
+<td>25</td>
+<td>&#160;</td>
+<td>0.573</td>
+<td>28</td>
+<td><span class="math notranslate nohighlight">\(\phi_r = 16^\circ\)</span></td>
+</tr>
+<tr class="row-odd"><td>From gneiss</td>
+<td>CL</td>
+<td>Brazil</td>
+<td>69</td>
+<td>26</td>
+<td>40</td>
+<td>16</td>
+<td>&#160;</td>
+<td>0.410</td>
+<td>31</td>
+<td><span class="math notranslate nohighlight">\(\phi_r = 12^\circ\)</span></td>
+</tr>
+<tr class="row-even"><td colspan="11"><strong>ALLUVIUM</strong></td>
+</tr>
+<tr class="row-odd"><td>Black swamp</td>
+<td>OH</td>
+<td>Louisiana</td>
+<td>36</td>
+<td>140</td>
+<td>120</td>
+<td>85</td>
+<td>0.307</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td>Black swamp</td>
+<td>OH</td>
+<td>Louisiana</td>
+<td>62</td>
+<td>60</td>
+<td>85</td>
+<td>50</td>
+<td>0.205</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td>Black swamp</td>
+<td>MH</td>
+<td>Georgia</td>
+<td>60</td>
+<td>54</td>
+<td>61</td>
+<td>22</td>
+<td>0.614</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td><span class="math notranslate nohighlight">\(e_0 = 1.7\)</span></td>
+</tr>
+<tr class="row-even"><td>Lacustrine</td>
+<td>CL</td>
+<td>Great Salt Lake</td>
+<td>49</td>
+<td>50</td>
+<td>45</td>
+<td>20</td>
+<td>0.696</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td>Lacustrine</td>
+<td>CL</td>
+<td>Canada</td>
+<td>69</td>
+<td>62</td>
+<td>33</td>
+<td>15</td>
+<td>0.512</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td>Lacustrine (volcanic)</td>
+<td>CH</td>
+<td>Mexico City</td>
+<td>18</td>
+<td>300</td>
+<td>410</td>
+<td>260</td>
+<td>0.819</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td><span class="math notranslate nohighlight">\(e_0 = 7\)</span>,
+<span class="math notranslate nohighlight">\(S_t = 13\)</span></td>
+</tr>
+<tr class="row-odd"><td>Estuarine</td>
+<td>CH</td>
+<td>Thames River</td>
+<td>49</td>
+<td>90</td>
+<td>115</td>
+<td>85</td>
+<td>0.307</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td>Estuarine</td>
+<td>CH</td>
+<td>Lake Maricaibo</td>
+<td>&#160;</td>
+<td>65</td>
+<td>73</td>
+<td>50</td>
+<td>0.512</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td>Estuarine</td>
+<td>CH</td>
+<td>Bangkok</td>
+<td>&#160;</td>
+<td>130</td>
+<td>118</td>
+<td>75</td>
+<td>0.102</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td>Estuarine</td>
+<td>MH</td>
+<td>Maine</td>
+<td>&#160;</td>
+<td>80</td>
+<td>60</td>
+<td>30</td>
+<td>0.410</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td colspan="11"><strong>MARINE SOILS (OTHER THAN ESTUARINE)</strong></td>
+</tr>
+<tr class="row-even"><td>Offshore</td>
+<td>MH</td>
+<td>Santa Barbara, Calif.</td>
+<td>52</td>
+<td>80</td>
+<td>83</td>
+<td>44</td>
+<td>0.307</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td><span class="math notranslate nohighlight">\(e_0 = 2.28\)</span></td>
+</tr>
+<tr class="row-odd"><td>Offshore</td>
+<td>CH</td>
+<td>New Jersey</td>
+<td>&#160;</td>
+<td>65</td>
+<td>95</td>
+<td>60</td>
+<td>1.331</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td>Offshore</td>
+<td>CH</td>
+<td>San Diego</td>
+<td>36</td>
+<td>125</td>
+<td>111</td>
+<td>64</td>
+<td>0.205</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>Depth = 6.56 ft</td>
+</tr>
+<tr class="row-odd"><td>Offshore</td>
+<td>CH</td>
+<td>Gulf of Maine</td>
+<td>36</td>
+<td>163</td>
+<td>124</td>
+<td>78</td>
+<td>0.102</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td>Coastal Plain</td>
+<td>CH</td>
+<td>Texas (Beaumont)</td>
+<td>87</td>
+<td>29</td>
+<td>81</td>
+<td>55</td>
+<td>2.048</td>
+<td>0.410</td>
+<td>16</td>
+<td><span class="math notranslate nohighlight">\(\phi_r = 14^\circ\)</span>,
+<span class="math notranslate nohighlight">\(e_0 = 0.8\)</span></td>
+</tr>
+<tr class="row-odd"><td>Coastal Plain</td>
+<td>CH</td>
+<td>London</td>
+<td>100</td>
+<td>25</td>
+<td>80</td>
+<td>55</td>
+<td>4.096</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td colspan="11"><strong>LOESS</strong></td>
+</tr>
+<tr class="row-odd"><td>Silty</td>
+<td>ML</td>
+<td>Nebraska-Kansas</td>
+<td>77</td>
+<td>9</td>
+<td>30</td>
+<td>8</td>
+<td>&#160;</td>
+<td>1.229</td>
+<td>32</td>
+<td>Natural
+<span class="math notranslate nohighlight">\(w\)</span> %</td>
+</tr>
+<tr class="row-even"><td>Silty</td>
+<td>ML</td>
+<td>Nebraska-Kansas</td>
+<td>77</td>
+<td><ol class="first last arabic simple" start="35">
+<li></li>
+</ol>
+</td>
+<td>30</td>
+<td>8</td>
+<td>&#160;</td>
+<td>0.000</td>
+<td>23</td>
+<td>Prewetted</td>
+</tr>
+<tr class="row-odd"><td>Clayey</td>
+<td>CL</td>
+<td>Nebraska-Kansas</td>
+<td>78</td>
+<td>9</td>
+<td>37</td>
+<td>17</td>
+<td>&#160;</td>
+<td>4.096</td>
+<td>30</td>
+<td>Natural
+<span class="math notranslate nohighlight">\(w\)</span> %</td>
+</tr>
+<tr class="row-even"><td colspan="11"><strong>GLACIAL SOILS</strong></td>
+</tr>
+<tr class="row-odd"><td>Till</td>
+<td>CL</td>
+<td>Chicago</td>
+<td>132</td>
+<td>23</td>
+<td>37</td>
+<td>21</td>
+<td>7.169</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td>Lacustrine (varved)</td>
+<td>CL</td>
+<td>Chicago</td>
+<td>106</td>
+<td>22</td>
+<td>30</td>
+<td>15</td>
+<td>2.048</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td><span class="math notranslate nohighlight">\(e_0 = 0.6\)</span> (OC)</td>
+</tr>
+<tr class="row-odd"><td>Lacustrine (varved)</td>
+<td>CL</td>
+<td>Chicago</td>
+<td>&#160;</td>
+<td>24</td>
+<td>30</td>
+<td>13</td>
+<td>0.205</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td><span class="math notranslate nohighlight">\(e_0 = 1.2\)</span> (NC)</td>
+</tr>
+<tr class="row-even"><td>Lacustrine (varved)</td>
+<td>CH</td>
+<td>Chicago</td>
+<td>74</td>
+<td>50</td>
+<td>54</td>
+<td>30</td>
+<td>0.205</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td>Lacustrine (varved)</td>
+<td>CH</td>
+<td>Ohio</td>
+<td>60</td>
+<td>46</td>
+<td>58</td>
+<td>31</td>
+<td>1.229</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td><span class="math notranslate nohighlight">\(S_t = 4\)</span></td>
+</tr>
+<tr class="row-even"><td>Lacustrine (varved)</td>
+<td>CH</td>
+<td>Detroit</td>
+<td>75</td>
+<td>46</td>
+<td>55</td>
+<td>30</td>
+<td>1.639</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td><span class="math notranslate nohighlight">\(e_0 = 1.3\)</span> (clay)</td>
+</tr>
+<tr class="row-odd"><td>Lacustrine (varved)</td>
+<td>CH</td>
+<td>New York City</td>
+<td>&#160;</td>
+<td>46</td>
+<td>62</td>
+<td>34</td>
+<td>2.048</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td><span class="math notranslate nohighlight">\(e_0 = 1.25\)</span> (clay)</td>
+</tr>
+<tr class="row-even"><td>Lacustrine (varved)</td>
+<td>CL</td>
+<td>Boston</td>
+<td>84</td>
+<td>38</td>
+<td>50</td>
+<td>26</td>
+<td>1.639</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td><span class="math notranslate nohighlight">\(S_t = 3\)</span></td>
+</tr>
+<tr class="row-odd"><td>Lacustrine (varved)</td>
+<td>CH</td>
+<td>Seattle</td>
+<td>&#160;</td>
+<td>30</td>
+<td>55</td>
+<td>22</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>30</td>
+<td><span class="math notranslate nohighlight">\(\phi_r = 13^\circ\)</span></td>
+</tr>
+<tr class="row-even"><td>Marine <a class="footnote-reference" href="#id17" id="id8">[7]</a></td>
+<td>CH</td>
+<td>Canada-Leda clay</td>
+<td>56</td>
+<td>80</td>
+<td>60</td>
+<td>32</td>
+<td>1.024</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td><span class="math notranslate nohighlight">\(S_t = 128\)</span></td>
+</tr>
+<tr class="row-odd"><td>Marine <a class="footnote-reference" href="#id17" id="id9">[7]</a></td>
+<td>CL</td>
+<td>Norway</td>
+<td>84</td>
+<td>40</td>
+<td>38</td>
+<td>15</td>
+<td>0.266</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td><span class="math notranslate nohighlight">\(S_t = 7\)</span></td>
+</tr>
+<tr class="row-even"><td>Marine <a class="footnote-reference" href="#id17" id="id10">[7]</a></td>
+<td>CL</td>
+<td>Norway</td>
+<td>81</td>
+<td>43</td>
+<td>28</td>
+<td>15</td>
+<td>0.102</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td><span class="math notranslate nohighlight">\(S_t = 75\)</span></td>
+</tr>
+</tbody>
+</table>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<table class="docutils footnote" frame="void" id="id11" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id2">[1]</a></td><td>Count in Olson ‘APC’ and ‘CT’ databases.</td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="id12" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id3">[2]</a></td><td><span class="math notranslate nohighlight">\(N\)</span> is blows per foot of penetration in the SPT. Adjustments for
+gradation are after Burmister (1962).</td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="id13" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id4">[3]</a></td><td>Density given is for <span class="math notranslate nohighlight">\(G_s = 2.65\)</span> (quartz grains)</td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="id14" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id5">[4]</a></td><td>Friction angle <span class="math notranslate nohighlight">\(\phi\)</span> depends on mineral type, normal stress, and
+grain angularity as well as <span class="math notranslate nohighlight">\(D_r\)</span> and gradation.</td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="id15" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id6">[5]</a></td><td><span class="math notranslate nohighlight">\(\gamma_{sat} = \gamma_{dry} + \gamma_w \Big( \dfrac{e}{1+e} \Big)\)</span></td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="id16" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id7">[6]</a></td><td>Unconfined compressive strength, <span class="math notranslate nohighlight">\(q_u\)</span>, is usually taken as equal
+to twice the cohesion, <span class="math notranslate nohighlight">\(c\)</span>, or the undrained shear strength, <span class="math notranslate nohighlight">\(s_u\)</span>.
+For the drained strength condition, most clays also have the additional strength
+parameter, <span class="math notranslate nohighlight">\(\phi\)</span>, although for most normally consolidated clays,
+<span class="math notranslate nohighlight">\(c = 0\)</span>. Typical values for <span class="math notranslate nohighlight">\(s_u\)</span> and drained strength parameters
+are given in <a class="reference internal" href="#hunt-cohesive-ext-table"><span class="std std-numref">Table 5</span></a>.</td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="id17" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label">[7]</td><td><em>(<a class="fn-backref" href="#id8">1</a>, <a class="fn-backref" href="#id9">2</a>, <a class="fn-backref" href="#id10">3</a>)</em> Marine clays strongly leached.</td></tr>
+</tbody>
+</table>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="stresses.html" title="Soil Stresses"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="delineation.html" title="Layer Delineation"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">edafos: A Python Module for Soil Mechanics</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018, Nick Machairas @ NYU Geo.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.5.
+    </div>
+  </body>
+</html>

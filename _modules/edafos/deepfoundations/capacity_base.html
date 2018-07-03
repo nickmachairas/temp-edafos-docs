@@ -1,0 +1,572 @@
+
+
+<!doctype html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>edafos.deepfoundations.capacity_base &#8212; edafos 0.1.0-beta documentation</title>
+    <link rel="stylesheet" href="../../../_static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../../../_static/bizstyle.js"></script>
+    <link rel="shortcut icon" href="../../../_static/favicon.png"/>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">edafos: A Python Module for Soil Mechanics</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../../index.html">
+              <img class="logo" src="../../../_static/logo.png" alt="Logo"/>
+            </a></p><h3><a href="../../../index.html">Site Contents</a></h3>
+<p class="caption"><span class="caption-text">INTRODUCTION:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../intro/units.html">Units</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../intro/nomenclature.html">Nomenclature</a></li>
+</ul>
+<p class="caption"><span class="caption-text">SOIL PROFILE:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../soil/delineation.html">Layer Delineation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../soil/correlations.html">Correlations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../soil/stresses.html">Soil Stresses</a></li>
+</ul>
+<p class="caption"><span class="caption-text">DEEP FOUNDATIONS:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../deepfoundations/types_o_piles.html">Types of Piles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../deepfoundations/capacity.html">Capacity of Single Piles</a></li>
+</ul>
+<p class="caption"><span class="caption-text">EXAMPLES:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../examples/pile_capacity.html">Pile Capacity Calculations</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API REFERENCE:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/api_reference.html">Module Documentation</a></li>
+</ul>
+
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for edafos.deepfoundations.capacity_base</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot; Provide the ``CapacityMethod`` class.</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="c1"># -- Imports -----------------------------------------------------------------</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">from</span> <span class="nn">edafos.data</span> <span class="k">import</span> <span class="n">english_hpiles</span><span class="p">,</span> <span class="n">olson90_data</span>
+
+
+<span class="c1"># -- CapacityMethod Class ----------------------------------------------------</span>
+
+<div class="viewcode-block" id="CapacityMethod"><a class="viewcode-back" href="../../../api/api_reference.html#edafos.deepfoundations.capacity_base.CapacityMethod">[docs]</a><span class="k">class</span> <span class="nc">CapacityMethod</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Class to represent the base methods shared by all Capacity Methods. It</span>
+<span class="sd">    is not anticipated that users will interact with this class.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># -- Constructor ---------------------------------------------------------</span>
+
+<div class="viewcode-block" id="CapacityMethod.__init__"><a class="viewcode-back" href="../../../api/api_reference.html#edafos.deepfoundations.capacity_base.CapacityMethod.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">project</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Args:</span>
+<span class="sd">            project (class): Provide the ``Project`` object as defined in the</span>
+<span class="sd">                :class:`~edafos.project.Project` class.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Type check</span>
+        <span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">project</span><span class="p">))</span> <span class="o">==</span> <span class="s2">&quot;&lt;class &#39;edafos.project.Project&#39;&gt;&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">project</span> <span class="o">=</span> <span class="n">project</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Wrong input. Attach `Project` objects only.&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">method_name</span> <span class="o">=</span> <span class="s1">&#39;Base Capacity Method&#39;</span>
+
+        <span class="c1"># Create data frame for tabular results</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="o">.</span><span class="n">unit_system</span> <span class="o">==</span> <span class="s1">&#39;English&#39;</span><span class="p">:</span>
+            <span class="n">col_names</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Depth (ft)&#39;</span><span class="p">,</span> <span class="s1">&#39;Rs_o (kip)&#39;</span><span class="p">,</span> <span class="s1">&#39;Rs_i (kip)&#39;</span><span class="p">,</span>
+                         <span class="s1">&#39;Rp_p (kip)&#39;</span><span class="p">,</span>  <span class="s1">&#39;Rp_u (kip)&#39;</span><span class="p">,</span> <span class="s1">&#39;Rn_p (kip)&#39;</span><span class="p">,</span>
+                         <span class="s1">&#39;Rn_u (kip)&#39;</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">col_names</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Depth (m)&#39;</span><span class="p">,</span> <span class="s1">&#39;Rs_o (kN)&#39;</span><span class="p">,</span> <span class="s1">&#39;Rs_i (kN)&#39;</span><span class="p">,</span>
+                         <span class="s1">&#39;Rp_p (kN)&#39;</span><span class="p">,</span> <span class="s1">&#39;Rp_u (kN)&#39;</span><span class="p">,</span> <span class="s1">&#39;Rn_p (kN)&#39;</span><span class="p">,</span>
+                         <span class="s1">&#39;Rn_u (kN)&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tab_results</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="n">col_names</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">capacity</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">plugged</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+    <span class="c1"># -- Private method for pre-checks ---------------------------------------</span>
+<div class="viewcode-block" id="CapacityMethod._pre_check"><a class="viewcode-back" href="../../../api/api_reference.html#edafos.deepfoundations.capacity_base.CapacityMethod._pre_check">[docs]</a>    <span class="k">def</span> <span class="nf">_pre_check</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">req</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Private method that goes through all defined soil and pile</span>
+<span class="sd">        properties and compares against the requested properties to ensure they</span>
+<span class="sd">        are available.</span>
+
+<span class="sd">        Pile objects cannot be created without the required properties, hence,</span>
+<span class="sd">        at the moment this method focuses mostly on soil properties.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            req (list): A list of required properties by their corresponding</span>
+<span class="sd">                argument names (i.e. ``[soil_type, tuw, corr_n]``).</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            pass/fail (TODO- with recommendations for missing properties)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Input check</span>
+        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">req</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="nb">list</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Input for &#39;req&#39; is not a list as it should.&quot;</span><span class="p">)</span>
+        <span class="c1"># Note and TODO:</span>
+        <span class="c1"># pile properties [&#39;pile_type&#39;, &#39;side&#39;, &#39;diameter&#39;, &#39;thickness&#39;] are not</span>
+        <span class="c1"># checked because the Pile object cannot be created without them</span>
+        <span class="n">allowed</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;soil_desc&#39;</span><span class="p">,</span> <span class="s1">&#39;tuw&#39;</span><span class="p">,</span> <span class="s1">&#39;corr_n&#39;</span><span class="p">,</span> <span class="s1">&#39;su&#39;</span><span class="p">]</span>
+
+        <span class="c1"># One more input check</span>
+        <span class="k">for</span> <span class="n">prop</span> <span class="ow">in</span> <span class="n">req</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">prop</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">allowed</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Invalid property &#39;</span><span class="si">{}</span><span class="s2">&#39;. Allowed properties are&quot;</span>
+                                 <span class="s2">&quot; </span><span class="si">{}</span><span class="s2">.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">prop</span><span class="p">,</span> <span class="n">allowed</span><span class="p">))</span>
+
+        <span class="c1"># Shorthand for convenience</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="o">.</span><span class="n">sp</span><span class="o">.</span><span class="n">layers</span>
+
+        <span class="c1"># -- Soil checks -----------------------------------------------------</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">index</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;No layers in soil profile.&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Create an empty dictionary</span>
+        <span class="n">missing</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">index</span><span class="p">:</span>
+            <span class="n">missing</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="c1"># Loop through layers</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">index</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">prop</span> <span class="ow">in</span> <span class="n">req</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">prop</span> <span class="o">==</span> <span class="s1">&#39;tuw&#39;</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;TUW&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">]):</span>
+                        <span class="n">missing</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;tuw&#39;</span><span class="p">)</span>
+                <span class="k">elif</span> <span class="n">prop</span> <span class="o">==</span> <span class="s1">&#39;corr_n&#39;</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;Soil Type&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;cohesionless&#39;</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;Corr. N&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">]):</span>
+                            <span class="n">missing</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;corr_n&#39;</span><span class="p">)</span>
+                <span class="k">elif</span> <span class="n">prop</span> <span class="o">==</span> <span class="s1">&#39;su&#39;</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;Soil Type&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;cohesive&#39;</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;Shear Su&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">]):</span>
+                            <span class="n">missing</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;su&#39;</span><span class="p">)</span>
+                <span class="k">elif</span> <span class="n">prop</span> <span class="o">==</span> <span class="s1">&#39;soil_desc&#39;</span><span class="p">:</span>  <span class="c1"># This accommodates Olson 90 only!!!</span>
+                    <span class="k">if</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;Soil Type&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;cohesionless&#39;</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="n">pd</span><span class="o">.</span><span class="n">isnull</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;Soil Desc&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">]):</span>
+                            <span class="n">missing</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;soil_desc&#39;</span><span class="p">)</span>
+
+        <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;ANALYSIS PRE-CHECK:</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">missing</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">missing</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">msg</span> <span class="o">=</span> <span class="n">msg</span> <span class="o">+</span> <span class="s2">&quot;Layer </span><span class="si">{}</span><span class="s2"> (</span><span class="si">{}</span><span class="s2">) is missing these properties: &quot;</span> \
+                            <span class="s2">&quot;</span><span class="si">{}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;Soil Type&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">],</span> <span class="n">missing</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">20</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> &quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">method_name</span><span class="o">.</span><span class="n">upper</span><span class="p">())</span> <span class="o">+</span> <span class="n">msg</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">***** </span><span class="si">{}</span><span class="s2"> ANALYSIS PRE-CHECK COMPLETE - NO REQUIRED &quot;</span>
+                  <span class="s2">&quot;PROPERTIES MISSING *****</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">method_name</span><span class="o">.</span><span class="n">upper</span><span class="p">()))</span></div>
+
+    <span class="c1"># -- Private method for expanded list of z&#39;s -----------------------------</span>
+
+<div class="viewcode-block" id="CapacityMethod._z_for_analysis"><a class="viewcode-back" href="../../../api/api_reference.html#edafos.deepfoundations.capacity_base.CapacityMethod._z_for_analysis">[docs]</a>    <span class="k">def</span> <span class="nf">_z_for_analysis</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Private method that expands the</span>
+<span class="sd">        :meth:`~edafos.project.Project.z_layer_pile` list to produce smaller</span>
+<span class="sd">        intervals that the analysis will run on. These intervals are:</span>
+
+<span class="sd">        - For **SI**: 0.2 meters</span>
+<span class="sd">        - For **English**: 0.5 feet</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            list: Two lists of depths, :math:`z` (unitless). The first list is</span>
+<span class="sd">                at the bottom, the second list is at mid point for average</span>
+<span class="sd">                effective stress calculations.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">last_z</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="o">.</span><span class="n">sp</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="s1">&#39;Depth&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="o">.</span><span class="n">unit_system</span> <span class="o">==</span> <span class="s1">&#39;SI&#39;</span><span class="p">:</span>
+            <span class="n">iz</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">last_z</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">iz</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">last_z</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">))</span>
+
+        <span class="c1"># Compile list</span>
+        <span class="n">z_list</span> <span class="o">=</span> <span class="n">iz</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="o">.</span><span class="n">z_layer_pile</span><span class="p">()</span>
+        <span class="c1"># Remove duplicates and sort</span>
+        <span class="n">z_list</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">z_list</span><span class="p">))</span>
+        <span class="n">z_list</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
+
+        <span class="c1"># mid_z_list = []</span>
+        <span class="c1"># for i, ii in zip(z_list[:-1], z_list[1:]):</span>
+        <span class="c1">#     mid = (ii - i)/2</span>
+        <span class="c1">#     mid_z_list.append(i + mid)</span>
+        <span class="c1">#</span>
+        <span class="c1"># return z_list, [0.0] + mid_z_list</span>
+        <span class="k">return</span> <span class="n">z_list</span></div>
+
+    <span class="c1"># -- Method for shaft resistance (general) -------------------------------</span>
+<div class="viewcode-block" id="CapacityMethod.shaft_resistance"><a class="viewcode-back" href="../../../api/api_reference.html#edafos.deepfoundations.capacity_base.CapacityMethod.shaft_resistance">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">shaft_resistance</span><span class="p">(</span><span class="n">fs</span><span class="p">,</span> <span class="n">area</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Method that calculates shaft resistance, :math:`R_s`, as per</span>
+<span class="sd">        equation :eq:`R_s-api`.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            fs (float): unit shaft resistance, :math:`f_s`</span>
+<span class="sd">            area (float): side surface area, :math:`A_s`</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Quantity: Shaft resistance with units.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">fs</span> <span class="o">*</span> <span class="n">area</span></div>
+
+    <span class="c1"># -- Method for toe resistance (general) ---------------------------------</span>
+<div class="viewcode-block" id="CapacityMethod.toe_resistance"><a class="viewcode-back" href="../../../api/api_reference.html#edafos.deepfoundations.capacity_base.CapacityMethod.toe_resistance">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">toe_resistance</span><span class="p">(</span><span class="n">qp</span><span class="p">,</span> <span class="n">area</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Method that calculates toe resistance, :math:`R_p`, as per</span>
+<span class="sd">        equation :eq:`R_p-api`.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            qp (float): Unit toe resistance, :math:`q_p`</span>
+<span class="sd">            area (float): pile toe cross-sectional area, :math:`A_p` or</span>
+<span class="sd">                :math:`A_{pp}`</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Quantity: Toe resistance with units.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">qp</span> <span class="o">*</span> <span class="n">area</span>
+        <span class="k">return</span> <span class="n">res</span></div>
+
+    <span class="c1"># -- Method for unit shaft resistance (cohesive) -------------------------</span>
+<div class="viewcode-block" id="CapacityMethod.unit_shaft_res_clay"><a class="viewcode-back" href="../../../api/api_reference.html#edafos.deepfoundations.capacity_base.CapacityMethod.unit_shaft_res_clay">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">unit_shaft_res_clay</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">su</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Method that calculates unit shaft resistance for cohesive soils, as</span>
+<span class="sd">        per equation :eq:`f_s-api-clay`.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            a (float): :math:`\\alpha` factor (unitless)</span>
+<span class="sd">            su (float): undrained shear strength of soil</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Quantity: Unit shaft resistance with units.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">a</span> <span class="o">*</span> <span class="n">su</span></div>
+
+    <span class="c1"># -- Method for alpha factor (Revised API, cohesive) ---------------------</span>
+<div class="viewcode-block" id="CapacityMethod.a_factor_rev_api"><a class="viewcode-back" href="../../../api/api_reference.html#edafos.deepfoundations.capacity_base.CapacityMethod.a_factor_rev_api">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">a_factor_rev_api</span><span class="p">(</span><span class="n">sigma</span><span class="p">,</span> <span class="n">su</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Method that calculates the :math:`\\alpha` factor for cohesionless</span>
+<span class="sd">        soils, as per equation :eq:`a-rev-api-clay`.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            sigma (float): average effective stress</span>
+<span class="sd">            su (float): undrained shear strength of soil</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            float or dimensionless Quantity: The :math:`\\alpha` factor</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">psi</span> <span class="o">=</span> <span class="n">su</span> <span class="o">/</span> <span class="n">sigma</span>
+        <span class="k">if</span> <span class="n">psi</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">alpha</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">psi</span> <span class="o">**</span> <span class="o">-</span><span class="mf">0.5</span><span class="p">),</span> <span class="mf">1.0</span><span class="p">)))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">alpha</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">psi</span> <span class="o">**</span> <span class="o">-</span><span class="mf">0.25</span><span class="p">),</span> <span class="mf">1.0</span><span class="p">)))</span>
+
+        <span class="k">return</span> <span class="n">alpha</span></div>
+
+    <span class="c1"># -- Method for unit toe resistance (cohesive) ---------------------------</span>
+<div class="viewcode-block" id="CapacityMethod.unit_toe_res_clay"><a class="viewcode-back" href="../../../api/api_reference.html#edafos.deepfoundations.capacity_base.CapacityMethod.unit_toe_res_clay">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">unit_toe_res_clay</span><span class="p">(</span><span class="n">su</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Method that calculates the unit toe resistance, :math:`q_p` for</span>
+<span class="sd">        cohesionless soils, as per equation :eq:`q_p-api-clay`.</span>
+
+<span class="sd">        The average, :math:`su`, is implemented in the</span>
+<span class="sd">        :meth:`~edafos.deepfoundations.capacity_base.CapacityMethod.average_toe_su`</span>
+<span class="sd">        method.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            su (float): undrained shear strength of soil</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Quantity: Unit toe resistance with units.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="mi">9</span> <span class="o">*</span> <span class="n">su</span></div>
+
+    <span class="c1"># -- Method for average toe su (cohesive) --------------------------------</span>
+<div class="viewcode-block" id="CapacityMethod.average_toe_su"><a class="viewcode-back" href="../../../api/api_reference.html#edafos.deepfoundations.capacity_base.CapacityMethod.average_toe_su">[docs]</a>    <span class="k">def</span> <span class="nf">average_toe_su</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; API RP2A guidelines, as also shown in equation :eq:`q_p-api-clay`,</span>
+<span class="sd">        recommend that for bearing capacity calculations, the undrained shear</span>
+<span class="sd">        strength, :math:`s_u`, should be taken as the average over a distance</span>
+<span class="sd">        of two pile diameters below the tip of the pile. This method calculates</span>
+<span class="sd">        this average if there is available information.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Quantity: Average</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># TODO: What about tapered piles?</span>
+        <span class="n">toe_z</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="o">.</span><span class="n">pile</span><span class="o">.</span><span class="n">pen_depth</span>
+        <span class="n">pile_side</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="o">.</span><span class="n">pile</span><span class="o">.</span><span class="n">side</span>
+        <span class="n">pile_diameter</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="o">.</span><span class="n">pile</span><span class="o">.</span><span class="n">diameter</span>
+        <span class="n">pile_shape</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="o">.</span><span class="n">pile</span><span class="o">.</span><span class="n">shape</span>
+        <span class="k">if</span> <span class="n">pile_side</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="o">.</span><span class="n">pile</span><span class="o">.</span><span class="n">pile_type</span> <span class="o">==</span> <span class="s1">&#39;h-pile&#39;</span><span class="p">:</span>
+                <span class="n">d</span> <span class="o">=</span> <span class="n">english_hpiles</span><span class="p">[</span><span class="n">pile_shape</span><span class="p">][</span><span class="s1">&#39;flange_width&#39;</span><span class="p">]</span>
+                <span class="n">two_d_z</span> <span class="o">=</span> <span class="p">(</span><span class="n">toe_z</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">d</span> <span class="o">*</span>
+                           <span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="o">.</span><span class="n">set_units</span><span class="p">(</span><span class="s1">&#39;pile_diameter&#39;</span><span class="p">))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">two_d_z</span> <span class="o">=</span> <span class="n">toe_z</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">pile_diameter</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">pile_shape</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;square-solid&#39;</span><span class="p">,</span> <span class="s1">&#39;square-hollow&#39;</span><span class="p">]:</span>
+                <span class="n">two_d_z</span> <span class="o">=</span> <span class="n">toe_z</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">pile_side</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># TODO: n = 5 here is not correct, must fix for hex and octa</span>
+                <span class="n">two_d_z</span> <span class="o">=</span> <span class="n">toe_z</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="n">pile_side</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">tan</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">5</span><span class="p">))</span>
+
+        <span class="n">two_d_range</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">toe_z</span><span class="o">.</span><span class="n">magnitude</span><span class="p">,</span> <span class="n">two_d_z</span><span class="o">.</span><span class="n">magnitude</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">)</span>
+
+        <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">added</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">two_d_range</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">su</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="o">.</span><span class="n">sp</span><span class="o">.</span><span class="n">get_soil_prop</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="s1">&#39;su&#39;</span><span class="p">)</span>
+                <span class="n">added</span> <span class="o">=</span> <span class="n">added</span> <span class="o">+</span> <span class="n">su</span>
+                <span class="n">count</span> <span class="o">=</span> <span class="n">count</span> <span class="o">+</span> <span class="mi">1</span>
+            <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+                <span class="k">pass</span>
+
+        <span class="k">return</span> <span class="n">added</span> <span class="o">/</span> <span class="n">count</span></div>
+
+    <span class="c1"># -- Method for unit shaft resistance (cohesionless) ---------------------</span>
+<div class="viewcode-block" id="CapacityMethod.unit_shaft_res_sand"><a class="viewcode-back" href="../../../api/api_reference.html#edafos.deepfoundations.capacity_base.CapacityMethod.unit_shaft_res_sand">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">unit_shaft_res_sand</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">sigma</span><span class="p">,</span> <span class="n">delta</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Method for unit shaft resistance in cohesionless soils, defined by</span>
+<span class="sd">        equation :eq:`f_s-api-sand`.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            k (float): Coefficient of lateral earth, :math:`K`. For Revised API</span>
+<span class="sd">                locate the value in :numref:`API_K_table`. For Olson 90, is it</span>
+<span class="sd">                calculated with equation :eq:`olson90-K`.</span>
+<span class="sd">            sigma (float): Average effective stress (at midpoint),</span>
+<span class="sd">                :math:`\\bar{\\sigma&#39;}`.</span>
+
+<span class="sd">                - For **SI**: Enter :math:`\\bar{\\sigma&#39;}`</span>
+<span class="sd">                  in **kN/m**\ :sup:`2`.</span>
+<span class="sd">                - For **English**: Enter :math:`\\bar{\\sigma&#39;}` in</span>
+<span class="sd">                  **kip/ft**\ :sup:`2`.</span>
+
+<span class="sd">            delta (float): Friction angle between the soil and the pile wall,</span>
+<span class="sd">                :math:`\\delta`. For Revised API, locate :math:`\\delta` in</span>
+<span class="sd">                :numref:`API_d_q_SPT_table`. For Olson 90, locate</span>
+<span class="sd">                :math:`\\delta` in :numref:`Olson90_table`.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Quantity: Unit shaft resistance with units.</span>
+
+<span class="sd">                - For **SI**: Returns :math:`f_s` in **kN/m**\ :sup:`2`.</span>
+<span class="sd">                - For **English**: Returns :math:`f_s` in **kip/ft**\ :sup:`2`.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">k</span> <span class="o">*</span> <span class="n">sigma</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">tan</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">deg2rad</span><span class="p">(</span><span class="n">delta</span><span class="p">))</span></div>
+
+    <span class="c1"># -- Method for lateral earth K in Revised API ---------------------------</span>
+<div class="viewcode-block" id="CapacityMethod.lateral_k_rev_api"><a class="viewcode-back" href="../../../api/api_reference.html#edafos.deepfoundations.capacity_base.CapacityMethod.lateral_k_rev_api">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">lateral_k_rev_api</span><span class="p">(</span><span class="n">full_displ</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Method that returns the value of coefficient of lateral earth,</span>
+<span class="sd">        :math:`K`, as per the Revised API guidelines in :numref:`API_K_table`.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            full_displ (bool): Pile condition (open-ended piles: ``False``,</span>
+<span class="sd">                full-displacement piles:``True``).</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            float: Value of coefficient of lateral earth, :math:`K`, as per</span>
+<span class="sd">            Revised API.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">full_displ</span><span class="p">:</span>
+            <span class="n">k</span> <span class="o">=</span> <span class="mf">1.0</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">k</span> <span class="o">=</span> <span class="mf">0.8</span>
+
+        <span class="k">return</span> <span class="n">k</span></div>
+
+    <span class="c1"># -- Method for lateral earth K in Olson 90 ------------------------------</span>
+<div class="viewcode-block" id="CapacityMethod.lateral_k_olson90"><a class="viewcode-back" href="../../../api/api_reference.html#edafos.deepfoundations.capacity_base.CapacityMethod.lateral_k_olson90">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">lateral_k_olson90</span><span class="p">(</span><span class="n">corr_n</span><span class="p">,</span> <span class="n">full_displ</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Method that returns the value of coefficient of lateral earth,</span>
+<span class="sd">        :math:`K`, as per Olson 90 and equation :eq:`olson90-K`.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            corr_n (int): SPT-N corrected value, :math:`K_{cor}`.</span>
+<span class="sd">            full_displ (bool): Pile condition (open-ended piles: ``False``,</span>
+<span class="sd">                full-displacement piles:``True``).</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            float: Value of coefficient of lateral earth, :math:`K`, as per</span>
+<span class="sd">            Olson 90.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">full_displ</span><span class="p">:</span>
+            <span class="n">k</span> <span class="o">=</span> <span class="mf">0.70</span> <span class="o">+</span> <span class="mf">0.015</span> <span class="o">*</span> <span class="n">corr_n</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">k</span> <span class="o">=</span> <span class="mf">0.16</span> <span class="o">+</span> <span class="mf">0.015</span> <span class="o">*</span> <span class="n">corr_n</span>
+
+        <span class="k">return</span> <span class="n">k</span></div>
+
+    <span class="c1"># -- Method that returns Olson 90 guidelines -----------------------------</span>
+<div class="viewcode-block" id="CapacityMethod.olson90_table"><a class="viewcode-back" href="../../../api/api_reference.html#edafos.deepfoundations.capacity_base.CapacityMethod.olson90_table">[docs]</a>    <span class="k">def</span> <span class="nf">olson90_table</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">soil_desc</span><span class="p">,</span> <span class="n">corr_n</span><span class="p">,</span> <span class="n">req</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Method that returns Olson 90 values for :math:`\\delta`,</span>
+<span class="sd">        :math:`f_{s.lim}`, :math:`N_q` and :math:`q_{p.lim}`. Refer to</span>
+<span class="sd">        :numref:`Olson90_table` for more details.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            soil_desc (str): Description of soil material. Permissible inputs</span>
+<span class="sd">                are:</span>
+
+<span class="sd">                - ``gravel``</span>
+<span class="sd">                - ``sand-gravel``</span>
+<span class="sd">                - ``sand``</span>
+<span class="sd">                - ``sand-silt``</span>
+<span class="sd">                - ``silt``</span>
+
+<span class="sd">            corr_n (int): SPT-N corrected value, :math:`K_{cor}`.</span>
+<span class="sd">            req (str): Requested value. Permissible inputs are:</span>
+
+<span class="sd">                - ``delta``: for the friction angle between the soil and the</span>
+<span class="sd">                  pile wall, :math:`\\delta`.</span>
+<span class="sd">                - ``f_lim``: for the limiting unit shaft resistance,</span>
+<span class="sd">                  :math:`f_{s.lim}`.</span>
+<span class="sd">                - ``N_q``: for the bearing capacity factor, :math:`N_q`.</span>
+<span class="sd">                - ``q_lim``: for the limiting unit toe resistance,</span>
+<span class="sd">                  :math:`q_{p.lim}`.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Quantity or float: The value requested for the given conditions.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">allowed_soil</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;gravel&#39;</span><span class="p">,</span> <span class="s1">&#39;sand-gravel&#39;</span><span class="p">,</span> <span class="s1">&#39;sand&#39;</span><span class="p">,</span> <span class="s1">&#39;sand-silt&#39;</span><span class="p">,</span> <span class="s1">&#39;silt&#39;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">soil_desc</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">allowed_soil</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;&#39;</span><span class="si">{}</span><span class="s2">&#39; not a valid input for `soil_desc`. Valid &quot;</span>
+                             <span class="s2">&quot;inputs are </span><span class="si">{}</span><span class="s2">.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">soil_desc</span><span class="p">,</span> <span class="n">allowed_soil</span><span class="p">))</span>
+
+        <span class="n">allowed_req</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;delta&#39;</span><span class="p">,</span> <span class="s1">&#39;f_lim&#39;</span><span class="p">,</span> <span class="s1">&#39;N_q&#39;</span><span class="p">,</span> <span class="s1">&#39;q_lim&#39;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">req</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">allowed_req</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;&#39;</span><span class="si">{}</span><span class="s2">&#39; not a valid input for `req`. Valid inputs &quot;</span>
+                             <span class="s2">&quot;are </span><span class="si">{}</span><span class="s2">.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">req</span><span class="p">,</span> <span class="n">allowed_req</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="n">soil_desc</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;gravel&#39;</span><span class="p">,</span> <span class="s1">&#39;sand-gravel&#39;</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">corr_n</span> <span class="o">&lt;=</span> <span class="mi">4</span><span class="p">:</span>
+                <span class="n">res</span> <span class="o">=</span> <span class="n">olson90_data</span><span class="p">[</span><span class="n">soil_desc</span><span class="p">][</span><span class="s1">&#39;very_loose&#39;</span><span class="p">][</span><span class="n">req</span><span class="p">]</span>
+            <span class="k">elif</span> <span class="mi">5</span> <span class="o">&lt;=</span> <span class="n">corr_n</span> <span class="o">&lt;=</span> <span class="mi">10</span><span class="p">:</span>
+                <span class="n">res</span> <span class="o">=</span> <span class="n">olson90_data</span><span class="p">[</span><span class="n">soil_desc</span><span class="p">][</span><span class="s1">&#39;loose&#39;</span><span class="p">][</span><span class="n">req</span><span class="p">]</span>
+            <span class="k">elif</span> <span class="mi">11</span> <span class="o">&lt;=</span> <span class="n">corr_n</span> <span class="o">&lt;=</span> <span class="mi">30</span><span class="p">:</span>
+                <span class="n">res</span> <span class="o">=</span> <span class="n">olson90_data</span><span class="p">[</span><span class="n">soil_desc</span><span class="p">][</span><span class="s1">&#39;medium&#39;</span><span class="p">][</span><span class="n">req</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">res</span> <span class="o">=</span> <span class="n">olson90_data</span><span class="p">[</span><span class="n">soil_desc</span><span class="p">][</span><span class="s1">&#39;dense&#39;</span><span class="p">][</span><span class="n">req</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="n">soil_desc</span> <span class="o">==</span> <span class="s1">&#39;sand&#39;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">corr_n</span> <span class="o">&lt;=</span> <span class="mi">4</span><span class="p">:</span>
+                <span class="n">res</span> <span class="o">=</span> <span class="n">olson90_data</span><span class="p">[</span><span class="n">soil_desc</span><span class="p">][</span><span class="s1">&#39;very_loose&#39;</span><span class="p">][</span><span class="n">req</span><span class="p">]</span>
+            <span class="k">elif</span> <span class="mi">5</span> <span class="o">&lt;=</span> <span class="n">corr_n</span> <span class="o">&lt;=</span> <span class="mi">10</span><span class="p">:</span>
+                <span class="n">res</span> <span class="o">=</span> <span class="n">olson90_data</span><span class="p">[</span><span class="n">soil_desc</span><span class="p">][</span><span class="s1">&#39;loose&#39;</span><span class="p">][</span><span class="n">req</span><span class="p">]</span>
+            <span class="k">elif</span> <span class="mi">11</span> <span class="o">&lt;=</span> <span class="n">corr_n</span> <span class="o">&lt;=</span> <span class="mi">30</span><span class="p">:</span>
+                <span class="n">res</span> <span class="o">=</span> <span class="n">olson90_data</span><span class="p">[</span><span class="n">soil_desc</span><span class="p">][</span><span class="s1">&#39;medium&#39;</span><span class="p">][</span><span class="n">req</span><span class="p">]</span>
+            <span class="k">elif</span> <span class="mi">31</span> <span class="o">&lt;=</span> <span class="n">corr_n</span> <span class="o">&lt;=</span> <span class="mi">50</span><span class="p">:</span>
+                <span class="n">res</span> <span class="o">=</span> <span class="n">olson90_data</span><span class="p">[</span><span class="n">soil_desc</span><span class="p">][</span><span class="s1">&#39;dense&#39;</span><span class="p">][</span><span class="n">req</span><span class="p">]</span>
+            <span class="k">elif</span> <span class="mi">51</span> <span class="o">&lt;=</span> <span class="n">corr_n</span> <span class="o">&lt;=</span> <span class="mi">100</span><span class="p">:</span>
+                <span class="n">res</span> <span class="o">=</span> <span class="n">olson90_data</span><span class="p">[</span><span class="n">soil_desc</span><span class="p">][</span><span class="s1">&#39;very_dense&#39;</span><span class="p">][</span><span class="n">req</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">res</span> <span class="o">=</span> <span class="n">olson90_data</span><span class="p">[</span><span class="n">soil_desc</span><span class="p">][</span><span class="s1">&#39;very_dense+&#39;</span><span class="p">][</span><span class="n">req</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="n">soil_desc</span> <span class="o">==</span> <span class="s1">&#39;sand-silt&#39;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">corr_n</span> <span class="o">&lt;=</span> <span class="mi">4</span><span class="p">:</span>
+                <span class="n">res</span> <span class="o">=</span> <span class="n">olson90_data</span><span class="p">[</span><span class="n">soil_desc</span><span class="p">][</span><span class="s1">&#39;very_loose&#39;</span><span class="p">][</span><span class="n">req</span><span class="p">]</span>
+            <span class="k">elif</span> <span class="mi">5</span> <span class="o">&lt;=</span> <span class="n">corr_n</span> <span class="o">&lt;=</span> <span class="mi">10</span><span class="p">:</span>
+                <span class="n">res</span> <span class="o">=</span> <span class="n">olson90_data</span><span class="p">[</span><span class="n">soil_desc</span><span class="p">][</span><span class="s1">&#39;loose&#39;</span><span class="p">][</span><span class="n">req</span><span class="p">]</span>
+            <span class="k">elif</span> <span class="mi">11</span> <span class="o">&lt;=</span> <span class="n">corr_n</span> <span class="o">&lt;=</span> <span class="mi">30</span><span class="p">:</span>
+                <span class="n">res</span> <span class="o">=</span> <span class="n">olson90_data</span><span class="p">[</span><span class="n">soil_desc</span><span class="p">][</span><span class="s1">&#39;medium&#39;</span><span class="p">][</span><span class="n">req</span><span class="p">]</span>
+            <span class="k">elif</span> <span class="mi">31</span> <span class="o">&lt;=</span> <span class="n">corr_n</span> <span class="o">&lt;=</span> <span class="mi">50</span><span class="p">:</span>
+                <span class="n">res</span> <span class="o">=</span> <span class="n">olson90_data</span><span class="p">[</span><span class="n">soil_desc</span><span class="p">][</span><span class="s1">&#39;dense&#39;</span><span class="p">][</span><span class="n">req</span><span class="p">]</span>
+            <span class="k">elif</span> <span class="mi">51</span> <span class="o">&lt;=</span> <span class="n">corr_n</span> <span class="o">&lt;=</span> <span class="mi">100</span><span class="p">:</span>
+                <span class="n">res</span> <span class="o">=</span> <span class="n">olson90_data</span><span class="p">[</span><span class="n">soil_desc</span><span class="p">][</span><span class="s1">&#39;very_dense&#39;</span><span class="p">][</span><span class="n">req</span><span class="p">]</span>
+            <span class="k">elif</span> <span class="mi">101</span> <span class="o">&lt;=</span> <span class="n">corr_n</span> <span class="o">&lt;=</span> <span class="mi">200</span><span class="p">:</span>
+                <span class="n">res</span> <span class="o">=</span> <span class="n">olson90_data</span><span class="p">[</span><span class="n">soil_desc</span><span class="p">][</span><span class="s1">&#39;very_dense+&#39;</span><span class="p">][</span><span class="n">req</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">res</span> <span class="o">=</span> <span class="n">olson90_data</span><span class="p">[</span><span class="n">soil_desc</span><span class="p">][</span><span class="s1">&#39;very_dense++&#39;</span><span class="p">][</span><span class="n">req</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>  <span class="c1"># silt</span>
+            <span class="k">if</span> <span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">corr_n</span> <span class="o">&lt;=</span> <span class="mi">4</span><span class="p">:</span>
+                <span class="n">res</span> <span class="o">=</span> <span class="n">olson90_data</span><span class="p">[</span><span class="n">soil_desc</span><span class="p">][</span><span class="s1">&#39;very_loose&#39;</span><span class="p">][</span><span class="n">req</span><span class="p">]</span>
+            <span class="k">elif</span> <span class="mi">5</span> <span class="o">&lt;=</span> <span class="n">corr_n</span> <span class="o">&lt;=</span> <span class="mi">10</span><span class="p">:</span>
+                <span class="n">res</span> <span class="o">=</span> <span class="n">olson90_data</span><span class="p">[</span><span class="n">soil_desc</span><span class="p">][</span><span class="s1">&#39;loose&#39;</span><span class="p">][</span><span class="n">req</span><span class="p">]</span>
+            <span class="k">elif</span> <span class="mi">11</span> <span class="o">&lt;=</span> <span class="n">corr_n</span> <span class="o">&lt;=</span> <span class="mi">30</span><span class="p">:</span>
+                <span class="n">res</span> <span class="o">=</span> <span class="n">olson90_data</span><span class="p">[</span><span class="n">soil_desc</span><span class="p">][</span><span class="s1">&#39;medium&#39;</span><span class="p">][</span><span class="n">req</span><span class="p">]</span>
+            <span class="k">elif</span> <span class="mi">31</span> <span class="o">&lt;=</span> <span class="n">corr_n</span> <span class="o">&lt;=</span> <span class="mi">50</span><span class="p">:</span>
+                <span class="n">res</span> <span class="o">=</span> <span class="n">olson90_data</span><span class="p">[</span><span class="n">soil_desc</span><span class="p">][</span><span class="s1">&#39;dense&#39;</span><span class="p">][</span><span class="n">req</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">res</span> <span class="o">=</span> <span class="n">olson90_data</span><span class="p">[</span><span class="n">soil_desc</span><span class="p">][</span><span class="s1">&#39;very_dense&#39;</span><span class="p">][</span><span class="n">req</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">req</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;f_lim&#39;</span><span class="p">,</span> <span class="s1">&#39;q_lim&#39;</span><span class="p">]:</span>
+            <span class="n">res</span> <span class="o">=</span> <span class="n">res</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="o">.</span><span class="n">set_units</span><span class="p">(</span><span class="s1">&#39;stress&#39;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">req</span> <span class="o">==</span> <span class="s1">&#39;delta&#39;</span><span class="p">:</span>
+            <span class="n">res</span> <span class="o">=</span> <span class="n">res</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="o">.</span><span class="n">set_units</span><span class="p">(</span><span class="s1">&#39;degrees&#39;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">res</span></div></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">edafos: A Python Module for Soil Mechanics</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018, Nick Machairas @ NYU Geo.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.5.
+    </div>
+  </body>
+</html>

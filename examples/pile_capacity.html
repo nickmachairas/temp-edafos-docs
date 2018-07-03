@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Pile Capacity Calculations &#8212; edafos 0.1.0beta documentation</title>
+    <title>Pile Capacity Calculations &#8212; edafos 0.1.0-beta documentation</title>
     <link rel="stylesheet" href="../_static/bizstyle.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
@@ -51,10 +51,12 @@
 <p class="caption"><span class="caption-text">INTRODUCTION:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../intro/units.html">Units</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../intro/nomenclature.html">Nomenclature</a></li>
 </ul>
 <p class="caption"><span class="caption-text">SOIL PROFILE:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../soil/delineation.html">Layer Delineation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../soil/correlations.html">Correlations</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../soil/stresses.html">Soil Stresses</a></li>
 </ul>
 <p class="caption"><span class="caption-text">DEEP FOUNDATIONS:</span></p>
@@ -185,11 +187,11 @@ the frictional (aka <em>shaft</em>) resistance, <span class="math notranslate no
 <span class="gp">   ...: </span>                  <span class="n">field_phi</span><span class="o">=</span><span class="mi">35</span><span class="p">,</span>
 <span class="gp">   ...: </span>                  <span class="n">corr_n</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
 <span class="gp">   ...: </span>
-<span class="gh">Out[6]: </span><span class="go">&lt;edafos.soil.profile.SoilProfile at 0x10d04d390&gt;</span>
+<span class="gh">Out[6]: </span><span class="go">&lt;edafos.soil.profile.SoilProfile at 0x10f51b048&gt;</span>
 
 <span class="go"># Attach the soil profile to the project</span>
 <span class="gp">In [7]: </span><span class="n">project</span><span class="o">.</span><span class="n">attach_sp</span><span class="p">(</span><span class="n">profile</span><span class="p">)</span>
-<span class="go">                                                         Out[7]: &lt;edafos.project.Project at 0x10d04d780&gt;</span>
+<span class="go">                                                         Out[7]: &lt;edafos.project.Project at 0x10f51b240&gt;</span>
 
 <span class="go"># Create a pile</span>
 <span class="gp">In [8]: </span><span class="n">pile</span> <span class="o">=</span> <span class="n">Pile</span><span class="p">(</span><span class="n">unit_system</span><span class="o">=</span><span class="s1">&#39;English&#39;</span><span class="p">,</span>
@@ -202,16 +204,16 @@ the frictional (aka <em>shaft</em>) resistance, <span class="math notranslate no
 
 <span class="go"># Attach the pile to the project</span>
 <span class="gp">In [9]: </span><span class="n">project</span><span class="o">.</span><span class="n">attach_pile</span><span class="p">(</span><span class="n">pile</span><span class="p">)</span>
-<span class="gh">Out[9]: </span><span class="go">&lt;edafos.project.Project at 0x10d04d780&gt;</span>
+<span class="gh">Out[9]: </span><span class="go">&lt;edafos.project.Project at 0x10f51b240&gt;</span>
 
 <span class="go"># Why not get the effective stress at say 15-ft??...</span>
 <span class="gp">In [10]: </span><span class="n">project</span><span class="o">.</span><span class="n">sp</span><span class="o">.</span><span class="n">calculate_stress</span><span class="p">(</span><span class="mi">15</span><span class="p">)</span>
 <span class="go">                                                Out[10]: &lt;Quantity(1.188, &#39;kip / foot ** 2&#39;)&gt;</span>
 
 <span class="gp">In [11]: </span><span class="k">print</span><span class="p">(</span><span class="n">project</span><span class="p">)</span>
-<span class="go">                                                                                              Project ID: 75250284</span>
+<span class="go">                                                                                              Project ID: 22617331</span>
 <span class="go">Project Name: Example 1</span>
-<span class="go">Datetime: 2018-06-19 11:42:45.529419</span>
+<span class="go">Datetime: 2018-07-03 12:24:51.750288</span>
 <span class="go">Unit System: English</span>
 <span class="gt">------------</span>
 <span class="n">Soil</span> <span class="n">Profile</span> <span class="n">WT</span><span class="p">:</span> <span class="mf">10.0</span> <span class="n">foot</span>

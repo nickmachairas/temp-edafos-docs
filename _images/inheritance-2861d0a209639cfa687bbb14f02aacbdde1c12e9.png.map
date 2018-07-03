@@ -1,0 +1,7 @@
+<map id="inheritance432b7616ac" name="inheritance432b7616ac">
+<area shape="rect" id="node1" href="#edafos.deepfoundations.capacity_base.CapacityMethod" target="_top" title="Class to represent the base methods shared by all Capacity Methods. It" alt="" coords="5,101,123,125"/>
+<area shape="rect" id="node2" href="#edafos.deepfoundations.capacity_api.Olson90" target="_top" title="Class to represent the Olson 90 method for capacity calculations of" alt="" coords="176,101,248,125"/>
+<area shape="rect" id="node3" href="#edafos.deepfoundations.piles.Pile" target="_top" title="Class to represent a new driven or drilled pile." alt="" coords="176,5,248,29"/>
+<area shape="rect" id="node4" href="#edafos.project.Project" target="_top" title="Class to represent a new project." alt="" coords="28,29,100,53"/>
+<area shape="rect" id="node5" href="#edafos.soil.profile.SoilProfile" target="_top" title="Class to represent a new soil profile." alt="" coords="171,53,252,77"/>
+</map>

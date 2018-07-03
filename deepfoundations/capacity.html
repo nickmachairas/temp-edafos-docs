@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Capacity of Single Piles &#8212; edafos 0.1.0beta documentation</title>
+    <title>Capacity of Single Piles &#8212; edafos 0.1.0-beta documentation</title>
     <link rel="stylesheet" href="../_static/bizstyle.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
@@ -51,10 +51,12 @@
 <p class="caption"><span class="caption-text">INTRODUCTION:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../intro/units.html">Units</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../intro/nomenclature.html">Nomenclature</a></li>
 </ul>
 <p class="caption"><span class="caption-text">SOIL PROFILE:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../soil/delineation.html">Layer Delineation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../soil/correlations.html">Correlations</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../soil/stresses.html">Soil Stresses</a></li>
 </ul>
 <p class="caption"><span class="caption-text">DEEP FOUNDATIONS:</span></p>
@@ -128,9 +130,9 @@
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Pile:</th><td class="field-body"><ul class="first simple">
-<li><span class="math notranslate nohighlight">\(\alpha\)</span> or <span class="math notranslate nohighlight">\(\delta\)</span>: side length or diameter for surface
+<li><span class="math notranslate nohighlight">\(\alpha\)</span> or <span class="math notranslate nohighlight">\(d\)</span>: side length or diameter for surface
 area, <span class="math notranslate nohighlight">\(A_s\)</span> (shaft resistance)</li>
-<li><span class="math notranslate nohighlight">\(\alpha\)</span> or <span class="math notranslate nohighlight">\(\delta\)</span> (<span class="math notranslate nohighlight">\(t\)</span>): side
+<li><span class="math notranslate nohighlight">\(\alpha\)</span> or <span class="math notranslate nohighlight">\(d\)</span> (<span class="math notranslate nohighlight">\(t\)</span>): side
 length or diameter (with thickness for open ended) for toe area,
 <span class="math notranslate nohighlight">\(A_p, A_{pp}\)</span> (toe resistance)</li>
 <li>pile type: open-ended or closed-ended for <span class="math notranslate nohighlight">\(K\)</span> selection
@@ -142,8 +144,8 @@ length or diameter (with thickness for open ended) for toe area,
 <li>type: cohesive/cohesionless classification</li>
 <li><span class="math notranslate nohighlight">\(\gamma\)</span>: total unit weight for effective stress calculations</li>
 <li><span class="math notranslate nohighlight">\(s_u\)</span>: undrained shear strength (cohesive soils)</li>
-<li><span class="math notranslate nohighlight">\(N_{cor}\)</span>: SPT-N corrected for <span class="math notranslate nohighlight">\(\delta\)</span>, <span class="math notranslate nohighlight">\(f_{s.lim}\)</span>,
-<span class="math notranslate nohighlight">\(N_q\)</span>, <span class="math notranslate nohighlight">\(q_{s.lim}\)</span> (cohesionless soils)</li>
+<li><span class="math notranslate nohighlight">\(N_{cor}\)</span>: SPT-N corrected to select <span class="math notranslate nohighlight">\(\delta\)</span>,
+<span class="math notranslate nohighlight">\(f_{s.lim}\)</span>, <span class="math notranslate nohighlight">\(N_q\)</span>, <span class="math notranslate nohighlight">\(q_{s.lim}\)</span> (cohesionless soils)</li>
 </ul>
 </td>
 </tr>
@@ -151,7 +153,8 @@ length or diameter (with thickness for open ended) for toe area,
 </table>
 <p class="last"><strong>Note</strong>: <code class="docutils literal notranslate"><span class="pre">edafos</span></code> runs a pre-check to verify that all required properties
 have been defined prior to running the capacity calculations. Refer to the
-… method for more information. TODO: add method</p>
+<a class="reference internal" href="../api/api_reference.html#edafos.deepfoundations.capacity_base.CapacityMethod._pre_check" title="edafos.deepfoundations.capacity_base.CapacityMethod._pre_check"><code class="xref py py-meth docutils literal notranslate"><span class="pre">_pre_check()</span></code></a>
+method for more information.</p>
 </div>
 <div class="section" id="cohesive-soils">
 <h3>Cohesive Soils<a class="headerlink" href="#cohesive-soils" title="Permalink to this headline">¶</a></h3>
@@ -176,9 +179,9 @@ in the offshore industry.</p>
 <li><span class="math notranslate nohighlight">\(s_u\)</span>: undrained shear strength of soil</li>
 </ul>
 <p>The <span class="math notranslate nohighlight">\(\alpha\)</span> factor is calculated based on the conditional in equation
-<a class="reference internal" href="#equation-a-api-clay">(3)</a>.</p>
-<div class="math notranslate nohighlight" id="equation-a-api-clay">
-<span class="eqno">(3)<a class="headerlink" href="#equation-a-api-clay" title="Permalink to this equation">¶</a></span>\[\begin{split}\alpha = \begin{cases}
+<a class="reference internal" href="#equation-a-rev-api-clay">(3)</a>.</p>
+<div class="math notranslate nohighlight" id="equation-a-rev-api-clay">
+<span class="eqno">(3)<a class="headerlink" href="#equation-a-rev-api-clay" title="Permalink to this equation">¶</a></span>\[\begin{split}\alpha = \begin{cases}
 0.5\psi^{-0.5} &amp; \textrm{if} \quad \psi \leq 1.0 \\
 0.5\psi^{-0.25} &amp; \textrm{if} \quad \psi &gt; 1.0
 \end{cases} \quad \leq 1.0\end{split}\]</div>
@@ -231,10 +234,10 @@ normal effective stress)</li>
 <li><span class="math notranslate nohighlight">\(\bar{\sigma'}\)</span>: average effective stress (at midpoint)</li>
 <li><span class="math notranslate nohighlight">\(\delta\)</span>: friction angle between the soil and the pile wall</li>
 </ul>
-<p><a class="reference internal" href="#api-k-table"><span class="std std-numref">Table 3</span></a> offers recommended values for the coefficient of lateral
+<p><a class="reference internal" href="#api-k-table"><span class="std std-numref">Table 7</span></a> offers recommended values for the coefficient of lateral
 earth, <span class="math notranslate nohighlight">\(K\)</span>.</p>
 <span id="api-k-table"></span><table border="1" class="docutils" id="id5">
-<caption><span class="caption-number">Table 3 </span><span class="caption-text">Values for coefficient of lateral earth, <span class="math notranslate nohighlight">\(K\)</span></span><a class="headerlink" href="#id5" title="Permalink to this table">¶</a></caption>
+<caption><span class="caption-number">Table 7 </span><span class="caption-text">Values for coefficient of lateral earth, <span class="math notranslate nohighlight">\(K\)</span></span><a class="headerlink" href="#id5" title="Permalink to this table">¶</a></caption>
 <colgroup>
 <col width="91%" />
 <col width="9%" />
@@ -253,10 +256,10 @@ earth, <span class="math notranslate nohighlight">\(K\)</span>.</p>
 </tr>
 </tbody>
 </table>
-<p><a class="reference internal" href="#api-d-table"><span class="std std-numref">Table 4</span></a> offers guidelines for <span class="math notranslate nohighlight">\(\delta\)</span>, the friction angle
+<p><a class="reference internal" href="#api-d-table"><span class="std std-numref">Table 8</span></a> offers guidelines for <span class="math notranslate nohighlight">\(\delta\)</span>, the friction angle
 between the soil and the pile wall as well as limiting, <span class="math notranslate nohighlight">\(f_s\)</span>.</p>
 <span id="api-d-table"></span><table border="1" class="docutils" id="id6">
-<caption><span class="caption-number">Table 4 </span><span class="caption-text">Guidelines for Side Friction in Siliceous Soil</span><a class="headerlink" href="#id6" title="Permalink to this table">¶</a></caption>
+<caption><span class="caption-number">Table 8 </span><span class="caption-text">Guidelines for Side Friction in Siliceous Soil</span><a class="headerlink" href="#id6" title="Permalink to this table">¶</a></caption>
 <colgroup>
 <col width="51%" />
 <col width="21%" />
@@ -312,10 +315,10 @@ toe resistance for piles in cohesionless soils is calculated by:</p>
 <li><span class="math notranslate nohighlight">\(\sigma'\)</span>: effective stress at pile tip (not average)</li>
 <li><span class="math notranslate nohighlight">\(N_q\)</span>: bearing capacity factor</li>
 </ul>
-<p><a class="reference internal" href="#api-q-table"><span class="std std-numref">Table 5</span></a> offers guidelines for <span class="math notranslate nohighlight">\(N_q\)</span>, bearing capacity factor
+<p><a class="reference internal" href="#api-q-table"><span class="std std-numref">Table 9</span></a> offers guidelines for <span class="math notranslate nohighlight">\(N_q\)</span>, bearing capacity factor
 as well as limiting, <span class="math notranslate nohighlight">\(q_p\)</span>.</p>
 <span id="api-q-table"></span><table border="1" class="docutils" id="id7">
-<caption><span class="caption-number">Table 5 </span><span class="caption-text">Guidelines for Toe Resistance in Siliceous Soil</span><a class="headerlink" href="#id7" title="Permalink to this table">¶</a></caption>
+<caption><span class="caption-number">Table 9 </span><span class="caption-text">Guidelines for Toe Resistance in Siliceous Soil</span><a class="headerlink" href="#id7" title="Permalink to this table">¶</a></caption>
 <colgroup>
 <col width="51%" />
 <col width="17%" />
@@ -358,11 +361,11 @@ as well as limiting, <span class="math notranslate nohighlight">\(q_p\)</span>.<
 </tr>
 </tbody>
 </table>
-<p>In order to interpret <a class="reference internal" href="#api-d-table"><span class="std std-numref">Table 4</span></a> and <a class="reference internal" href="#api-q-table"><span class="std std-numref">Table 5</span></a>
-algorithmically, the correlation in <a class="reference internal" href="#api-spt-corr-table"><span class="std std-numref">Table 6</span></a> is employed
+<p>In order to interpret <a class="reference internal" href="#api-d-table"><span class="std std-numref">Table 8</span></a> and <a class="reference internal" href="#api-q-table"><span class="std std-numref">Table 9</span></a>
+algorithmically, the correlation in <a class="reference internal" href="#api-spt-corr-table"><span class="std std-numref">Table 10</span></a> is employed
 in <code class="docutils literal notranslate"><span class="pre">edafos</span></code>.</p>
 <span id="api-spt-corr-table"></span><table border="1" class="docutils" id="id8">
-<caption><span class="caption-number">Table 6 </span><span class="caption-text">SPT-N corrected Correlations</span><a class="headerlink" href="#id8" title="Permalink to this table">¶</a></caption>
+<caption><span class="caption-number">Table 10 </span><span class="caption-text">SPT-N corrected Correlations</span><a class="headerlink" href="#id8" title="Permalink to this table">¶</a></caption>
 <colgroup>
 <col width="25%" />
 <col width="40%" />
@@ -397,11 +400,11 @@ in <code class="docutils literal notranslate"><span class="pre">edafos</span></c
 </tr>
 </tbody>
 </table>
-<p>In which case <a class="reference internal" href="#api-d-table"><span class="std std-numref">Table 4</span></a>, <a class="reference internal" href="#api-q-table"><span class="std std-numref">Table 5</span></a> and
-<a class="reference internal" href="#api-spt-corr-table"><span class="std std-numref">Table 6</span></a> can be consolidated as in
-<a class="reference internal" href="#api-d-q-spt-table"><span class="std std-numref">Table 7</span></a>.</p>
+<p>In which case <a class="reference internal" href="#api-d-table"><span class="std std-numref">Table 8</span></a>, <a class="reference internal" href="#api-q-table"><span class="std std-numref">Table 9</span></a> and
+<a class="reference internal" href="#api-spt-corr-table"><span class="std std-numref">Table 10</span></a> can be consolidated as in
+<a class="reference internal" href="#api-d-q-spt-table"><span class="std std-numref">Table 11</span></a>.</p>
 <span id="api-d-q-spt-table"></span><table border="1" class="docutils" id="id9">
-<caption><span class="caption-number">Table 7 </span><span class="caption-text">Guidelines for Shaft and Toe Resistance in Siliceous Soil with
+<caption><span class="caption-number">Table 11 </span><span class="caption-text">Guidelines for Shaft and Toe Resistance in Siliceous Soil with
 SPT-N values</span><a class="headerlink" href="#id9" title="Permalink to this table">¶</a></caption>
 <colgroup>
 <col width="27%" />
@@ -468,11 +471,45 @@ SPT-N values</span><a class="headerlink" href="#id9" title="Permalink to this ta
 <span id="olson90-method"></span><h2>Olson 90 Method<a class="headerlink" href="#olson-90-method" title="Permalink to this headline">¶</a></h2>
 <p>The Olson 90 method is for cohesionless soils only. It was created from a
 database of 31 load tests on steel pipe piles.</p>
+<div class="admonition-required-properties admonition">
+<p class="first admonition-title">Required Properties</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Pile:</th><td class="field-body"><ul class="first simple">
+<li><span class="math notranslate nohighlight">\(\alpha\)</span> or <span class="math notranslate nohighlight">\(d\)</span>: side length or diameter for surface
+area, <span class="math notranslate nohighlight">\(A_s\)</span> (shaft resistance)</li>
+<li><span class="math notranslate nohighlight">\(\alpha\)</span> or <span class="math notranslate nohighlight">\(d\)</span> (<span class="math notranslate nohighlight">\(t\)</span>): side
+length or diameter (with thickness for open ended) for toe area,
+<span class="math notranslate nohighlight">\(A_p, A_{pp}\)</span> (toe resistance)</li>
+<li>pile type: open-ended or closed-ended for <span class="math notranslate nohighlight">\(K\)</span> selection
+(cohesionless soils)</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Soil:</th><td class="field-body"><ul class="first last simple">
+<li>type: cohesive/cohesionless classification</li>
+<li><span class="math notranslate nohighlight">\(\gamma\)</span>: total unit weight for effective stress calculations</li>
+<li><span class="math notranslate nohighlight">\(s_u\)</span>: undrained shear strength (cohesive soils)</li>
+<li>desc, <span class="math notranslate nohighlight">\(N_{cor}\)</span>: soil description and SPT-N corrected to select
+<span class="math notranslate nohighlight">\(\delta\)</span>, <span class="math notranslate nohighlight">\(f_{s.lim}\)</span>, <span class="math notranslate nohighlight">\(N_q\)</span>, <span class="math notranslate nohighlight">\(q_{s.lim}\)</span>
+(cohesionless soils)</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="last"><strong>Note</strong>: <code class="docutils literal notranslate"><span class="pre">edafos</span></code> runs a pre-check to verify that all required properties
+have been defined prior to running the capacity calculations. Refer to the
+<a class="reference internal" href="../api/api_reference.html#edafos.deepfoundations.capacity_base.CapacityMethod._pre_check" title="edafos.deepfoundations.capacity_base.CapacityMethod._pre_check"><code class="xref py py-meth docutils literal notranslate"><span class="pre">_pre_check()</span></code></a>
+method for more information.</p>
+</div>
 <div class="section" id="id4">
 <h3>Cohesionless Soils<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h3>
 <p>Olson 90 is similar to the Revised API method with two main differences. First,
 the coefficient of lateral earth, <span class="math notranslate nohighlight">\(K\)</span>, is calculated rather than taken
-from <a class="reference internal" href="#api-k-table"><span class="std std-numref">Table 3</span></a>. In Olson 90, <span class="math notranslate nohighlight">\(K\)</span> is:</p>
+from <a class="reference internal" href="#api-k-table"><span class="std std-numref">Table 7</span></a>. In Olson 90, <span class="math notranslate nohighlight">\(K\)</span> is:</p>
 <div class="math notranslate nohighlight" id="equation-olson90-k">
 <span class="eqno">(8)<a class="headerlink" href="#equation-olson90-k" title="Permalink to this equation">¶</a></span>\[\begin{split}K = \begin{cases}
 0.16 + 0.015 \, N_{cor} &amp; \textrm{non-displacement piles}\\
@@ -483,9 +520,9 @@ from <a class="reference internal" href="#api-k-table"><span class="std std-numr
 <li><span class="math notranslate nohighlight">\(N_{cor}\)</span>: SPT-N values corrected for overburden pressure</li>
 </ul>
 <p>Next, Olson 90 provides revised guidelines for shaft and tow resistances which
-are offered in <a class="reference internal" href="#olson90-table"><span class="std std-numref">Table 8</span></a>.</p>
+are offered in <a class="reference internal" href="#olson90-table"><span class="std std-numref">Table 12</span></a>.</p>
 <span id="olson90-table"></span><table border="1" class="docutils" id="id10">
-<caption><span class="caption-number">Table 8 </span><span class="caption-text">Olson 90 guidelines for Shaft and Toe Resistance</span><a class="headerlink" href="#id10" title="Permalink to this table">¶</a></caption>
+<caption><span class="caption-number">Table 12 </span><span class="caption-text">Olson 90 guidelines for Shaft and Toe Resistance</span><a class="headerlink" href="#id10" title="Permalink to this table">¶</a></caption>
 <colgroup>
 <col width="12%" />
 <col width="19%" />
@@ -669,7 +706,7 @@ are offered in <a class="reference internal" href="#olson90-table"><span class="
 </table>
 <p><strong>Note:</strong></p>
 <ul class="simple">
-<li>Must not interpolate. In using values in <a class="reference internal" href="#olson90-table"><span class="std std-numref">Table 8</span></a>, use the
+<li>Must not interpolate. In using values in <a class="reference internal" href="#olson90-table"><span class="std std-numref">Table 12</span></a>, use the
 line corresponding to N = 4 for any layer with N less than or equal to 4,
 the line corresponding to 10 for N = 5 - 10, and so on.</li>
 <li>Number in brackets were extrapolated, no supporting data.</li>

@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>edafos.soil.profile &#8212; edafos 0.1.0beta documentation</title>
+    <title>edafos.soil.profile &#8212; edafos 0.1.0-beta documentation</title>
     <link rel="stylesheet" href="../../../_static/bizstyle.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
@@ -44,10 +44,12 @@
 <p class="caption"><span class="caption-text">INTRODUCTION:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../intro/units.html">Units</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../intro/nomenclature.html">Nomenclature</a></li>
 </ul>
 <p class="caption"><span class="caption-text">SOIL PROFILE:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../soil/delineation.html">Layer Delineation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../soil/correlations.html">Correlations</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../soil/stresses.html">Soil Stresses</a></li>
 </ul>
 <p class="caption"><span class="caption-text">DEEP FOUNDATIONS:</span></p>
@@ -128,7 +130,7 @@
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">unit_system</span><span class="o">=</span><span class="n">unit_system</span><span class="p">)</span>
 
         <span class="c1"># Set units for the water table</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">water_table</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">water_table</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_set_units</span><span class="p">(</span><span class="s1">&#39;length&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">water_table</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">water_table</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">set_units</span><span class="p">(</span><span class="s1">&#39;length&#39;</span><span class="p">)</span>
 
         <span class="c1"># Call function to instantiate the soil profile data frame</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_create_profile</span><span class="p">()</span></div>
@@ -144,8 +146,8 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Careful when changing column named. Update API.get_soil_prop</span>
-        <span class="n">name_list</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Soil Type&#39;</span><span class="p">,</span> <span class="s1">&#39;Depth&#39;</span><span class="p">,</span> <span class="s1">&#39;Height&#39;</span><span class="p">,</span> <span class="s1">&#39;TUW&#39;</span><span class="p">,</span> <span class="s1">&#39;Field N&#39;</span><span class="p">,</span>
-                     <span class="s1">&#39;Corr. N&#39;</span><span class="p">,</span> <span class="s1">&#39;Field Phi&#39;</span><span class="p">,</span> <span class="s1">&#39;Calc. Phi&#39;</span><span class="p">,</span> <span class="s1">&#39;Shear Su&#39;</span><span class="p">]</span>
+        <span class="n">name_list</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Soil Type&#39;</span><span class="p">,</span> <span class="s1">&#39;Soil Desc&#39;</span><span class="p">,</span> <span class="s1">&#39;Depth&#39;</span><span class="p">,</span> <span class="s1">&#39;Height&#39;</span><span class="p">,</span> <span class="s1">&#39;TUW&#39;</span><span class="p">,</span>
+                     <span class="s1">&#39;Field N&#39;</span><span class="p">,</span> <span class="s1">&#39;Corr. N&#39;</span><span class="p">,</span> <span class="s1">&#39;Field Phi&#39;</span><span class="p">,</span> <span class="s1">&#39;Calc. Phi&#39;</span><span class="p">,</span> <span class="s1">&#39;Shear Su&#39;</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">layers</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="n">name_list</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;Layer&#39;</span>
 
@@ -172,6 +174,12 @@
 
 
 <span class="sd">        Keyword Args:</span>
+<span class="sd">            soil_desc (str): Soil description. Initially created to accommodate</span>
+<span class="sd">                the :ref:`olson90-method`. As such, in order to follow the</span>
+<span class="sd">                guidelines in :numref:`Olson90_table`, the only valid inputs</span>
+<span class="sd">                are: ``gravel``, ``sand-gravel``, ``sand``, ``sand-silt``,</span>
+<span class="sd">                ``silt``. TODO: There is no check to reject these inputs for</span>
+<span class="sd">                ``soil_type = &#39;cohesive&#39;``, although they have no effect.</span>
 <span class="sd">            tuw (float): Total unit weight of soil.</span>
 
 <span class="sd">                - For **SI**: Enter TUW in **kN/m**\ :sup:`3`.</span>
@@ -192,14 +200,14 @@
 <span class="sd">            su (float): Undrained shear strength, *s*\ :sub:`u`.</span>
 
 <span class="sd">                - For **SI**: Enter *s*\ :sub:`u` in **kN/m**\ :sup:`2`.</span>
-<span class="sd">                - For **English**: Enter *s*\ :sub:`u` in **lbf/ft**\ :sup:`2`.</span>
+<span class="sd">                - For **English**: Enter *s*\ :sub:`u` in **kip/ft**\ :sup:`2`.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="c1"># Check for valid attributes</span>
         <span class="c1"># If you update these keys, make sure to update API.get_soil_prop too</span>
-        <span class="n">allowed_keys</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;soil_type&#39;</span><span class="p">,</span> <span class="s1">&#39;height&#39;</span><span class="p">,</span> <span class="s1">&#39;tuw&#39;</span><span class="p">,</span> <span class="s1">&#39;field_n&#39;</span><span class="p">,</span> <span class="s1">&#39;corr_n&#39;</span><span class="p">,</span>
-                        <span class="s1">&#39;field_phi&#39;</span><span class="p">,</span> <span class="s1">&#39;calc_phi&#39;</span><span class="p">,</span> <span class="s1">&#39;su&#39;</span><span class="p">]</span>
+        <span class="n">allowed_keys</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;soil_type&#39;</span><span class="p">,</span> <span class="s1">&#39;soil_desc&#39;</span><span class="p">,</span> <span class="s1">&#39;height&#39;</span><span class="p">,</span> <span class="s1">&#39;tuw&#39;</span><span class="p">,</span> <span class="s1">&#39;field_n&#39;</span><span class="p">,</span>
+                        <span class="s1">&#39;corr_n&#39;</span><span class="p">,</span> <span class="s1">&#39;field_phi&#39;</span><span class="p">,</span> <span class="s1">&#39;calc_phi&#39;</span><span class="p">,</span> <span class="s1">&#39;su&#39;</span><span class="p">]</span>
         <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">allowed_keys</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="s2">&quot;&#39;</span><span class="si">{}</span><span class="s2">&#39; is not a valid attribute. The &quot;</span>
@@ -207,6 +215,7 @@
                                      <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">allowed_keys</span><span class="p">))</span>
 
         <span class="c1"># Assign values</span>
+        <span class="n">soil_desc</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;soil_desc&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
         <span class="n">tuw</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;tuw&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
         <span class="n">field_n</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;field_n&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
         <span class="n">corr_n</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;corr_n&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
@@ -220,6 +229,13 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Soil type can only be &#39;cohesive&#39; or &quot;</span>
                              <span class="s2">&quot;&#39;cohesionless&#39;.&quot;</span><span class="p">)</span>
+        <span class="c1"># Check for soil description</span>
+        <span class="n">allowed_soil_desc</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;gravel&#39;</span><span class="p">,</span> <span class="s1">&#39;sand-gravel&#39;</span><span class="p">,</span> <span class="s1">&#39;sand&#39;</span><span class="p">,</span> <span class="s1">&#39;sand-silt&#39;</span><span class="p">,</span>
+                             <span class="s1">&#39;silt&#39;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">soil_desc</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">soil_desc</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">allowed_soil_desc</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;&#39;</span><span class="si">{}</span><span class="s2">&#39; is not a valid soil description input.</span><span class="se">\n</span><span class="s2">&quot;</span>
+                             <span class="s2">&quot;Valid inputs are: </span><span class="si">{}</span><span class="s2">.&quot;</span>
+                             <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">soil_desc</span><span class="p">,</span> <span class="n">allowed_soil_desc</span><span class="p">))</span>
 
         <span class="c1"># Check that all inputs are positive numbers</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="p">[</span><span class="n">height</span><span class="p">,</span> <span class="n">tuw</span><span class="p">,</span> <span class="n">field_n</span><span class="p">,</span> <span class="n">corr_n</span><span class="p">,</span> <span class="n">field_phi</span><span class="p">,</span> <span class="n">calc_phi</span><span class="p">,</span> <span class="n">su</span><span class="p">]:</span>
@@ -242,8 +258,8 @@
 
         <span class="c1"># Store values in data frame</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
-            <span class="n">soil_type</span><span class="p">,</span> <span class="n">depth</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="n">tuw</span><span class="p">,</span> <span class="n">field_n</span><span class="p">,</span> <span class="n">corr_n</span><span class="p">,</span> <span class="n">field_phi</span><span class="p">,</span>
-            <span class="n">calc_phi</span><span class="p">,</span> <span class="n">su</span><span class="p">]</span>
+            <span class="n">soil_type</span><span class="p">,</span> <span class="n">soil_desc</span><span class="p">,</span> <span class="n">depth</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="n">tuw</span><span class="p">,</span> <span class="n">field_n</span><span class="p">,</span> <span class="n">corr_n</span><span class="p">,</span>
+            <span class="n">field_phi</span><span class="p">,</span> <span class="n">calc_phi</span><span class="p">,</span> <span class="n">su</span><span class="p">]</span>
 
         <span class="c1"># Reset index to start at 1</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
@@ -254,7 +270,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
         <span class="c1"># for column in self.layers.columns.levels[0]:</span>
         <span class="k">for</span> <span class="n">column</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">column</span> <span class="o">!=</span> <span class="s1">&#39;Soil Type&#39;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">column</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;Soil Type&#39;</span><span class="p">,</span> <span class="s1">&#39;Soil Desc&#39;</span><span class="p">]:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="n">column</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="n">column</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="bp">self</span></div>
@@ -319,6 +335,9 @@
 <span class="sd">        Returns:</span>
 <span class="sd">            Quantity: A physical quantity with associated units.</span>
 
+<span class="sd">                - For **SI**: Stress is returned in, **kN/m**\ :sup:`2`.</span>
+<span class="sd">                - For **English**: Stress is returned in, **kip/ft**\ :sup:`2`.</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="c1"># Check for kind values</span>
@@ -334,16 +353,16 @@
         <span class="k">if</span> <span class="n">z</span> <span class="o">&gt;</span> <span class="n">max_depth</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Depth z = </span><span class="si">{0}</span><span class="s2"> </span><span class="si">{2}</span><span class="s2">, is beyond the total defined &quot;</span>
                              <span class="s2">&quot;soil profile depth, </span><span class="si">{1}</span><span class="s2"> </span><span class="si">{2}</span><span class="s2">.&quot;</span>
-                             <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">z</span><span class="p">,</span> <span class="n">max_depth</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_set_units</span><span class="p">(</span><span class="s1">&#39;length&#39;</span><span class="p">)))</span>
+                             <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">z</span><span class="p">,</span> <span class="n">max_depth</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">set_units</span><span class="p">(</span><span class="s1">&#39;length&#39;</span><span class="p">)))</span>
         <span class="k">elif</span> <span class="p">((</span><span class="n">z</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">water_table</span><span class="o">.</span><span class="n">magnitude</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">))</span> \
                 <span class="ow">or</span> <span class="p">(</span><span class="n">z</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">water_table</span><span class="o">.</span><span class="n">magnitude</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Nothing but thin air at z = </span><span class="si">{}</span><span class="s2"> </span><span class="si">{}</span><span class="s2">. Try lower.&quot;</span>
-                             <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">z</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_set_units</span><span class="p">(</span><span class="s1">&#39;length&#39;</span><span class="p">)))</span>
+                             <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">z</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">set_units</span><span class="p">(</span><span class="s1">&#39;length&#39;</span><span class="p">)))</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">pass</span>
 
         <span class="c1"># Set units for input parameter, z</span>
-        <span class="n">z</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">z</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_set_units</span><span class="p">(</span><span class="s1">&#39;length&#39;</span><span class="p">)</span>
+        <span class="n">z</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">z</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">set_units</span><span class="p">(</span><span class="s1">&#39;length&#39;</span><span class="p">)</span>
 
         <span class="c1"># Define zw, the vertical distance below the water table.</span>
         <span class="n">zw</span> <span class="o">=</span> <span class="n">z</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">water_table</span>
@@ -352,20 +371,20 @@
 
         <span class="c1"># Define pore water pressure</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">unit_system</span> <span class="o">==</span> <span class="s1">&#39;SI&#39;</span><span class="p">:</span>
-            <span class="n">gamma_w</span> <span class="o">=</span> <span class="mf">9.81</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_set_units</span><span class="p">(</span><span class="s1">&#39;tuw&#39;</span><span class="p">)</span>
+            <span class="n">gamma_w</span> <span class="o">=</span> <span class="mf">9.81</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">set_units</span><span class="p">(</span><span class="s1">&#39;tuw&#39;</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">gamma_w</span> <span class="o">=</span> <span class="mf">62.4</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_set_units</span><span class="p">(</span><span class="s1">&#39;tuw&#39;</span><span class="p">)</span>
+            <span class="n">gamma_w</span> <span class="o">=</span> <span class="mf">62.4</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">set_units</span><span class="p">(</span><span class="s1">&#39;tuw&#39;</span><span class="p">)</span>
         <span class="n">pore_water</span> <span class="o">=</span> <span class="n">zw</span> <span class="o">*</span> <span class="n">gamma_w</span>
 
         <span class="c1"># -- Define total stress ---------------------------------------------</span>
-        <span class="n">h1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="s1">&#39;Height&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_set_units</span><span class="p">(</span><span class="s1">&#39;length&#39;</span><span class="p">)</span>
-        <span class="n">g1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="s1">&#39;TUW&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_set_units</span><span class="p">(</span><span class="s1">&#39;tuw&#39;</span><span class="p">)</span>
+        <span class="n">h1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="s1">&#39;Height&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">set_units</span><span class="p">(</span><span class="s1">&#39;length&#39;</span><span class="p">)</span>
+        <span class="n">g1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="s1">&#39;TUW&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">set_units</span><span class="p">(</span><span class="s1">&#39;tuw&#39;</span><span class="p">)</span>
 
         <span class="c1"># Prepare for Takeaway No 4</span>
         <span class="k">if</span> <span class="p">(</span><span class="n">z</span><span class="o">.</span><span class="n">magnitude</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">water_table</span><span class="o">.</span><span class="n">magnitude</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">):</span>
             <span class="n">stress_from_water_body</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">water_table</span><span class="p">)</span> <span class="o">*</span> <span class="n">gamma_w</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">stress_from_water_body</span> <span class="o">=</span> <span class="mi">0</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_set_units</span><span class="p">(</span><span class="s1">&#39;stress&#39;</span><span class="p">)</span>
+            <span class="n">stress_from_water_body</span> <span class="o">=</span> <span class="mi">0</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">set_units</span><span class="p">(</span><span class="s1">&#39;stress&#39;</span><span class="p">)</span>
 
         <span class="c1"># Main if statement</span>
         <span class="k">if</span> <span class="p">(</span><span class="n">z</span><span class="o">.</span><span class="n">magnitude</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">water_table</span><span class="o">.</span><span class="n">magnitude</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">):</span>
@@ -378,15 +397,10 @@
             <span class="c1"># Get the layer index where z is at the interface</span>
             <span class="n">ix</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="s1">&#39;Depth&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">z</span><span class="o">.</span><span class="n">magnitude</span><span class="p">]</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
-            <span class="c1"># Multiply and sum the data frame columns of relevant layers</span>
-            <span class="c1"># total_stress = (sum(self.layers[&#39;Height&#39;][0:ix] *</span>
-            <span class="c1">#                     self.layers[&#39;TUW&#39;][0:ix]</span>
-            <span class="c1">#                     ) * self._set_units(&#39;stress&#39;)</span>
-            <span class="c1">#                 ) + stress_from_water_body</span>
             <span class="n">total_stress</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="s1">&#39;Height&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">:</span><span class="n">ix</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
-                                <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_set_units</span><span class="p">(</span><span class="s1">&#39;length&#39;</span><span class="p">))</span> <span class="o">*</span>
+                                <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">set_units</span><span class="p">(</span><span class="s1">&#39;length&#39;</span><span class="p">))</span> <span class="o">*</span>
                                <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="s1">&#39;TUW&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">:</span><span class="n">ix</span><span class="p">]</span><span class="o">.</span><span class="n">values</span> <span class="o">*</span>
-                                <span class="bp">self</span><span class="o">.</span><span class="n">_set_units</span><span class="p">(</span><span class="s1">&#39;tuw&#39;</span><span class="p">))</span>
+                                <span class="bp">self</span><span class="o">.</span><span class="n">set_units</span><span class="p">(</span><span class="s1">&#39;tuw&#39;</span><span class="p">))</span>
                                <span class="p">)</span> <span class="o">+</span> <span class="n">stress_from_water_body</span>
 
         <span class="k">else</span><span class="p">:</span>
@@ -396,23 +410,15 @@
             <span class="c1"># Get the current layer index where z is in</span>
             <span class="n">ixc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="s1">&#39;Depth&#39;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">z</span><span class="o">.</span><span class="n">magnitude</span><span class="p">]</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
-            <span class="c1"># Multiply and sum the data frame columns of relevant layers</span>
-            <span class="c1"># total_stress = ((sum(self.layers[&#39;Height&#39;][0:ixp] *</span>
-            <span class="c1">#                      self.layers[&#39;TUW&#39;][0:ixp]</span>
-            <span class="c1">#                      ) + (</span>
-            <span class="c1">#                      (z.magnitude - self.layers[&#39;Depth&#39;][ixp]) *</span>
-            <span class="c1">#                      self.layers[&#39;TUW&#39;][ixc])</span>
-            <span class="c1">#                  ) * self._set_units(&#39;stress&#39;)</span>
-            <span class="c1">#                 ) + stress_from_water_body</span>
             <span class="n">total_stress</span> <span class="o">=</span> <span class="p">(</span><span class="nb">sum</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="s1">&#39;Height&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">:</span><span class="n">ixp</span><span class="p">]</span><span class="o">.</span><span class="n">values</span> <span class="o">*</span>
-                                 <span class="bp">self</span><span class="o">.</span><span class="n">_set_units</span><span class="p">(</span><span class="s1">&#39;length&#39;</span><span class="p">))</span> <span class="o">*</span>
+                                 <span class="bp">self</span><span class="o">.</span><span class="n">set_units</span><span class="p">(</span><span class="s1">&#39;length&#39;</span><span class="p">))</span> <span class="o">*</span>
                                 <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="s1">&#39;TUW&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">:</span><span class="n">ixp</span><span class="p">]</span><span class="o">.</span><span class="n">values</span> <span class="o">*</span>
-                                 <span class="bp">self</span><span class="o">.</span><span class="n">_set_units</span><span class="p">(</span><span class="s1">&#39;tuw&#39;</span><span class="p">))</span>
+                                 <span class="bp">self</span><span class="o">.</span><span class="n">set_units</span><span class="p">(</span><span class="s1">&#39;tuw&#39;</span><span class="p">))</span>
                                 <span class="p">)</span> <span class="o">+</span> <span class="p">(</span>
                                 <span class="p">((</span><span class="n">z</span><span class="o">.</span><span class="n">magnitude</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="s1">&#39;Depth&#39;</span><span class="p">][</span><span class="n">ixp</span><span class="p">])</span> <span class="o">*</span>
-                                 <span class="bp">self</span><span class="o">.</span><span class="n">_set_units</span><span class="p">(</span><span class="s1">&#39;length&#39;</span><span class="p">))</span> <span class="o">*</span>
+                                 <span class="bp">self</span><span class="o">.</span><span class="n">set_units</span><span class="p">(</span><span class="s1">&#39;length&#39;</span><span class="p">))</span> <span class="o">*</span>
                                 <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="s1">&#39;TUW&#39;</span><span class="p">][</span><span class="n">ixc</span><span class="p">]</span> <span class="o">*</span>
-                                 <span class="bp">self</span><span class="o">.</span><span class="n">_set_units</span><span class="p">(</span><span class="s1">&#39;tuw&#39;</span><span class="p">)))</span>
+                                 <span class="bp">self</span><span class="o">.</span><span class="n">set_units</span><span class="p">(</span><span class="s1">&#39;tuw&#39;</span><span class="p">)))</span>
 
                             <span class="p">)</span> <span class="o">+</span> <span class="n">stress_from_water_body</span>
 
@@ -427,6 +433,69 @@
             <span class="k">return</span> <span class="n">pore_water</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">total_stress</span><span class="p">,</span> <span class="n">pore_water</span><span class="p">,</span> <span class="n">effective_stress</span></div>
+
+    <span class="c1"># -- Method that returns soil properties given z -------------------------</span>
+<div class="viewcode-block" id="SoilProfile.get_soil_prop"><a class="viewcode-back" href="../../../api/api_reference.html#edafos.soil.profile.SoilProfile.get_soil_prop">[docs]</a>    <span class="k">def</span> <span class="nf">get_soil_prop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">sp</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; This method will return the soil property (with units), i.e. SPT-N,</span>
+<span class="sd">        total unit weight, undrained shear strength, etc. at depth, :math:`z`.</span>
+<span class="sd">        The soil properties must have been previously defined with the</span>
+<span class="sd">        :meth:`~edafos.soil.profile.SoilProfile.add_layer` method.</span>
+
+<span class="sd">        TODO: This method will be updated to locate more granular data prior to</span>
+<span class="sd">        layer delineation, if available.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            z (float): Vertical depth to the point of interest, measured from</span>
+<span class="sd">                the top of the soil profile.</span>
+
+<span class="sd">                - For **SI**: Enter depth, *z*, in **meters**.</span>
+<span class="sd">                - For **English**: Enter depth, *z*, in **feet**.</span>
+
+<span class="sd">            sp (str): Available inputs exactly as defined in the keyword</span>
+<span class="sd">                arguments of :meth:`~edafos.soil.profile.SoilProfile.add_layer`.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Quantity: Soil property with units.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Shorthand for convenience</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">layers</span>
+
+        <span class="c1"># z check</span>
+        <span class="k">if</span> <span class="n">z</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;z cannot be negative.&quot;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">z</span> <span class="o">&gt;</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;Depth&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">():</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;z cannot be larger than max soil profile depth.&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Input check</span>
+        <span class="n">allowed</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;soil_type&#39;</span><span class="p">,</span> <span class="s1">&#39;soil_desc&#39;</span><span class="p">,</span> <span class="s1">&#39;height&#39;</span><span class="p">,</span> <span class="s1">&#39;tuw&#39;</span><span class="p">,</span> <span class="s1">&#39;field_n&#39;</span><span class="p">,</span>
+                   <span class="s1">&#39;corr_n&#39;</span><span class="p">,</span> <span class="s1">&#39;field_phi&#39;</span><span class="p">,</span> <span class="s1">&#39;calc_phi&#39;</span><span class="p">,</span> <span class="s1">&#39;su&#39;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">sp</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">allowed</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;&#39;</span><span class="si">{}</span><span class="s2">&#39; is not a valid input. Allowed inputs are </span><span class="si">{}</span><span class="s2">&quot;</span>
+                             <span class="s2">&quot;.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">sp</span><span class="p">,</span> <span class="n">allowed</span><span class="p">))</span>
+
+        <span class="n">cond</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;Depth&#39;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">z</span><span class="p">]</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
+        <span class="n">index</span> <span class="o">=</span> <span class="mi">1</span> <span class="k">if</span> <span class="n">cond</span> <span class="ow">is</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span> <span class="k">else</span> <span class="n">cond</span> <span class="o">+</span> <span class="mi">1</span>
+
+        <span class="k">if</span> <span class="n">sp</span> <span class="o">==</span> <span class="s1">&#39;soil_type&#39;</span><span class="p">:</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;Soil Type&#39;</span><span class="p">][</span><span class="n">index</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="n">sp</span> <span class="o">==</span> <span class="s1">&#39;soil_desc&#39;</span><span class="p">:</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;Soil Desc&#39;</span><span class="p">][</span><span class="n">index</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="n">sp</span> <span class="o">==</span> <span class="s1">&#39;height&#39;</span><span class="p">:</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;Height&#39;</span><span class="p">][</span><span class="n">index</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">set_units</span><span class="p">(</span><span class="s1">&#39;length&#39;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">sp</span> <span class="o">==</span> <span class="s1">&#39;tuw&#39;</span><span class="p">:</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;TUW&#39;</span><span class="p">][</span><span class="n">index</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">set_units</span><span class="p">(</span><span class="s1">&#39;tuw&#39;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">sp</span> <span class="o">==</span> <span class="s1">&#39;field_n&#39;</span><span class="p">:</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;Field N&#39;</span><span class="p">][</span><span class="n">index</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="n">sp</span> <span class="o">==</span> <span class="s1">&#39;corr_n&#39;</span><span class="p">:</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;Corr. N&#39;</span><span class="p">][</span><span class="n">index</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="n">sp</span> <span class="o">==</span> <span class="s1">&#39;field_phi&#39;</span><span class="p">:</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;Field Phi&#39;</span><span class="p">][</span><span class="n">index</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">set_units</span><span class="p">(</span><span class="s1">&#39;degrees&#39;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">sp</span> <span class="o">==</span> <span class="s1">&#39;calc_phi&#39;</span><span class="p">:</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;Calc. Phi&#39;</span><span class="p">][</span><span class="n">index</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">set_units</span><span class="p">(</span><span class="s1">&#39;degrees&#39;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>  <span class="c1"># su</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;Shear Su&#39;</span><span class="p">][</span><span class="n">index</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">set_units</span><span class="p">(</span><span class="s1">&#39;stress&#39;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">value</span></div>
 
     <span class="c1"># -- Method for string representation ------------------------------------</span>
 

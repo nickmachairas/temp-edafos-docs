@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Module Documentation &#8212; edafos 0.1.0beta documentation</title>
+    <title>Module Documentation &#8212; edafos 0.1.0-beta documentation</title>
     <link rel="stylesheet" href="../_static/bizstyle.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
@@ -47,10 +47,12 @@
 <p class="caption"><span class="caption-text">INTRODUCTION:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../intro/units.html">Units</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../intro/nomenclature.html">Nomenclature</a></li>
 </ul>
 <p class="caption"><span class="caption-text">SOIL PROFILE:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../soil/delineation.html">Layer Delineation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../soil/correlations.html">Correlations</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../soil/stresses.html">Soil Stresses</a></li>
 </ul>
 <p class="caption"><span class="caption-text">DEEP FOUNDATIONS:</span></p>
@@ -68,7 +70,8 @@
 <li class="toctree-l2"><a class="reference internal" href="#module-edafos.project"><code class="docutils literal notranslate"><span class="pre">edafos.project</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#module-edafos.soil.profile"><code class="docutils literal notranslate"><span class="pre">edafos.soil.profile</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#module-edafos.deepfoundations.piles"><code class="docutils literal notranslate"><span class="pre">edafos.deepfoundations.piles</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="#module-edafos.deepfoundations.api"><code class="docutils literal notranslate"><span class="pre">edafos.deepfoundations.api</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-edafos.deepfoundations.capacity_base"><code class="docutils literal notranslate"><span class="pre">edafos.deepfoundations.capacity_base</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-edafos.deepfoundations.capacity_api"><code class="docutils literal notranslate"><span class="pre">edafos.deepfoundations.capacity_api</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -107,7 +110,15 @@
 <span id="api-reference"></span><h1>Module Documentation<a class="headerlink" href="#module-documentation" title="Permalink to this headline">¶</a></h1>
 <p>This section provides the complete API reference for <code class="docutils literal notranslate"><span class="pre">edafos</span></code>, auto-generated
 from the docstrings in the project source code.</p>
-<div class="section" id="module-edafos.project">
+<p class="rubric">Inheritance Diagram</p>
+<img src="../_images/inheritance-2861d0a209639cfa687bbb14f02aacbdde1c12e9.png" alt="Inheritance diagram of edafos.soil.profile, edafos.deepfoundations.piles, edafos.deepfoundations.capacity_base, edafos.deepfoundations.capacity_api" usemap="#inheritance432b7616ac" class="inheritance"/>
+<map id="inheritance432b7616ac" name="inheritance432b7616ac">
+<area shape="rect" id="node1" href="#edafos.deepfoundations.capacity_base.CapacityMethod" target="_top" title="Class to represent the base methods shared by all Capacity Methods. It" alt="" coords="5,101,123,125"/>
+<area shape="rect" id="node2" href="#edafos.deepfoundations.capacity_api.Olson90" target="_top" title="Class to represent the Olson 90 method for capacity calculations of" alt="" coords="176,101,248,125"/>
+<area shape="rect" id="node3" href="#edafos.deepfoundations.piles.Pile" target="_top" title="Class to represent a new driven or drilled pile." alt="" coords="176,5,248,29"/>
+<area shape="rect" id="node4" href="#edafos.project.Project" target="_top" title="Class to represent a new project." alt="" coords="28,29,100,53"/>
+<area shape="rect" id="node5" href="#edafos.soil.profile.SoilProfile" target="_top" title="Class to represent a new soil profile." alt="" coords="171,53,252,77"/>
+</map><div class="section" id="module-edafos.project">
 <span id="edafos-project"></span><h2><code class="docutils literal notranslate"><span class="pre">edafos.project</span></code><a class="headerlink" href="#module-edafos.project" title="Permalink to this headline">¶</a></h2>
 <p>Provide the <code class="docutils literal notranslate"><span class="pre">Project</span></code> class.</p>
 <p>As of this writing (v.0.1.0) <code class="docutils literal notranslate"><span class="pre">Project</span></code> classes will be required for all
@@ -177,6 +188,26 @@ the previous <code class="docutils literal notranslate"><span class="pre">SoilPr
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>obj</strong> (<em>class</em>) – A <a class="reference internal" href="#edafos.soil.profile.SoilProfile" title="edafos.soil.profile.SoilProfile"><code class="xref py py-class docutils literal notranslate"><span class="pre">SoilProfile</span></code></a> class.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">self</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="edafos.project.Project.set_units">
+<code class="descname">set_units</code><span class="sig-paren">(</span><em>dim</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/edafos/project.html#Project.set_units"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#edafos.project.Project.set_units" title="Permalink to this definition">¶</a></dt>
+<dd><p>A private helper method that returns the Pint units to be attached
+to a variable based on the set unit system and dimensionality (dim).
+Since this is a private method, the stored values will not be shown
+in the docstring. Refer to the <cite>unit_dict</cite> in the code.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>dim</strong> (<em>str</em>) – The dimensionality for the variable. For example, layer
+height is ‘length’.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Pint units.</td>
 </tr>
 </tbody>
 </table>
@@ -288,6 +319,12 @@ strength.</p>
 </tr>
 <tr class="field-even field"><th class="field-name" colspan="2">Keyword Arguments:</th></tr>
 <tr class="field-even field"><td>&#160;</td><td class="field-body"><ul class="first last simple">
+<li><strong>soil_desc</strong> (<em>str</em>) – Soil description. Initially created to accommodate
+the <a class="reference internal" href="../deepfoundations/capacity.html#olson90-method"><span class="std std-ref">Olson 90 Method</span></a>. As such, in order to follow the
+guidelines in <a class="reference internal" href="../deepfoundations/capacity.html#olson90-table"><span class="std std-numref">Table 12</span></a>, the only valid inputs
+are: <code class="docutils literal notranslate"><span class="pre">gravel</span></code>, <code class="docutils literal notranslate"><span class="pre">sand-gravel</span></code>, <code class="docutils literal notranslate"><span class="pre">sand</span></code>, <code class="docutils literal notranslate"><span class="pre">sand-silt</span></code>,
+<code class="docutils literal notranslate"><span class="pre">silt</span></code>. TODO: There is no check to reject these inputs for
+<code class="docutils literal notranslate"><span class="pre">soil_type</span> <span class="pre">=</span> <span class="pre">'cohesive'</span></code>, although they have no effect.</li>
 <li><strong>tuw</strong> (<em>float</em>) – <p>Total unit weight of soil.</p>
 <ul>
 <li>For <strong>SI</strong>: Enter TUW in <strong>kN/m</strong><sup>3</sup>.</li>
@@ -309,7 +346,7 @@ in degrees.</li>
 <li><strong>su</strong> (<em>float</em>) – <p>Undrained shear strength, <em>s</em><sub>u</sub>.</p>
 <ul>
 <li>For <strong>SI</strong>: Enter <em>s</em><sub>u</sub> in <strong>kN/m</strong><sup>2</sup>.</li>
-<li>For <strong>English</strong>: Enter <em>s</em><sub>u</sub> in <strong>lbf/ft</strong><sup>2</sup>.</li>
+<li>For <strong>English</strong>: Enter <em>s</em><sub>u</sub> in <strong>kip/ft</strong><sup>2</sup>.</li>
 </ul>
 </li>
 </ul>
@@ -344,7 +381,50 @@ stresses in the same order.</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A physical quantity with associated units.</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><p>A physical quantity with associated units.</p>
+<blockquote>
+<div><ul class="simple">
+<li>For <strong>SI</strong>: Stress is returned in, <strong>kN/m</strong><sup>2</sup>.</li>
+<li>For <strong>English</strong>: Stress is returned in, <strong>kip/ft</strong><sup>2</sup>.</li>
+</ul>
+</div></blockquote>
+</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">Quantity</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="edafos.soil.profile.SoilProfile.get_soil_prop">
+<code class="descname">get_soil_prop</code><span class="sig-paren">(</span><em>z</em>, <em>sp</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/edafos/soil/profile.html#SoilProfile.get_soil_prop"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#edafos.soil.profile.SoilProfile.get_soil_prop" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method will return the soil property (with units), i.e. SPT-N,
+total unit weight, undrained shear strength, etc. at depth, <span class="math notranslate nohighlight">\(z\)</span>.
+The soil properties must have been previously defined with the
+<a class="reference internal" href="#edafos.soil.profile.SoilProfile.add_layer" title="edafos.soil.profile.SoilProfile.add_layer"><code class="xref py py-meth docutils literal notranslate"><span class="pre">add_layer()</span></code></a> method.</p>
+<p>TODO: This method will be updated to locate more granular data prior to
+layer delineation, if available.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>z</strong> (<em>float</em>) – <p>Vertical depth to the point of interest, measured from
+the top of the soil profile.</p>
+<ul>
+<li>For <strong>SI</strong>: Enter depth, <em>z</em>, in <strong>meters</strong>.</li>
+<li>For <strong>English</strong>: Enter depth, <em>z</em>, in <strong>feet</strong>.</li>
+</ul>
+</li>
+<li><strong>sp</strong> (<em>str</em>) – Available inputs exactly as defined in the keyword
+arguments of <a class="reference internal" href="#edafos.soil.profile.SoilProfile.add_layer" title="edafos.soil.profile.SoilProfile.add_layer"><code class="xref py py-meth docutils literal notranslate"><span class="pre">add_layer()</span></code></a>.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Soil property with units.</p>
 </td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">Quantity</p>
@@ -435,8 +515,8 @@ Requires keyword argument <code class="docutils literal notranslate"><span class
 <li><strong>shape</strong> (<em>str</em>) – Pile shape given pile type. For concrete piles the
 options are <code class="docutils literal notranslate"><span class="pre">square-solid</span></code>, <code class="docutils literal notranslate"><span class="pre">square-hollow</span></code>,
 <code class="docutils literal notranslate"><span class="pre">circle-closed</span></code>, <code class="docutils literal notranslate"><span class="pre">circle-open</span></code>, <code class="docutils literal notranslate"><span class="pre">hexagon</span></code> and <code class="docutils literal notranslate"><span class="pre">octagon</span></code>.
-For H-piles see documentation for stored sections.
-TODO: Add reference to table with sections.</li>
+For H-piles, see <a class="reference internal" href="../deepfoundations/types_o_piles.html#english-hpile-table"><span class="std std-numref">Table 6</span></a> for stored
+sections.</li>
 <li><strong>side</strong> (<em>float</em>) – <p><span class="math notranslate nohighlight">\(\alpha\)</span>: Side length of square, hexagonal and
 octagonal piles, at the top.</p>
 <ul>
@@ -556,7 +636,7 @@ side area.</li>
 
 <dl class="method">
 <dt id="edafos.deepfoundations.piles.Pile.side_area">
-<code class="descname">side_area</code><span class="sig-paren">(</span><em>z1</em>, <em>z2</em>, <em>box_area=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/edafos/deepfoundations/piles.html#Pile.side_area"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#edafos.deepfoundations.piles.Pile.side_area" title="Permalink to this definition">¶</a></dt>
+<code class="descname">side_area</code><span class="sig-paren">(</span><em>z1</em>, <em>z2</em>, <em>box_area=False</em>, <em>inside=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/edafos/deepfoundations/piles.html#Pile.side_area"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#edafos.deepfoundations.piles.Pile.side_area" title="Permalink to this definition">¶</a></dt>
 <dd><p>Method that returns the side area for a section of the pile defined
 by z1 and z2.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -580,6 +660,8 @@ measured from the top of the soil profile.</p>
 </li>
 <li><strong>box_area</strong> (<em>bool</em>) – For H-piles, if set to <code class="docutils literal notranslate"><span class="pre">TRUE</span></code>, the method
 returns the box area.</li>
+<li><strong>inside</strong> (<em>bool</em>) – For open steel pipe piles only. If TRUE, it returns
+the inside area of the pile for plugged calculations.</li>
 </ul>
 </td>
 </tr>
@@ -664,18 +746,18 @@ corresponding <span class="math notranslate nohighlight">\(z\)</span>.</p>
 <div class="line"><br /></div>
 </div>
 </div>
-<div class="section" id="module-edafos.deepfoundations.api">
-<span id="edafos-deepfoundations-api"></span><h2><code class="docutils literal notranslate"><span class="pre">edafos.deepfoundations.api</span></code><a class="headerlink" href="#module-edafos.deepfoundations.api" title="Permalink to this headline">¶</a></h2>
-<p>Provide the <code class="docutils literal notranslate"><span class="pre">API</span></code> class.</p>
+<div class="section" id="module-edafos.deepfoundations.capacity_base">
+<span id="edafos-deepfoundations-capacity-base"></span><h2><code class="docutils literal notranslate"><span class="pre">edafos.deepfoundations.capacity_base</span></code><a class="headerlink" href="#module-edafos.deepfoundations.capacity_base" title="Permalink to this headline">¶</a></h2>
+<p>Provide the <code class="docutils literal notranslate"><span class="pre">CapacityMethod</span></code> class.</p>
 <dl class="class">
-<dt id="edafos.deepfoundations.api.API">
-<em class="property">class </em><code class="descname">API</code><span class="sig-paren">(</span><em>project</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/edafos/deepfoundations/api.html#API"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#edafos.deepfoundations.api.API" title="Permalink to this definition">¶</a></dt>
+<dt id="edafos.deepfoundations.capacity_base.CapacityMethod">
+<em class="property">class </em><code class="descname">CapacityMethod</code><span class="sig-paren">(</span><em>project</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/edafos/deepfoundations/capacity_base.html#CapacityMethod"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#edafos.deepfoundations.capacity_base.CapacityMethod" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>Class to represent the API method for capacity calculations of driven
-or drilled piles.</p>
+<p>Class to represent the base methods shared by all Capacity Methods. It
+is not anticipated that users will interact with this class.</p>
 <dl class="method">
-<dt id="edafos.deepfoundations.api.API.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><em>project</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/edafos/deepfoundations/api.html#API.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#edafos.deepfoundations.api.API.__init__" title="Permalink to this definition">¶</a></dt>
+<dt id="edafos.deepfoundations.capacity_base.CapacityMethod.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>project</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/edafos/deepfoundations/capacity_base.html#CapacityMethod.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#edafos.deepfoundations.capacity_base.CapacityMethod.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -688,8 +770,29 @@ or drilled piles.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="edafos.deepfoundations.api.API._z_analysis">
-<code class="descname">_z_analysis</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/edafos/deepfoundations/api.html#API._z_analysis"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#edafos.deepfoundations.api.API._z_analysis" title="Permalink to this definition">¶</a></dt>
+<dt id="edafos.deepfoundations.capacity_base.CapacityMethod._pre_check">
+<code class="descname">_pre_check</code><span class="sig-paren">(</span><em>req</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/edafos/deepfoundations/capacity_base.html#CapacityMethod._pre_check"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#edafos.deepfoundations.capacity_base.CapacityMethod._pre_check" title="Permalink to this definition">¶</a></dt>
+<dd><p>Private method that goes through all defined soil and pile
+properties and compares against the requested properties to ensure they
+are available.</p>
+<p>Pile objects cannot be created without the required properties, hence,
+at the moment this method focuses mostly on soil properties.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>req</strong> (<em>list</em>) – A list of required properties by their corresponding
+argument names (i.e. <code class="docutils literal notranslate"><span class="pre">[soil_type,</span> <span class="pre">tuw,</span> <span class="pre">corr_n]</span></code>).</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">pass/fail (TODO- with recommendations for missing properties)</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="edafos.deepfoundations.capacity_base.CapacityMethod._z_for_analysis">
+<code class="descname">_z_for_analysis</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/edafos/deepfoundations/capacity_base.html#CapacityMethod._z_for_analysis"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#edafos.deepfoundations.capacity_base.CapacityMethod._z_for_analysis" title="Permalink to this definition">¶</a></dt>
 <dd><p>Private method that expands the
 <a class="reference internal" href="#edafos.project.Project.z_layer_pile" title="edafos.project.Project.z_layer_pile"><code class="xref py py-meth docutils literal notranslate"><span class="pre">z_layer_pile()</span></code></a> list to produce smaller
 intervals that the analysis will run on. These intervals are:</p>
@@ -701,7 +804,12 @@ intervals that the analysis will run on. These intervals are:</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A list of depths, <span class="math notranslate nohighlight">\(z\)</span> (unitless).</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><dl class="docutils">
+<dt>Two lists of depths, <span class="math notranslate nohighlight">\(z\)</span> (unitless). The first list is</dt>
+<dd>at the bottom, the second list is at mid point for average
+effective stress calculations.</dd>
+</dl>
+</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">list</td>
 </tr>
@@ -709,33 +817,356 @@ intervals that the analysis will run on. These intervals are:</p>
 </table>
 </dd></dl>
 
-<dl class="method">
-<dt id="edafos.deepfoundations.api.API.get_soil_prop">
-<code class="descname">get_soil_prop</code><span class="sig-paren">(</span><em>z</em>, <em>sp</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/edafos/deepfoundations/api.html#API.get_soil_prop"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#edafos.deepfoundations.api.API.get_soil_prop" title="Permalink to this definition">¶</a></dt>
-<dd><p>This method will return the soil property (with units), i.e. SPT-N,
-total unit weight, undrained shear strength, etc. at depth, <span class="math notranslate nohighlight">\(z\)</span>.
-The soil properties must have been previously defined with the
-<a class="reference internal" href="#edafos.soil.profile.SoilProfile.add_layer" title="edafos.soil.profile.SoilProfile.add_layer"><code class="xref py py-meth docutils literal notranslate"><span class="pre">add_layer()</span></code></a> method.</p>
-<p>TODO: This method will be updated to locate more granular data prior to
-layer delineation, if available.</p>
+<dl class="staticmethod">
+<dt id="edafos.deepfoundations.capacity_base.CapacityMethod.a_factor_rev_api">
+<em class="property">static </em><code class="descname">a_factor_rev_api</code><span class="sig-paren">(</span><em>sigma</em>, <em>su</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/edafos/deepfoundations/capacity_base.html#CapacityMethod.a_factor_rev_api"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#edafos.deepfoundations.capacity_base.CapacityMethod.a_factor_rev_api" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method that calculates the <span class="math notranslate nohighlight">\(\alpha\)</span> factor for cohesionless
+soils, as per equation <a class="reference internal" href="../deepfoundations/capacity.html#equation-a-rev-api-clay">(3)</a>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>z</strong> (<em>float</em>) – <p>Vertical depth to the point of interest, measured from
-the top of the soil profile.</p>
-<ul>
-<li>For <strong>SI</strong>: Enter depth, <em>z</em>, in <strong>meters</strong>.</li>
-<li>For <strong>English</strong>: Enter depth, <em>z</em>, in <strong>feet</strong>.</li>
-</ul>
-</li>
-<li><strong>sp</strong> (<em>str</em>) – Available inputs exactly as defined in the keyword
-arguments of <a class="reference internal" href="#edafos.soil.profile.SoilProfile.add_layer" title="edafos.soil.profile.SoilProfile.add_layer"><code class="xref py py-meth docutils literal notranslate"><span class="pre">add_layer()</span></code></a>.</li>
+<li><strong>sigma</strong> (<em>float</em>) – average effective stress</li>
+<li><strong>su</strong> (<em>float</em>) – undrained shear strength of soil</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Soil property with units.</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The <span class="math notranslate nohighlight">\(\alpha\)</span> factor</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">float or dimensionless Quantity</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="edafos.deepfoundations.capacity_base.CapacityMethod.average_toe_su">
+<code class="descname">average_toe_su</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/edafos/deepfoundations/capacity_base.html#CapacityMethod.average_toe_su"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#edafos.deepfoundations.capacity_base.CapacityMethod.average_toe_su" title="Permalink to this definition">¶</a></dt>
+<dd><p>API RP2A guidelines, as also shown in equation <a class="reference internal" href="../deepfoundations/capacity.html#equation-q-p-api-clay">(5)</a>,
+recommend that for bearing capacity calculations, the undrained shear
+strength, <span class="math notranslate nohighlight">\(s_u\)</span>, should be taken as the average over a distance
+of two pile diameters below the tip of the pile. This method calculates
+this average if there is available information.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Average</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">Quantity</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="edafos.deepfoundations.capacity_base.CapacityMethod.lateral_k_olson90">
+<em class="property">static </em><code class="descname">lateral_k_olson90</code><span class="sig-paren">(</span><em>corr_n</em>, <em>full_displ</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/edafos/deepfoundations/capacity_base.html#CapacityMethod.lateral_k_olson90"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#edafos.deepfoundations.capacity_base.CapacityMethod.lateral_k_olson90" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method that returns the value of coefficient of lateral earth,
+<span class="math notranslate nohighlight">\(K\)</span>, as per Olson 90 and equation <a class="reference internal" href="../deepfoundations/capacity.html#equation-olson90-k">(8)</a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>corr_n</strong> (<em>int</em>) – SPT-N corrected value, <span class="math notranslate nohighlight">\(K_{cor}\)</span>.</li>
+<li><strong>full_displ</strong> (<em>bool</em>) – Pile condition (open-ended piles: <code class="docutils literal notranslate"><span class="pre">False</span></code>,
+full-displacement piles:<code class="docutils literal notranslate"><span class="pre">True</span></code>).</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Value of coefficient of lateral earth, <span class="math notranslate nohighlight">\(K\)</span>, as per
+Olson 90.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">float</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="edafos.deepfoundations.capacity_base.CapacityMethod.lateral_k_rev_api">
+<em class="property">static </em><code class="descname">lateral_k_rev_api</code><span class="sig-paren">(</span><em>full_displ</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/edafos/deepfoundations/capacity_base.html#CapacityMethod.lateral_k_rev_api"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#edafos.deepfoundations.capacity_base.CapacityMethod.lateral_k_rev_api" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method that returns the value of coefficient of lateral earth,
+<span class="math notranslate nohighlight">\(K\)</span>, as per the Revised API guidelines in <a class="reference internal" href="../deepfoundations/capacity.html#api-k-table"><span class="std std-numref">Table 7</span></a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>full_displ</strong> (<em>bool</em>) – Pile condition (open-ended piles: <code class="docutils literal notranslate"><span class="pre">False</span></code>,
+full-displacement piles:<code class="docutils literal notranslate"><span class="pre">True</span></code>).</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Value of coefficient of lateral earth, <span class="math notranslate nohighlight">\(K\)</span>, as per
+Revised API.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">float</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="edafos.deepfoundations.capacity_base.CapacityMethod.olson90_table">
+<code class="descname">olson90_table</code><span class="sig-paren">(</span><em>soil_desc</em>, <em>corr_n</em>, <em>req</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/edafos/deepfoundations/capacity_base.html#CapacityMethod.olson90_table"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#edafos.deepfoundations.capacity_base.CapacityMethod.olson90_table" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method that returns Olson 90 values for <span class="math notranslate nohighlight">\(\delta\)</span>,
+<span class="math notranslate nohighlight">\(f_{s.lim}\)</span>, <span class="math notranslate nohighlight">\(N_q\)</span> and <span class="math notranslate nohighlight">\(q_{p.lim}\)</span>. Refer to
+<a class="reference internal" href="../deepfoundations/capacity.html#olson90-table"><span class="std std-numref">Table 12</span></a> for more details.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>soil_desc</strong> (<em>str</em>) – <p>Description of soil material. Permissible inputs
+are:</p>
+<ul>
+<li><code class="docutils literal notranslate"><span class="pre">gravel</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">sand-gravel</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">sand</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">sand-silt</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">silt</span></code></li>
+</ul>
+</li>
+<li><strong>corr_n</strong> (<em>int</em>) – SPT-N corrected value, <span class="math notranslate nohighlight">\(K_{cor}\)</span>.</li>
+<li><strong>req</strong> (<em>str</em>) – <p>Requested value. Permissible inputs are:</p>
+<ul>
+<li><code class="docutils literal notranslate"><span class="pre">delta</span></code>: for the friction angle between the soil and the
+pile wall, <span class="math notranslate nohighlight">\(\delta\)</span>.</li>
+<li><code class="docutils literal notranslate"><span class="pre">f_lim</span></code>: for the limiting unit shaft resistance,
+<span class="math notranslate nohighlight">\(f_{s.lim}\)</span>.</li>
+<li><code class="docutils literal notranslate"><span class="pre">N_q</span></code>: for the bearing capacity factor, <span class="math notranslate nohighlight">\(N_q\)</span>.</li>
+<li><code class="docutils literal notranslate"><span class="pre">q_lim</span></code>: for the limiting unit toe resistance,
+<span class="math notranslate nohighlight">\(q_{p.lim}\)</span>.</li>
+</ul>
+</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The value requested for the given conditions.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">Quantity or float</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="edafos.deepfoundations.capacity_base.CapacityMethod.shaft_resistance">
+<em class="property">static </em><code class="descname">shaft_resistance</code><span class="sig-paren">(</span><em>fs</em>, <em>area</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/edafos/deepfoundations/capacity_base.html#CapacityMethod.shaft_resistance"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#edafos.deepfoundations.capacity_base.CapacityMethod.shaft_resistance" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method that calculates shaft resistance, <span class="math notranslate nohighlight">\(R_s\)</span>, as per
+equation <a class="reference internal" href="../deepfoundations/capacity.html#equation-r-s-api">(1)</a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>fs</strong> (<em>float</em>) – unit shaft resistance, <span class="math notranslate nohighlight">\(f_s\)</span></li>
+<li><strong>area</strong> (<em>float</em>) – side surface area, <span class="math notranslate nohighlight">\(A_s\)</span></li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Shaft resistance with units.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">Quantity</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="edafos.deepfoundations.capacity_base.CapacityMethod.toe_resistance">
+<em class="property">static </em><code class="descname">toe_resistance</code><span class="sig-paren">(</span><em>qp</em>, <em>area</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/edafos/deepfoundations/capacity_base.html#CapacityMethod.toe_resistance"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#edafos.deepfoundations.capacity_base.CapacityMethod.toe_resistance" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method that calculates toe resistance, <span class="math notranslate nohighlight">\(R_p\)</span>, as per
+equation <a class="reference internal" href="../deepfoundations/capacity.html#equation-r-p-api">(4)</a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>qp</strong> (<em>float</em>) – Unit toe resistance, <span class="math notranslate nohighlight">\(q_p\)</span></li>
+<li><strong>area</strong> (<em>float</em>) – pile toe cross-sectional area, <span class="math notranslate nohighlight">\(A_p\)</span> or
+<span class="math notranslate nohighlight">\(A_{pp}\)</span></li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Toe resistance with units.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">Quantity</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="edafos.deepfoundations.capacity_base.CapacityMethod.unit_shaft_res_clay">
+<em class="property">static </em><code class="descname">unit_shaft_res_clay</code><span class="sig-paren">(</span><em>a</em>, <em>su</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/edafos/deepfoundations/capacity_base.html#CapacityMethod.unit_shaft_res_clay"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#edafos.deepfoundations.capacity_base.CapacityMethod.unit_shaft_res_clay" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method that calculates unit shaft resistance for cohesive soils, as
+per equation <a class="reference internal" href="../deepfoundations/capacity.html#equation-f-s-api-clay">(2)</a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>a</strong> (<em>float</em>) – <span class="math notranslate nohighlight">\(\alpha\)</span> factor (unitless)</li>
+<li><strong>su</strong> (<em>float</em>) – undrained shear strength of soil</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Unit shaft resistance with units.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">Quantity</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="edafos.deepfoundations.capacity_base.CapacityMethod.unit_shaft_res_sand">
+<em class="property">static </em><code class="descname">unit_shaft_res_sand</code><span class="sig-paren">(</span><em>k</em>, <em>sigma</em>, <em>delta</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/edafos/deepfoundations/capacity_base.html#CapacityMethod.unit_shaft_res_sand"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#edafos.deepfoundations.capacity_base.CapacityMethod.unit_shaft_res_sand" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method for unit shaft resistance in cohesionless soils, defined by
+equation <a class="reference internal" href="../deepfoundations/capacity.html#equation-f-s-api-sand">(6)</a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>k</strong> (<em>float</em>) – Coefficient of lateral earth, <span class="math notranslate nohighlight">\(K\)</span>. For Revised API
+locate the value in <a class="reference internal" href="../deepfoundations/capacity.html#api-k-table"><span class="std std-numref">Table 7</span></a>. For Olson 90, is it
+calculated with equation <a class="reference internal" href="../deepfoundations/capacity.html#equation-olson90-k">(8)</a>.</li>
+<li><strong>sigma</strong> (<em>float</em>) – <p>Average effective stress (at midpoint),
+<span class="math notranslate nohighlight">\(\bar{\sigma'}\)</span>.</p>
+<ul>
+<li>For <strong>SI</strong>: Enter <span class="math notranslate nohighlight">\(\bar{\sigma'}\)</span>
+in <strong>kN/m</strong><sup>2</sup>.</li>
+<li>For <strong>English</strong>: Enter <span class="math notranslate nohighlight">\(\bar{\sigma'}\)</span> in
+<strong>kip/ft</strong><sup>2</sup>.</li>
+</ul>
+</li>
+<li><strong>delta</strong> (<em>float</em>) – Friction angle between the soil and the pile wall,
+<span class="math notranslate nohighlight">\(\delta\)</span>. For Revised API, locate <span class="math notranslate nohighlight">\(\delta\)</span> in
+<a class="reference internal" href="../deepfoundations/capacity.html#api-d-q-spt-table"><span class="std std-numref">Table 11</span></a>. For Olson 90, locate
+<span class="math notranslate nohighlight">\(\delta\)</span> in <a class="reference internal" href="../deepfoundations/capacity.html#olson90-table"><span class="std std-numref">Table 12</span></a>.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><p>Unit shaft resistance with units.</p>
+<blockquote>
+<div><ul class="simple">
+<li>For <strong>SI</strong>: Returns <span class="math notranslate nohighlight">\(f_s\)</span> in <strong>kN/m</strong><sup>2</sup>.</li>
+<li>For <strong>English</strong>: Returns <span class="math notranslate nohighlight">\(f_s\)</span> in <strong>kip/ft</strong><sup>2</sup>.</li>
+</ul>
+</div></blockquote>
+</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">Quantity</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="edafos.deepfoundations.capacity_base.CapacityMethod.unit_toe_res_clay">
+<em class="property">static </em><code class="descname">unit_toe_res_clay</code><span class="sig-paren">(</span><em>su</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/edafos/deepfoundations/capacity_base.html#CapacityMethod.unit_toe_res_clay"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#edafos.deepfoundations.capacity_base.CapacityMethod.unit_toe_res_clay" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method that calculates the unit toe resistance, <span class="math notranslate nohighlight">\(q_p\)</span> for
+cohesionless soils, as per equation <a class="reference internal" href="../deepfoundations/capacity.html#equation-q-p-api-clay">(5)</a>.</p>
+<p>The average, <span class="math notranslate nohighlight">\(su\)</span>, is implemented in the
+<a class="reference internal" href="#edafos.deepfoundations.capacity_base.CapacityMethod.average_toe_su" title="edafos.deepfoundations.capacity_base.CapacityMethod.average_toe_su"><code class="xref py py-meth docutils literal notranslate"><span class="pre">average_toe_su()</span></code></a>
+method.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>su</strong> (<em>float</em>) – undrained shear strength of soil</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Unit toe resistance with units.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">Quantity</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+</div>
+<div class="section" id="module-edafos.deepfoundations.capacity_api">
+<span id="edafos-deepfoundations-capacity-api"></span><h2><code class="docutils literal notranslate"><span class="pre">edafos.deepfoundations.capacity_api</span></code><a class="headerlink" href="#module-edafos.deepfoundations.capacity_api" title="Permalink to this headline">¶</a></h2>
+<p>Provide the <code class="docutils literal notranslate"><span class="pre">Olson</span> <span class="pre">90</span></code> class.</p>
+<dl class="class">
+<dt id="edafos.deepfoundations.capacity_api.Olson90">
+<em class="property">class </em><code class="descname">Olson90</code><span class="sig-paren">(</span><em>project</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/edafos/deepfoundations/capacity_api.html#Olson90"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#edafos.deepfoundations.capacity_api.Olson90" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#edafos.deepfoundations.capacity_base.CapacityMethod" title="edafos.deepfoundations.capacity_base.CapacityMethod"><code class="xref py py-class docutils literal notranslate"><span class="pre">edafos.deepfoundations.capacity_base.CapacityMethod</span></code></a></p>
+<p>Class to represent the Olson 90 method for capacity calculations of
+driven or drilled piles. For the engineering background refer to the section
+on the <a class="reference internal" href="../deepfoundations/capacity.html#olson90-method"><span class="std std-ref">Olson 90 Method</span></a>.</p>
+<dl class="method">
+<dt id="edafos.deepfoundations.capacity_api.Olson90.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>project</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/edafos/deepfoundations/capacity_api.html#Olson90.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#edafos.deepfoundations.capacity_api.Olson90.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>project</strong> (<em>class</em>) – Provide the <code class="docutils literal notranslate"><span class="pre">Project</span></code> object as defined in the
+<a class="reference internal" href="#edafos.project.Project" title="edafos.project.Project"><code class="xref py py-class docutils literal notranslate"><span class="pre">Project</span></code></a> class.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="edafos.deepfoundations.capacity_api.Olson90.run">
+<code class="descname">run</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/edafos/deepfoundations/capacity_api.html#Olson90.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#edafos.deepfoundations.capacity_api.Olson90.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method where the method “recipe” is compiled and all calculations
+are performed.</p>
+<p>Returns:</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="edafos.deepfoundations.capacity_api.Olson90.shaft_res_per_z">
+<code class="descname">shaft_res_per_z</code><span class="sig-paren">(</span><em>z1</em>, <em>z2</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/edafos/deepfoundations/capacity_api.html#Olson90.shaft_res_per_z"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#edafos.deepfoundations.capacity_api.Olson90.shaft_res_per_z" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method that follows the Olson 90 method for pile shaft resistance
+and calculates <span class="math notranslate nohighlight">\(R_s\)</span> for a section defined by <code class="docutils literal notranslate"><span class="pre">z1</span></code> and <code class="docutils literal notranslate"><span class="pre">z2</span></code>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>z1</strong> (<em>float</em>) – <p>Vertical depth to the highest point of interest,
+measured from the top of the soil profile.</p>
+<ul>
+<li>For <strong>SI</strong>: Enter depth, <em>z1</em>, in <strong>meters</strong>.</li>
+<li>For <strong>English</strong>: Enter depth, <em>z1</em>, in <strong>feet</strong>.</li>
+</ul>
+</li>
+<li><strong>z2</strong> (<em>float</em>) – <p>Vertical depth to the lowest point of interest,
+measured from the top of the soil profile.</p>
+<ul>
+<li>For <strong>SI</strong>: Enter depth, <em>z1</em>, in <strong>meters</strong>.</li>
+<li>For <strong>English</strong>: Enter depth, <em>z1</em>, in <strong>feet</strong>.</li>
+</ul>
+</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Two values with units depending on pile type. The first
+for <strong>plugged</strong> conditions, the second for <strong>unplugged</strong> conditions.</p>
 </td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">Quantity</p>

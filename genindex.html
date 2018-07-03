@@ -7,7 +7,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Index &#8212; edafos 0.1.0beta documentation</title>
+    <title>Index &#8212; edafos 0.1.0-beta documentation</title>
     <link rel="stylesheet" href="_static/bizstyle.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -44,10 +44,12 @@
 <p class="caption"><span class="caption-text">INTRODUCTION:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="intro/units.html">Units</a></li>
+<li class="toctree-l1"><a class="reference internal" href="intro/nomenclature.html">Nomenclature</a></li>
 </ul>
 <p class="caption"><span class="caption-text">SOIL PROFILE:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="soil/delineation.html">Layer Delineation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="soil/correlations.html">Correlations</a></li>
 <li class="toctree-l1"><a class="reference internal" href="soil/stresses.html">Soil Stresses</a></li>
 </ul>
 <p class="caption"><span class="caption-text">DEEP FOUNDATIONS:</span></p>
@@ -93,8 +95,13 @@
  | <a href="#C"><strong>C</strong></a>
  | <a href="#E"><strong>E</strong></a>
  | <a href="#G"><strong>G</strong></a>
+ | <a href="#L"><strong>L</strong></a>
+ | <a href="#O"><strong>O</strong></a>
  | <a href="#P"><strong>P</strong></a>
+ | <a href="#R"><strong>R</strong></a>
  | <a href="#S"><strong>S</strong></a>
+ | <a href="#T"><strong>T</strong></a>
+ | <a href="#U"><strong>U</strong></a>
  | <a href="#X"><strong>X</strong></a>
  | <a href="#Z"><strong>Z</strong></a>
  
@@ -102,9 +109,11 @@
 <h2 id="_">_</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/api_reference.html#edafos.deepfoundations.api.API.__init__">__init__() (API method)</a>
+      <li><a href="api/api_reference.html#edafos.deepfoundations.capacity_base.CapacityMethod.__init__">__init__() (CapacityMethod method)</a>
 
       <ul>
+        <li><a href="api/api_reference.html#edafos.deepfoundations.capacity_api.Olson90.__init__">(Olson90 method)</a>
+</li>
         <li><a href="api/api_reference.html#edafos.deepfoundations.piles.Pile.__init__">(Pile method)</a>
 </li>
         <li><a href="api/api_reference.html#edafos.project.Project.__init__">(Project method)</a>
@@ -118,7 +127,9 @@
 </li>
       <li><a href="api/api_reference.html#edafos.deepfoundations.piles.Pile._pile_a_d">_pile_a_d() (Pile method)</a>
 </li>
-      <li><a href="api/api_reference.html#edafos.deepfoundations.api.API._z_analysis">_z_analysis() (API method)</a>
+      <li><a href="api/api_reference.html#edafos.deepfoundations.capacity_base.CapacityMethod._pre_check">_pre_check() (CapacityMethod method)</a>
+</li>
+      <li><a href="api/api_reference.html#edafos.deepfoundations.capacity_base.CapacityMethod._z_for_analysis">_z_for_analysis() (CapacityMethod method)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -126,17 +137,19 @@
 <h2 id="A">A</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/api_reference.html#edafos.deepfoundations.capacity_base.CapacityMethod.a_factor_rev_api">a_factor_rev_api() (CapacityMethod static method)</a>
+</li>
       <li><a href="api/api_reference.html#edafos.soil.profile.SoilProfile.add_layer">add_layer() (SoilProfile method)</a>
 </li>
-      <li><a href="api/api_reference.html#edafos.deepfoundations.api.API">API (class in edafos.deepfoundations.api)</a>
+      <li><a href="api/api_reference.html#edafos.deepfoundations.piles.Pile.area_of_shape">area_of_shape() (Pile static method)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/api_reference.html#edafos.deepfoundations.piles.Pile.area_of_shape">area_of_shape() (Pile static method)</a>
-</li>
       <li><a href="api/api_reference.html#edafos.project.Project.attach_pile">attach_pile() (Project method)</a>
 </li>
       <li><a href="api/api_reference.html#edafos.project.Project.attach_sp">attach_sp() (Project method)</a>
+</li>
+      <li><a href="api/api_reference.html#edafos.deepfoundations.capacity_base.CapacityMethod.average_toe_su">average_toe_su() (CapacityMethod method)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -147,17 +160,23 @@
       <li><a href="api/api_reference.html#edafos.soil.profile.SoilProfile.calculate_stress">calculate_stress() (SoilProfile method)</a>
 </li>
   </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/api_reference.html#edafos.deepfoundations.capacity_base.CapacityMethod">CapacityMethod (class in edafos.deepfoundations.capacity_base)</a>
+</li>
+  </ul></td>
 </tr></table>
 
 <h2 id="E">E</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/api_reference.html#module-edafos.deepfoundations.api">edafos.deepfoundations.api (module)</a>
+      <li><a href="api/api_reference.html#module-edafos.deepfoundations.capacity_api">edafos.deepfoundations.capacity_api (module)</a>
 </li>
-      <li><a href="api/api_reference.html#module-edafos.deepfoundations.piles">edafos.deepfoundations.piles (module)</a>
+      <li><a href="api/api_reference.html#module-edafos.deepfoundations.capacity_base">edafos.deepfoundations.capacity_base (module)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/api_reference.html#module-edafos.deepfoundations.piles">edafos.deepfoundations.piles (module)</a>
+</li>
       <li><a href="api/api_reference.html#module-edafos.project">edafos.project (module)</a>
 </li>
       <li><a href="api/api_reference.html#module-edafos.soil.profile">edafos.soil.profile (module)</a>
@@ -168,7 +187,31 @@
 <h2 id="G">G</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/api_reference.html#edafos.deepfoundations.api.API.get_soil_prop">get_soil_prop() (API method)</a>
+      <li><a href="api/api_reference.html#edafos.soil.profile.SoilProfile.get_soil_prop">get_soil_prop() (SoilProfile method)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="L">L</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/api_reference.html#edafos.deepfoundations.capacity_base.CapacityMethod.lateral_k_olson90">lateral_k_olson90() (CapacityMethod static method)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/api_reference.html#edafos.deepfoundations.capacity_base.CapacityMethod.lateral_k_rev_api">lateral_k_rev_api() (CapacityMethod static method)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="O">O</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/api_reference.html#edafos.deepfoundations.capacity_api.Olson90">Olson90 (class in edafos.deepfoundations.capacity_api)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/api_reference.html#edafos.deepfoundations.capacity_base.CapacityMethod.olson90_table">olson90_table() (CapacityMethod method)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -185,14 +228,50 @@
   </ul></td>
 </tr></table>
 
+<h2 id="R">R</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/api_reference.html#edafos.deepfoundations.capacity_api.Olson90.run">run() (Olson90 method)</a>
+</li>
+  </ul></td>
+</tr></table>
+
 <h2 id="S">S</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/api_reference.html#edafos.deepfoundations.piles.Pile.side_area">side_area() (Pile method)</a>
+      <li><a href="api/api_reference.html#edafos.project.Project.set_units">set_units() (Project method)</a>
+</li>
+      <li><a href="api/api_reference.html#edafos.deepfoundations.capacity_api.Olson90.shaft_res_per_z">shaft_res_per_z() (Olson90 method)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/api_reference.html#edafos.deepfoundations.capacity_base.CapacityMethod.shaft_resistance">shaft_resistance() (CapacityMethod static method)</a>
+</li>
+      <li><a href="api/api_reference.html#edafos.deepfoundations.piles.Pile.side_area">side_area() (Pile method)</a>
+</li>
       <li><a href="api/api_reference.html#edafos.soil.profile.SoilProfile">SoilProfile (class in edafos.soil.profile)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="T">T</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/api_reference.html#edafos.deepfoundations.capacity_base.CapacityMethod.toe_resistance">toe_resistance() (CapacityMethod static method)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="U">U</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/api_reference.html#edafos.deepfoundations.capacity_base.CapacityMethod.unit_shaft_res_clay">unit_shaft_res_clay() (CapacityMethod static method)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/api_reference.html#edafos.deepfoundations.capacity_base.CapacityMethod.unit_shaft_res_sand">unit_shaft_res_sand() (CapacityMethod static method)</a>
+</li>
+      <li><a href="api/api_reference.html#edafos.deepfoundations.capacity_base.CapacityMethod.unit_toe_res_clay">unit_toe_res_clay() (CapacityMethod static method)</a>
 </li>
   </ul></td>
 </tr></table>
